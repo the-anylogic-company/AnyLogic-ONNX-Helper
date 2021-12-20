@@ -1,0 +1,111 @@
+<!-- USAGE:
+1. Update the `depedencies` tag with all the items you want to download.
+2. Update the output names in the `properties` section, as desired.
+2. Comment out either `plugin` (inside the `build/plugins` tabs that you don't want (the first creates a single jar, the second splits into individual files)
+3. Open a command prompt, navigate to the directory this file is inside and enter `mvn clean install`
+4. Once complete, check inside the created `target` folder for your resources!
+	You can ignore the following files/folders:
+	* archive-tmp/
+	* maven-archiver/
+	* foobar-0.0.0.jar (or whatever the artifact ID + version is set to below)
+-->
+<project>
+	<!-- Required tags about "project" -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.dummy</groupId>
+	<artifactId>foobar</artifactId>
+	<version>0.0.0</version>
+	<packaging>jar</packaging>
+	
+  
+	<repositories>
+		<repository>
+			<id>my-repo</id>
+			<name>sonasnaps</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
+  
+	<!-- Include all the dependencies you want to download below. -->
+	<dependencies>
+	
+		
+	
+		<!--
+		<dependency>
+			<groupId>com.microsoft.onnxruntime</groupId>
+			<artifactId>onnxruntime_gpu</artifactId>
+			<version>1.10.0</version>
+		</dependency>
+		-->
+		
+	</dependencies>
+	
+	<!-- User-defined names of the outputs; change if desired -->
+	<properties>
+		<output_file_name>uber_jar</output_file_name>
+		<output_folder_name>individual_jars</output_folder_name>
+	</properties>
+	
+	<build>
+		<plugins>
+		
+			<!-- The following plugin is used to bundle all library dependencies into a single jar.
+			The file will inside the "target" folder and named whatever the property `output_file_name` is set to above.
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.2.0</version>
+
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					
+					<finalName>${output_file_name}</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+						
+				</executions>
+
+			</plugin>
+			
+			
+			
+			<!-- Include to have a folder of jars for each library dependency.
+			The folder will inside the "target" folder and named whatever the property `output_folder_name` is set to above.
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+				  <execution>
+					<id>copy-dependencies</id>
+					<phase>package</phase>
+					<goals>
+					  <goal>copy-dependencies</goal>
+					</goals>
+					<configuration>
+					  <outputDirectory>${project.build.directory}/${output_folder_name}</outputDirectory>
+					  <overWriteReleases>false</overWriteReleases>
+					  <overWriteSnapshots>false</overWriteSnapshots>
+					  <overWriteIfNewer>true</overWriteIfNewer>
+					</configuration>
+				  </execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,2160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+*************************************************
+	         AnyLogic Project File 
+*************************************************	         
+-->
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.8.202111151746" AlpVersion="8.7.2">
+<Model>
+	<Id>1637182862490</Id>
+	<Name><![CDATA[Onnx Wrapper]]></Name>
+	<EngineVersion>6</EngineVersion>
+	<JavaPackageName><![CDATA[onnx_wrapper]]></JavaPackageName>
+	<ModelTimeUnit><![CDATA[Second]]></ModelTimeUnit>
+	<ActiveObjectClasses>
+		<!--   =========   Active Object Class   ========  -->
+		<ActiveObjectClass>
+			<Id>1637182964287</Id>
+			<Name><![CDATA[OnnxWrapper]]></Name>
+			<AdditionalClassCode><![CDATA[private final ObjectMapper mapper = new ObjectMapper();
+
+int[] findArrayDims(Object o) {
+	 return _findArrayDims(o, new ArrayList<Integer>()).stream()
+	 								.mapToInt(i->i).toArray();
+}
+
+private ArrayList<Integer> _findArrayDims(Object o, ArrayList<Integer> dims) {
+	if (o.getClass().isArray()) {
+		if (Array.get(o, 0).getClass().isArray()) {
+			// o is (at least) a two dimentional array
+			dims.add(Array.getLength(o));
+			return _findArrayDims(Array.get(o, 0), dims);
+		} else {
+			// o is a single dimention array
+			dims.add(Array.getLength(o));
+			return dims;
+		}
+	} else if (Collection.class.isAssignableFrom(o.getClass())) {
+		// o is a class-based array (nonprimitive)
+		Collection<?> c = (Collection<?>)o;
+		dims.add(c.size());
+		return dims;
+	}
+	return null;
+}
+
+Class<?> getRootComponentType(Object o) {
+	return _getRootComponentType(o.getClass());
+}
+
+private Class<?> _getRootComponentType(Class<?> cls) {
+	if (cls.isArray()) {
+		return _getRootComponentType(cls.getComponentType());
+	}
+	return cls;
+}
+
+/*
+public Class<?> getArrayType(Class<?> componentType,
+		int dimensions) throws ClassNotFoundException {
+	if (dimensions == 0) {
+		return componentType;
+	}
+
+	String rawName = componentType.getName();
+	switch (rawName) {
+		case "byte" :
+			rawName = "B";
+			break;
+		case "char" :
+			rawName = "C";
+			break;
+		case "double" :
+			rawName = "D";
+			break;
+		case "float" :
+			rawName = "F";
+			break;
+		case "int" :
+			rawName = "I";
+			break;
+		case "long" :
+			rawName = "J";
+			break;
+		case "short" :
+			rawName = "S";
+			break;
+		case "boolean" :
+			rawName = "Z";
+			break;
+		default :
+			rawName = "L" + rawName + ";";
+			break;
+	}
+
+	for (int i = 0; i < dimensions; i++) {
+		rawName = "[" + rawName;
+	}
+
+	return Class.forName(rawName);
+}
+
+public Object createArray(Class<?> componentType,
+		int dimensions, int length)
+		throws NegativeArraySizeException,
+		ClassNotFoundException {
+	if (dimensions == 0) {
+		return null;
+	}
+
+	Object array = Array.newInstance(
+			getArrayType(componentType, dimensions - 1),
+			length);
+
+	for (int i = 0; i < length; i++) {
+		Array.set(array, i, createArray(componentType,
+				dimensions - 1, length));
+	}
+
+	return array;
+}
+*/]]></AdditionalClassCode>
+			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
+			<Import><![CDATA[import ai.onnxruntime.OrtEnvironment;
+import ai.onnxruntime.OrtSession;
+import ai.onnxruntime.OrtException;
+import ai.onnxruntime.OnnxTensor;
+import ai.onnxruntime.OrtSession.Result;
+import ai.onnxruntime.OnnxValue;
+import org.apache.commons.lang3.ArrayUtils;
+import ai.onnxruntime.NodeInfo;
+import ai.onnxruntime.MapInfo;
+import ai.onnxruntime.SequenceInfo;
+import ai.onnxruntime.TensorInfo;
+import ai.onnxruntime.ValueInfo;
+import java.util.stream.Collectors;
+import java.util.Map.Entry;
+import java.lang.reflect.Array;
+import java.util.stream.IntStream;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ai.onnxruntime.OnnxJavaType;]]></Import>
+			<StartupCode><![CDATA[if (targetModel != null) {
+	reloadSession();
+}]]></StartupCode>
+			<Generic>false</Generic>
+			<GenericParameter>
+				<Id>1637182964285</Id>
+				<Name><![CDATA[1637182964285]]></Name>
+				<GenericParameterValue Class="CodeValue">
+					<Code><![CDATA[T extends Agent]]></Code>
+				</GenericParameterValue>
+				<GenericParameterLabel><![CDATA[Generic parameter:]]></GenericParameterLabel>
+			</GenericParameter>
+			<FlowchartBlock>true</FlowchartBlock>
+			<FlowChartsUsage>ENTITY</FlowChartsUsage>
+			<SamplesToKeep>100</SamplesToKeep>
+			<LimitNumberOfArrayElements>false</LimitNumberOfArrayElements>
+			<ElementsLimitValue>100</ElementsLimitValue>
+			<MakeDefaultViewArea>true</MakeDefaultViewArea>
+			<SceneGridColor/>
+			<SceneBackgroundColor/>
+			<SceneSkybox>null</SceneSkybox>
+			<AgentProperties>
+	 			<SpaceType>CONTINUOUS</SpaceType>			
+				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
+				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
+				<RotateAnimationVertically>false</RotateAnimationVertically>
+				<VelocityCode Class="CodeUnitValue">
+					<Code><![CDATA[10]]></Code>
+					<Unit Class="SpeedUnits"><![CDATA[MPS]]></Unit>
+				</VelocityCode>
+				<PhysicalLength Class="CodeUnitValue">
+					<Code><![CDATA[1]]></Code>
+					<Unit Class="LengthUnits"><![CDATA[METER]]></Unit>
+				</PhysicalLength>
+				<PhysicalWidth Class="CodeUnitValue">
+					<Code><![CDATA[1]]></Code>
+					<Unit Class="LengthUnits"><![CDATA[METER]]></Unit>
+				</PhysicalWidth>
+				<PhysicalHeight Class="CodeUnitValue">
+					<Code><![CDATA[1]]></Code>
+					<Unit Class="LengthUnits"><![CDATA[METER]]></Unit>
+				</PhysicalHeight>
+			</AgentProperties>
+			<EnvironmentProperties>
+					<EnableSteps>false</EnableSteps>
+					<StepDurationCode Class="CodeUnitValue">
+						<Code><![CDATA[1.0]]></Code>
+						<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+					</StepDurationCode>
+					<SpaceType>CONTINUOUS</SpaceType>
+					<WidthCode><![CDATA[500]]></WidthCode>
+					<HeightCode><![CDATA[500]]></HeightCode>
+					<ZHeightCode><![CDATA[0]]></ZHeightCode>
+					<ColumnsCountCode><![CDATA[100]]></ColumnsCountCode>
+					<RowsCountCode><![CDATA[100]]></RowsCountCode>
+					<NeigborhoodType>MOORE</NeigborhoodType>
+					<LayoutType>USER_DEF</LayoutType>
+					<LayoutTypeApplyOnStartup>true</LayoutTypeApplyOnStartup>
+					<NetworkType>USER_DEF</NetworkType>
+					<NetworkTypeApplyOnStartup>true</NetworkTypeApplyOnStartup>
+					<ConnectionsPerAgentCode><![CDATA[2]]></ConnectionsPerAgentCode>
+					<ConnectionsRangeCode><![CDATA[50]]></ConnectionsRangeCode>
+					<NeighborLinkFractionCode><![CDATA[0.95]]></NeighborLinkFractionCode>
+					<MCode><![CDATA[10]]></MCode>
+			</EnvironmentProperties>
+			<DatasetsCreationProperties>
+				<AutoCreate>false</AutoCreate>
+					<OccurrenceAtTime>true</OccurrenceAtTime>
+					<OccurrenceDate>1637222400000</OccurrenceDate>
+					<OccurrenceTime Class="CodeUnitValue">
+						<Code><![CDATA[0]]></Code>
+						<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+					</OccurrenceTime>
+					<RecurrenceCode Class="CodeUnitValue">
+						<Code><![CDATA[1]]></Code>
+						<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+					</RecurrenceCode>
+			</DatasetsCreationProperties>
+			<ScaleRuler>
+				<Id>1637182964283</Id>
+				<Name><![CDATA[scale]]></Name>
+				<X>0</X><Y>-150</Y>
+				<PublicFlag>false</PublicFlag>
+				<PresentationFlag>false</PresentationFlag>
+				<ShowLabel>false</ShowLabel>
+				<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+				<Length>100</Length>
+				<Rotation>0</Rotation>
+				<ScaleType>BASED_ON_LENGTH</ScaleType>
+				<ModelLength>10</ModelLength>
+				<LengthUnits>METER</LengthUnits>
+				<Scale>10</Scale>
+				<InheritedFromParentAgentType>true</InheritedFromParentAgentType>
+			</ScaleRuler>
+			<CurrentLevel>1637182964286</CurrentLevel>
+			<ConnectionsId>1637182964282</ConnectionsId>
+			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1637183235326</Id>
+					<Name><![CDATA[env]]></Name>
+					<X>50</X><Y>150</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="default" StaticVariable="false">
+						<Type><![CDATA[OrtEnvironment]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[OrtEnvironment.getEnvironment()]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1637183235328</Id>
+					<Name><![CDATA[session]]></Name>
+					<X>50</X><Y>170</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="default" StaticVariable="false">
+						<Type><![CDATA[OrtSession]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1637434648224</Id>
+					<Name><![CDATA[hasDuplicateInputShapes]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>70</X><Y>390</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[boolean]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[false]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1637434666883</Id>
+					<Name><![CDATA[hasDuplicateOutputShapes]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>70</X><Y>440</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[boolean]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[false]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="Parameter">
+					<Id>1637183359611</Id>
+					<Name><![CDATA[targetModel]]></Name>
+					<Description><![CDATA[The ONNX file to use.<br>
+<br>
+It can be changed during runtime by calling <code>set_targetModel("new_model.onnx");</code> or restarted with <code>refreshSession()</code>.]]></Description>
+					<X>50</X><Y>50</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[String]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<DefaultValue Class="CodeValue">
+							<Code><![CDATA["my_model.onnx"]]></Code>
+						</DefaultValue>
+						<OnChangeCode><![CDATA[reloadSession();]]></OnChangeCode>
+						<ParameterEditor>
+							<Id>1637183359609</Id>
+							<Label><![CDATA[ONNX File]]></Label>
+							<EditorContolType>FILE_CHOOSER</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+				<Variable Class="Parameter">
+					<Id>1637370069540</Id>
+					<Name><![CDATA[ambiguousInputBehavior]]></Name>
+					<Description><![CDATA[When calling predict without explicit input-name mapping (i.e., via <code>predict(Object...)</code>), data should be in the same order as specified by the ONNX file (able to be previewed from the wrapper's inspection window). This parameters determines what should happen if the user tries to pass inputs in a different order.<br>
+<br>
+<ul>
+<li>0 = Throw error (force user to use proper order or other explicit predict function)</code></li>
+<li>1 = Attempt to resolve; tries to match based on the dimensions.</li>
+</ul>
+<br>
+Option 0 is ideal for ensuring input is mapped correctly - and thus, that the output is correct. Conversely, option 1 is more convenient, but may cause incorrect output in certain cases. For example, if there are multiple inputs which have both unique and shared shapes and an object with a unique shape is detected in the wrong place; as, there is no way to distinguish the shared-shape objects, they are matched up in the presented order.]]></Description>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>70</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[int]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<DefaultValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</DefaultValue>
+						<ParameterEditor>
+							<Id>1637370069538</Id>
+							<Label><![CDATA[Handling incorrect input order]]></Label>
+							<EditorContolType>RADIO_BUTTONS</EditorContolType>
+							<PredefParamValue>
+								<Id>0</Id>
+								<Name><![CDATA[Throw error]]></Name>
+								<Value Class="CodeValue">
+									<Code><![CDATA[0]]></Code>
+								</Value>
+							</PredefParamValue>
+							<PredefParamValue>
+								<Id>0</Id>
+								<Name><![CDATA[Auto-resolve]]></Name>
+								<Value Class="CodeValue">
+									<Code><![CDATA[1]]></Code>
+								</Value>
+							</PredefParamValue>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+				<Variable Class="Parameter">
+					<Id>1637370575799</Id>
+					<Name><![CDATA[outputDataMethod]]></Name>
+					<Description><![CDATA[This determines how the output of the model will return data.<br>
+<br>
+<ul>
+<li>0 = As a map (key = output name, value = output entry)</li>
+<li>1 = As a list of the outputs (regardless if there's one entry or multiple)</li>
+<li>2 = The output entry directly when only one value, or as a list of outputs when there are multiple outputs.</li>
+</ul>]]></Description>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[int]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<DefaultValue Class="CodeValue">
+							<Code><![CDATA[2]]></Code>
+						</DefaultValue>
+						<ParameterEditor>
+							<Id>1637370575797</Id>
+							<Label><![CDATA[How output is returned]]></Label>
+							<EditorContolType>RADIO_BUTTONS</EditorContolType>
+							<PredefParamValue>
+								<Id>1637370575795</Id>
+								<Name><![CDATA[As a map]]></Name>
+								<Value Class="CodeValue">
+									<Code><![CDATA[0]]></Code>
+								</Value>
+							</PredefParamValue>
+							<PredefParamValue>
+								<Id>1637370575796</Id>
+								<Name><![CDATA[As a list (always)]]></Name>
+								<Value Class="CodeValue">
+									<Code><![CDATA[1]]></Code>
+								</Value>
+							</PredefParamValue>
+							<PredefParamValue>
+								<Id>0</Id>
+								<Name><![CDATA[Directly or as a list]]></Name>
+								<Value Class="CodeValue">
+									<Code><![CDATA[2]]></Code>
+								</Value>
+							</PredefParamValue>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+				<Variable Class="CollectionVariable">
+					<Id>1637345547232</Id>
+					<Name><![CDATA[inputShapeLookup]]></Name>
+					<Description><![CDATA[Key = input name
+Value = String-encoded shape]]></Description>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>350</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" AccessType="default" StaticVariable="false">
+						<CollectionClass><![CDATA[LinkedHashMap]]></CollectionClass>
+						<ElementClass><![CDATA[String]]></ElementClass>
+						<ValueElementClass><![CDATA[String]]></ValueElementClass>
+					</Properties>
+
+				</Variable>
+				<Variable Class="CollectionVariable">
+					<Id>1637345608408</Id>
+					<Name><![CDATA[outputShapeLookup]]></Name>
+					<Description><![CDATA[Key = output name
+Value = String-encoded shape]]></Description>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>420</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" AccessType="default" StaticVariable="false">
+						<CollectionClass><![CDATA[LinkedHashMap]]></CollectionClass>
+						<ElementClass><![CDATA[String]]></ElementClass>
+						<ValueElementClass><![CDATA[String]]></ValueElementClass>
+					</Properties>
+
+				</Variable>
+				<Variable Class="CollectionVariable">
+					<Id>1637435487102</Id>
+					<Name><![CDATA[inputNamesLookup]]></Name>
+					<Description><![CDATA[Key = input shape
+Value = List of names that possess that shape]]></Description>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>370</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" AccessType="default" StaticVariable="false">
+						<CollectionClass><![CDATA[LinkedHashMap]]></CollectionClass>
+						<ElementClass><![CDATA[String]]></ElementClass>
+						<ValueElementClass><![CDATA[ArrayList<String>]]></ValueElementClass>
+					</Properties>
+
+				</Variable>
+			</Variables>
+			<Functions>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1637183476175</Id>
+					<Name><![CDATA[reloadSession]]></Name>
+					<Description><![CDATA[Refreshes the connection to the target ONNX model.<br>
+<br>
+Note that this will reset any memory layers (e.g., LSTM) which may be present in the ONNX model.]]></Description>
+					<X>50</X><Y>190</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[try {
+	session = env.createSession(targetModel,
+			new OrtSession.SessionOptions());
+} catch (OrtException e) {
+	error(e, "Failed to import ONNX model");
+}
+/*
+// update shape information
+try {
+	// reset input data
+	inputShapeLookup.clear();
+	inputNamesLookup.clear();
+	hasDuplicateInputShapes = false;
+	// update with new input info
+	for (NodeInfo n : session.getInputInfo().values()) {
+		// TODO add handling for other ValueInfo implementations
+		if (n.getInfo().getClass().isAssignableFrom(TensorInfo.class)) {
+			TensorInfo t = (TensorInfo)n.getInfo();
+			String name = n.getName();
+			String shape = encodeShape(t.getShape());
+			
+			if (inputShapeLookup.containsValue(shape)) {
+				warning("Two inputs share a shape of %s", shape);
+				hasDuplicateInputShapes = true;
+				inputNamesLookup.get(shape).add(name);			
+			} else {
+				inputShapeLookup.put(name, shape);
+				inputNamesLookup.put(shape, new ArrayList<String>(Arrays.asList(name)));
+			}
+			//traceln("For ip %s = shape %s", name, shape);
+		} else {
+			error("Not implemented: Value of type %s", n.getInfo().getClass());
+		}
+		
+	}
+	// ensure all name lists are sorted
+	inputNamesLookup.forEach((k,v) -> v.sort(null));
+	
+	// reset output data
+	outputShapeLookup.clear();
+	hasDuplicateOutputShapes = false;
+	// update with new output info
+	for (NodeInfo n : session.getOutputInfo().values()) {
+		// TODO add handling for other ValueInfo implementations
+		if (n.getInfo().getClass().isAssignableFrom(TensorInfo.class)) {
+			TensorInfo t = (TensorInfo)n.getInfo();
+			String shape = encodeShape(t.getShape());
+			
+			// set flag to prevent simplified use of predict if there's more than one input with this shape
+			if (outputShapeLookup.containsValue(shape)) {
+				// TODO do you need to do anything else other than warning?
+				warning("Two outputs share a shape of %s", shape);
+				hasDuplicateOutputShapes = true;
+			}
+			outputShapeLookup.put(n.getName(), shape);
+			//traceln("For op %s = shape %s", n.getName(), shape);
+		
+		} else {
+			error("Not implemented: Value of type %s", n.getInfo().getClass());
+		}
+		
+	}
+} catch (OrtException e) {
+	error(e, "Failed to update shape info");
+}
+*/]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[String]]></ReturnType>
+					<Id>1637183546560</Id>
+					<Name><![CDATA[toString]]></Name>
+					<X>50</X><Y>210</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[StringBuilder sb = new StringBuilder();
+sb.append("Active session target: " + targetModel.replaceFirst(".+[\\/\\\\](?=.+?\\.onnx)", ""));
+//									(only list the file name, not the directory)
+
+try {
+	// TODO maybe pull data from custom maps
+	sb.append("\n[Inputs]\n\t");
+	sb.append(session.getInputInfo().values().stream()
+					.map(i -> nodeInfoToString(i))
+					.collect(Collectors.joining("\n\t")));
+	sb.append("\n[Outputs]\n\t");
+	sb.append(session.getOutputInfo().values().stream()
+					.map(i -> nodeInfoToString(i))
+					.collect(Collectors.joining("\n\t")));
+} catch (Exception e) {
+}
+/*
+sb.append("\n~Debug~\n");
+sb.append(inputShapeLookup.toString());
+sb.append("\n");
+sb.append(inputNamesLookup.toString());
+sb.append(String.format("\nSizes: %s", Arrays.toString(inputNamesLookup.values().stream().mapToInt(v -> v.size()).toArray())));
+sb.append("\n");
+sb.append(outputShapeLookup.toString());
+*/
+return sb.toString();]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[String]]></ReturnType>
+					<Id>1637264389117</Id>
+					<Name><![CDATA[nodeInfoToString]]></Name>
+					<X>70</X><Y>230</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[nodeInfo]]></Name>
+						<Type><![CDATA[NodeInfo]]></Type>
+					</Parameter>
+					<Body><![CDATA[// Input/output information is stored in the NodeInfo
+// interface.
+// Each implementation has a toString() but it's overly
+// verbose, so this method
+// provides a more concise way to show the outputs.
+StringBuilder sb = new StringBuilder(nodeInfo.getName());
+
+ValueInfo valueInfo = nodeInfo.getInfo();
+if (valueInfo.getClass()
+		.isAssignableFrom(TensorInfo.class)) {
+	TensorInfo info = (TensorInfo) valueInfo;
+	sb.append(String.format("(%s):[%s]", 
+			info.type, encodeShape(info.getShape())));
+} else if (valueInfo.getClass()
+		.isAssignableFrom(MapInfo.class)) {
+	MapInfo info = (MapInfo) valueInfo;
+	sb.append(String.format("(%s, %s):%s", 
+			info.keyType, info.valueType, info.size));
+} else if (valueInfo.getClass()
+		.isAssignableFrom(SequenceInfo.class)) {
+	SequenceInfo info = (SequenceInfo) valueInfo;
+	
+	// FIXME understand structure of sequences to better
+	// provide a simple str output
+	sb.append(info.mapInfo.toString());
+}
+//sb.insert(0, "\t");
+return sb.toString();]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[Object]]></ReturnType>
+					<Id>1637267076456</Id>
+					<Name><![CDATA[predict]]></Name>
+					<X>270</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[input]]></Name>
+						<Type><![CDATA[Map<String, Object>]]></Type>
+					</Parameter>
+					<Body><![CDATA[if (session == null) {
+	error("No ONNX models are loaded. Fill in the target model parameter or call `set_targetModel`");
+}
+try {
+	HashMap<String, OnnxTensor> tensorInputs = new HashMap<>();
+	for (String name : input.keySet()) {
+		OnnxTensor tensor = OnnxTensor.createTensor(env,
+				input.get(name));
+		tensorInputs.put(name, tensor);
+	}
+
+	HashMap<String, Object> outputs = new HashMap<>();
+	Result result = session.run(tensorInputs);
+
+	for (Iterator<Entry<String, OnnxValue>> iter = result
+			.iterator(); iter.hasNext();) {
+		Entry<String, OnnxValue> entry = iter.next();
+		outputs.put(entry.getKey(),
+				entry.getValue().getValue());
+	}
+
+	return resultsToOutputData(outputs);
+} catch (Exception e) {
+	e.printStackTrace();
+}
+return null;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[Object]]></ReturnType>
+					<Id>1637267107058</Id>
+					<Name><![CDATA[predict]]></Name>
+					<X>270</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[inputs]]></Name>
+						<Type><![CDATA[Object...]]></Type>
+					</Parameter>
+					<Body><![CDATA[HashMap<String, Object> imap = inputDataToMap(inputs);
+return predict(imap);]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[String]]></ReturnType>
+					<Id>1637434721844</Id>
+					<Name><![CDATA[encodeShape]]></Name>
+					<Description><![CDATA[Encode shape array to string (for dictionary keys).
+Removes all non-numical characters and substitutes negative sizes (i.e., variable) with a placeholder character.]]></Description>
+					<X>50</X><Y>270</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[shape]]></Name>
+						<Type><![CDATA[long[]]]></Type>
+					</Parameter>
+					<Body><![CDATA[return Arrays.toString(shape).replaceAll("[\\[\\] ]", "").replaceAll("-1", "*");]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[Object]]></ReturnType>
+					<Id>1637435119251</Id>
+					<Name><![CDATA[resultsToOutputData]]></Name>
+					<X>290</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[results]]></Name>
+						<Type><![CDATA[Map<String, Object>]]></Type>
+					</Parameter>
+					<Body><![CDATA[if (outputDataMethod == 0) { // map
+	return results;
+}
+
+List<Object> outputs = results.entrySet().stream()
+       //.sorted(Map.Entry.comparingByKey()) // underlying map is actually ordered, so don't change
+       .map(e -> e.getValue())
+       .collect(Collectors.toList());
+if (outputDataMethod == 2 && outputs.size() == 1) { // single if only one
+	return outputs.get(0);
+}
+
+return outputs;]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[String]]></ReturnType>
+					<Id>1637436275314</Id>
+					<Name><![CDATA[encodeShape]]></Name>
+					<Description><![CDATA[Encode shape array to string (for dictionary keys).
+Removes all non-numical characters and substitutes negative sizes (i.e., variable) with a placeholder character.]]></Description>
+					<X>50</X><Y>290</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[shape]]></Name>
+						<Type><![CDATA[int[]]]></Type>
+					</Parameter>
+					<Body><![CDATA[return Arrays.toString(shape).replaceAll("[\\[\\] ]", "");]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int[]]]></ReturnType>
+					<Id>1637451444620</Id>
+					<Name><![CDATA[argMax]]></Name>
+					<Description><![CDATA[Returns a list of indices representing the location of the maximum argument in each subarray of the provided array.]]></Description>
+					<X>270</X><Y>400</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[float[][]]]></Type>
+					</Parameter>
+					<Body><![CDATA[int[] maxes = new int[array.length];
+for (int i = 0; i < array.length; i++) {
+	maxes[i] = argMax(array[i]);
+}
+return maxes;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int]]></ReturnType>
+					<Id>1637451627622</Id>
+					<Name><![CDATA[argMax]]></Name>
+					<Description><![CDATA[Returns the index of the maximum value in the passed array.]]></Description>
+					<X>270</X><Y>420</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[float[]]]></Type>
+					</Parameter>
+					<Body><![CDATA[if (array.length == 0)
+	return -1;
+int idx = 0;
+float val = array[0];
+for (int i = 0; i < array.length; i++) {
+	if (array[i] > val) {
+		idx = i;
+		val = array[i];
+	}
+}
+return idx;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int[]]]></ReturnType>
+					<Id>1637451628700</Id>
+					<Name><![CDATA[argMax]]></Name>
+					<Description><![CDATA[Returns a list of indices representing the location of the maximum argument in each subarray of the provided array.]]></Description>
+					<X>270</X><Y>440</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[double[][]]]></Type>
+					</Parameter>
+					<Body><![CDATA[int[] maxes = new int[array.length];
+for (int i = 0; i < array.length; i++) {
+	maxes[i] = argMax(array[i]);
+}
+return maxes;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int]]></ReturnType>
+					<Id>1637451630249</Id>
+					<Name><![CDATA[argMax]]></Name>
+					<Description><![CDATA[Returns the index of the maximum value in the passed array.]]></Description>
+					<X>270</X><Y>460</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[double[]]]></Type>
+					</Parameter>
+					<Body><![CDATA[if (array.length == 0)
+	return -1;
+int idx = 0;
+double val = array[0];
+for (int i = 0; i < array.length; i++) {
+	if (array[i] > val) {
+		idx = i;
+		val = array[i];
+	}
+}
+return idx;]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[T]]></ReturnType>
+					<Id>1637517797260</Id>
+					<Name><![CDATA[convert]]></Name>
+					<Description><![CDATA[Converts the class of the passed object to the specified type (accomplished via the Jackson library).]]></Description>
+					<CustomModifierCode><![CDATA[public <T>]]></CustomModifierCode>                 	
+					<X>270</X><Y>500</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[object]]></Name>
+						<Type><![CDATA[Object]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[outputType]]></Name>
+						<Type><![CDATA[Class<T>]]></Type>
+					</Parameter>
+					<Body><![CDATA[try {
+	return mapper.convertValue(object, outputType);
+} catch (Exception e) {
+	warning("Conversion of object (type %s) to type %s failed, returning null. Reason: %s",
+		object.getClass(), outputType, e);
+}
+return null;]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[HashMap<String, Object>]]></ReturnType>
+					<Id>1637518205493</Id>
+					<Name><![CDATA[inputDataToMap]]></Name>
+					<Description><![CDATA[Handles finding matching names for all the data in the given input. Used by the predict function.]]></Description>
+					<X>290</X><Y>240</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[inputs]]></Name>
+						<Type><![CDATA[Object...]]></Type>
+					</Parameter>
+					<Body><![CDATA[HashMap<String, Object> imap = new HashMap<>();
+
+// "Wrapping" the inputs when directly-passed-value is misinterpreted as separate inputs
+if (Number.class.isAssignableFrom(inputs[0].getClass())) {
+	inputs = new Object[]{ArrayUtils.toPrimitive( inputs )};
+}
+
+try {
+	int i = 0;
+	// Loop over the expected input information, assuming the inputs are given in that order
+	// (it will break if there's a mismatch detected)
+	for (Entry<String,NodeInfo> entries : session.getInputInfo().entrySet()) {
+		String name = entries.getKey();
+		Object obj = inputs[i];
+		
+		// Validate correct shape and type
+		ValueInfo vinfo = entries.getValue().getInfo();
+		if (!vinfo.getClass().isAssignableFrom(TensorInfo.class)) {
+			error("Not implemented: handling of node type %s.", vinfo.getClass());
+		}
+		TensorInfo info = (TensorInfo)vinfo;
+		// Use string-encoded shapes to avoid issues/hassle with int&long array comparison,
+		//	and to use regex for matching with variable sized dimensions
+		String expectedShape = encodeShape(info.getShape());
+		String actualShape = encodeShape(findArrayDims(obj));
+		if (!actualShape.matches(expectedShape.replace("*", "\\d+"))) {
+			error("Object at index %s (shape %s) failed to match expected size (input '%s', shape %s). See the inspection window of the wrapper object for order/type information.",
+				i, actualShape, name, expectedShape);
+		}
+		
+		Class<?> rootType = getRootComponentType(obj);
+		OnnxJavaType convertedType = info.type.mapFromClass(rootType);
+		if (!info.type.equals(convertedType)) {
+			error("Object at index %s (shape %s, component type %s / onnx type %s) failed to match expected type (input '%s', onnx type %s). See the inspection window of the wrapper object for order/type information.",
+				i, actualShape, rootType, convertedType, name, info.type);
+		}
+		
+		imap.put(name, obj);
+		i++;
+	}	
+
+} catch (Exception e) { error(e, "Problem with getting info in session"); }
+
+return imap;
+]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[HashMap<String, Object>]]></ReturnType>
+					<Id>1637693153097</Id>
+					<Name><![CDATA[inputDataToMap1]]></Name>
+					<Description><![CDATA[Handles finding matching names for all the data in the given input.
+
+To initialize:
+- construct an empty map (from input names to input objects; to be output at end)
+- construct a queue (list) with the names remaining (all)
+The algorithm takes a two pass approach:
+[Pass 1]
+For each object:
+	- find its shape key
+	- if the shape key is fixed (no variable sized dimensions), use the first name in the lookup dictionary that hasn't been found yet. Remove it from the queue.
+	- else, do nothing
+[Pass 2] - All remaining elements should be for variable sized dimensions
+Repeat pass 1
+
+In this way, if there are two (*,3) inputs and one (2,3) inputs and the user passes three (2,3) objects, the first]]></Description>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>290</X><Y>280</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[inputs]]></Name>
+						<Type><![CDATA[Object...]]></Type>
+					</Parameter>
+					<Body><![CDATA[try {
+	// Underlying Set + Map are ordered
+	HashMap<String, Object> imap = new HashMap<>();
+	
+	boolean requireHandling = false; // whether heuristic is needed to match up remainder of inputs
+	int i = 0;
+	
+	// Loop over the expected input information, assuming the inputs are given in that order
+	// (it will break if there's a mismatch detected)
+	for (Entry<String,NodeInfo> entries : session.getInputInfo().entrySet()) {
+		String name = entries.getKey();
+		Object obj = inputs[i];
+		// Validate correct shape
+		ValueInfo vinfo = entries.getValue().getInfo();
+		if (!vinfo.getClass().isAssignableFrom(TensorInfo.class)) {
+			error("Not implemented: handling of node type %s.", vinfo.getClass());
+		}
+		TensorInfo info = (TensorInfo)vinfo;
+		// Use string-encoded shapes to avoid issues/hassle with int&long array comparison,
+		//	and to use regex for matching with variable sized dimensions
+		String expectedShape = encodeShape(info.getShape());
+	
+		String actualShape = encodeShape(findArrayDims(obj));
+		if (!actualShape.matches(expectedShape.replace("*", "\\d+"))) {
+			// Detected mismatch; handle based on parameter
+			if (ambiguousInputBehavior == 0) {
+				error("Object at index %s has shape %s but was expecting %s", i, actualShape, expectedShape);
+				return null;
+			}
+			
+			warning("Object at index %s has shape %s but was expecting %s; performing best-guess", i, actualShape, expectedShape);
+			requireHandling = true;
+			break;
+		}
+		
+		imap.put(name, obj);
+		i++;
+	}
+	
+	if (!requireHandling) {
+		// process is complete; all inputs are assigned
+		return imap;
+	}
+	//			 a       b      c     d       e     f
+	// expected: [2,3] [1,5], [4,1] [1,2,3] [2,2] [1,*,3]
+	// passed  : [2,3] [1,5], [2,2] [1,2,3] [4,1] [1,6,3]
+	
+	// i = 2
+	
+	// namesTodo = {c,d,e,f}
+	// shapesRemain = {"2,2", "1,2,3", "4,1", "1,*,3"}
+	
+	
+	// Need to find best-match for remainder of inputs;
+	LinkedList<String> namesTodo = (LinkedList)session.getInputNames().stream().collect(Collectors.toList());
+	imap.keySet().forEach(c -> namesTodo.removeFirstOccurrence(c));
+	
+	while (i < session.getNumInputs()) {
+		
+	}
+	
+
+} catch (Exception e) { error(e, "Problem with getting info in session"); }
+
+return null;
+
+// The following was the handling of the (assumed to be) 100% ambiguous input order
+// Not needed anymore but kept just in case
+/*
+// Don't let user move on if conditions aren't met
+if (hasDuplicateInputShapes && ambiguousInputBehavior == 0) {
+	error("Multiple inputs share a shape, making the input ambiguous. Refactor to use `predict(Map)`.");
+	return null;
+}
+
+HashMap<String, Object> imap = new HashMap<>();
+int i = 0;
+
+for (Object obj : inputs) {
+	String shape = encodeShape(findArrayDims(obj));
+	
+	String name = null;
+	if (inputNamesLookup.containsKey(shape)) {
+		name = inputNamesLookup.get(shape).get(0); // FIXME replace with handling logic for ambiguous inputs
+	} else if (inputNamesLookup.size() == 1) { 
+		name = inputNamesLookup.values().iterator().next().get(0);
+	} else {
+		// TODO implement proper detection of "-1" dimension size
+		warning("Could not find name with shape %s, just using first name (see TODO)", shape);
+		name = inputNamesLookup.values().iterator().next().get(0);
+	}
+	imap.put(name, obj);
+}
+
+return imap;
+*/]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[HashMap<String, Object>]]></ReturnType>
+					<Id>1637699057491</Id>
+					<Name><![CDATA[inputDataToMap2]]></Name>
+					<Description><![CDATA[Handles finding matching names for all the data in the given input.
+
+To initialize:
+- construct an empty map (from input names to input objects; to be output at end)
+- construct a queue (list) with the names remaining (all)
+The algorithm takes a two pass approach:
+[Pass 1]
+For each object:
+	- find its shape key
+	- if the shape key is fixed (no variable sized dimensions), use the first name in the lookup dictionary that hasn't been found yet. Remove it from the queue.
+	- else, do nothing
+[Pass 2] - All remaining elements should be for variable sized dimensions
+Repeat pass 1
+
+In this way, if there are two (*,3) inputs and one (2,3) inputs and the user passes three (2,3) objects, the first]]></Description>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>290</X><Y>260</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[inputs]]></Name>
+						<Type><![CDATA[Object...]]></Type>
+					</Parameter>
+					<Body><![CDATA[try {
+	/*
+	// Underlying Set + Map are ordered
+	HashMap<String, Object> imap = new HashMap<>();
+	
+	boolean requireHandling = false; // whether heuristic is needed to match up remainder of inputs
+	int i = 0;
+	
+	// Loop over the expected input information, assuming the inputs are given in that order
+	// (it will break if there's a mismatch detected)
+	for (Entry<String,NodeInfo> entries : session.getInputInfo().entrySet()) {
+		String name = entries.getKey();
+		Object obj = inputs[i];
+		// Validate correct shape
+		ValueInfo vinfo = entries.getValue().getInfo();
+		if (!vinfo.getClass().isAssignableFrom(TensorInfo.class)) {
+			error("Not implemented: handling of node type %s.", vinfo.getClass());
+		}
+		TensorInfo info = (TensorInfo)vinfo;
+		// Use string-encoded shapes to avoid issues/hassle with int&long array comparison,
+		//	and to use regex for matching with variable sized dimensions
+		String expectedShape = encodeShape(info.getShape());
+	
+		String actualShape = encodeShape(findArrayDims(obj));
+		if (!actualShape.matches(expectedShape.replace("*", "\\d+"))) {
+			// Detected mismatch; handle based on parameter
+			if (ambiguousInputBehavior == 0) {
+				error("Object at index %s has shape %s but was expecting %s", i, actualShape, expectedShape);
+				return null;
+			}
+			
+			warning("Object at index %s has shape %s but was expecting %s; performing best-guess", i, actualShape, expectedShape);
+			requireHandling = true;
+			break;
+		}
+		
+		imap.put(name, obj);
+		i++;
+	}
+	
+	if (!requireHandling) {
+		// process is complete; all inputs are assigned
+		return imap;
+	}
+	*/
+	// String[] names = [a,b,c,d,e,f]
+	// String[] expshapes = ["2,3", "1,5", "4,1", "1,2,3", "2,2", "1,*,3"]
+	// String[] inpShapes = ["2,3", "1,5", "2,2", "1,2,3", "4,1", "1,*,3"]
+	// int expPtr = 0;
+	// int inpPtr = 0;
+	// HashMap<String,Object> imap
+	
+	HashMap<String, Object> imap = new HashMap<>();
+
+	/*
+	ArrayList<String> names = new ArrayList<>(), expShapes = new ArrayList<>(), inpShapes = new ArrayList<>();
+	// fill in lists
+	session.getInputInfo().entrySet().forEach(e -> {
+		names.add(e.getKey()); 
+		expShapes.add( encodeShape(((TensorInfo)e.getValue().getInfo()).getShape()) );
+		
+	});
+	Arrays.stream(inputs).forEach(obj -> inpShapes.add(encodeShape(findArrayDims(obj))));
+	// index pointers for current target in each shape array
+	int expPtr = 0, inpPtr = 0;
+	*/
+	
+	
+	//			 a       b      c     d       e     f
+	// expected: [2,3] [1,5], [4,1] [1,2,3] [2,2] [1,*,3]
+	// passed  : [2,3] [1,5], [2,2] [1,2,3] [4,1] [1,6,3]
+	//
+	// look thru expected and find the first index/object in passed that matches which hasn't been used yet 
+	
+	// Keep track of objects in input that need to be match up (by index/shape key)
+	ArrayList<Pair<Integer,String>> todo = new ArrayList<>();
+	for (int i = 0; i < inputs.length; i++) {
+		todo.add(new Pair<Integer,String>(i, encodeShape(findArrayDims(inputs[i]))));
+	}
+	
+	traceln("TODO: " + todo);
+	
+	for (Entry<String,NodeInfo> entries : session.getInputInfo().entrySet()) {
+		String name = entries.getKey();
+		ValueInfo vinfo = entries.getValue().getInfo();
+		if (!vinfo.getClass().isAssignableFrom(TensorInfo.class)) {
+			error("Not implemented: handling of node type %s.", vinfo.getClass());
+		}
+		String shapePattern = encodeShape(((TensorInfo)vinfo).getShape()).replace("*", "\\d+");
+		
+		traceln("Checking %s, shape pattern %s", name, shapePattern);
+		traceln("Options remaining = " + todo);
+		
+		// find first that matches
+		int toPop = -1;
+		for (int i = 0; i < todo.size(); i++) {
+			traceln("\tOption %s: %s (index %s)", i, todo.get(i).getSecond(), todo.get(i).getFirst());
+			if (i > 0 && ambiguousInputBehavior == 0) {
+				error("Input '%s' in incorrect location", name);
+			}
+			
+			Pair<Integer,String> entry = todo.get(i);
+			if (entry.getSecond().matches(shapePattern)) {
+				toPop = i;
+				traceln("\t\tMatches!");
+				break;
+			}
+		}
+		if (toPop < 0) { error("No shape matching pattern %s found.", shapePattern); }
+		Pair<Integer,String> entry = todo.remove(toPop);
+		imap.put(name, inputs[entry.getFirst()]);
+	}
+	
+	return imap;
+	
+
+} catch (Exception e) { error(e, "Problem with getting info in session"); }
+
+return null;
+
+// The following was the handling of the (assumed to be) 100% ambiguous input order
+// Not needed anymore but kept just in case
+/*
+// Don't let user move on if conditions aren't met
+if (hasDuplicateInputShapes && ambiguousInputBehavior == 0) {
+	error("Multiple inputs share a shape, making the input ambiguous. Refactor to use `predict(Map)`.");
+	return null;
+}
+
+HashMap<String, Object> imap = new HashMap<>();
+int i = 0;
+
+for (Object obj : inputs) {
+	String shape = encodeShape(findArrayDims(obj));
+	
+	String name = null;
+	if (inputNamesLookup.containsKey(shape)) {
+		name = inputNamesLookup.get(shape).get(0); // FIXME replace with handling logic for ambiguous inputs
+	} else if (inputNamesLookup.size() == 1) { 
+		name = inputNamesLookup.values().iterator().next().get(0);
+	} else {
+		// TODO implement proper detection of "-1" dimension size
+		warning("Could not find name with shape %s, just using first name (see TODO)", shape);
+		name = inputNamesLookup.values().iterator().next().get(0);
+	}
+	imap.put(name, obj);
+}
+
+return imap;
+*/]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1638473529119</Id>
+					<Name><![CDATA[reshape]]></Name>
+					<Description><![CDATA[Reshape the provided array into the specified shape. Note that this is done in row order.]]></Description>
+					<X>270</X><Y>540</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[Object]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[shape]]></Name>
+						<Type><![CDATA[int[]]]></Type>
+					</Parameter>
+					<Body><![CDATA[error("Not implemented");]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1638473777877</Id>
+					<Name><![CDATA[flatten]]></Name>
+					<Description><![CDATA[Flatten the provided multi-dimensional array into a 1D array.]]></Description>
+					<X>270</X><Y>580</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[Object]]></Type>
+					</Parameter>
+					<Body><![CDATA[error("Not implemented");]]></Body>
+				</Function>
+			</Functions>
+			<AgentLinks>
+				<AgentLink>
+					<Id>1637182964282</Id>
+					<Name><![CDATA[connections]]></Name>
+					<X>210</X><Y>-150</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<HandleReceiveInConnections>false</HandleReceiveInConnections>
+					<AgentLinkType>COLLECTION_OF_LINKS</AgentLinkType>
+					<AgentLinkBidirectional>true</AgentLinkBidirectional>
+					<MessageType><![CDATA[Object]]></MessageType>
+					<LineStyle>SOLID</LineStyle>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineZOrder>UNDER_AGENTS</LineZOrder>
+					<LineArrow>NONE</LineArrow>
+					<LineArrowPosition>END</LineArrowPosition>
+				</AgentLink>
+			</AgentLinks>
+
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1638405044294</Id>
+					<Name><![CDATA[main]]></Name>
+					<X>50</X><Y>-100</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[onnx_wrapper]]></PackageName>
+						<ClassName><![CDATA[Main]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
+
+			<Presentation>
+				<Level>
+					<Id>1637182964286</Id>
+					<Name><![CDATA[level]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<Z>0</Z>
+					<LevelVisibility>DIM_NON_CURRENT</LevelVisibility>
+
+			<Presentation>
+				<Text>
+					<Id>1637267226373</Id>
+					<Name><![CDATA[text]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>510</X><Y>70</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[
+/*
+// EXAMPLE 1
+float[][][] input_data = new float[1][6][1];
+for (int i = 0; i < 6; i++) {
+	input_data[0][i][0] = previousNormedRates.get(i).floatValue();
+}
+
+try {
+	OnnxTensor tensor = OnnxTensor.createTensor(env, input_data);
+	String input_name = rate_session.getInputNames().stream().findFirst().get();
+	Map<String, OnnxTensor> inputs = Map.of(input_name, tensor);
+	
+	Result result = rate_session.run(inputs); 
+	
+	OnnxValue val = result.get(0);
+// EXAMPLE 2
+OnnxTensor tensor = OnnxTensor.createTensor(env, agent.getArray()); // float[]
+	String input_name = los_session.getInputNames().stream().findFirst().get();
+	Map<String, OnnxTensor> inputs = Map.of(input_name, tensor);
+	
+	Result result = los_session.run(inputs); 
+	
+	OnnxValue val = result.get(0);
+	output = ((float[][])val.getValue())[0][0];
+*/]]></Text>
+					<Font>
+						<Name>Consolas</Name>
+						<Size>14</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1637517780776</Id>
+					<Name><![CDATA[text1]]></Name>
+					<X>250</X><Y>370</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-65536</Color>
+					<Text><![CDATA[Helper functions]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>10</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Group>
+					<Id>1637598968541</Id>
+					<Name><![CDATA[group]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[return true;]]></OnClickCode>
+					<EmbeddedIcon>true</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Curve ControlPoints="true">
+					<Id>1637516577706</Id>
+					<Name><![CDATA[outline]]></Name>
+					<X>0</X><Y>-16</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>true</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>0.5</LineWidth>
+					<LineColor>-12698050</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-15461356</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-1</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-12</X><Y>11</Y><Z>0</Z></Point>
+					   <Point><X>-12</X><Y>21</Y><Z>0</Z></Point>
+					   <Point><X>-12</X><Y>28</Y><Z>0</Z></Point>
+					   <Point><X>-10</X><Y>35</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>35</Y><Z>0</Z></Point>
+					   <Point><X>10</X><Y>35</Y><Z>0</Z></Point>
+					   <Point><X>13</X><Y>28</Y><Z>0</Z></Point>
+					   <Point><X>13</X><Y>21</Y><Z>0</Z></Point>
+					   <Point><X>13</X><Y>11</Y><Z>0</Z></Point>
+					   <Point><X>1</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Curve>
+				<Curve ControlPoints="true">
+					<Id>1637516844775</Id>
+					<Name><![CDATA[topShadow]]></Name>
+					<X>0</X><Y>-16</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>true</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>0.1</LineWidth>
+					<LineColor>-16316665</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16316665</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-1</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-12</X><Y>11</Y><Z>0</Z></Point>
+					   <Point><X>-12</X><Y>21</Y><Z>0</Z></Point>
+					   <Point><X>-12</X><Y>21</Y><Z>0</Z></Point>
+					   <Point><X>-11.15</X><Y>18.6</Y><Z>0</Z></Point>
+					   <Point><X>-11.15</X><Y>18.6</Y><Z>0</Z></Point>
+					   <Point><X>-11.15</X><Y>18.6</Y><Z>0</Z></Point>
+					   <Point><X>-9</X><Y>20</Y><Z>0</Z></Point>
+					   <Point><X>-9</X><Y>20</Y><Z>0</Z></Point>
+					   <Point><X>-9</X><Y>20</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>11</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>11</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>11</Y><Z>0</Z></Point>
+					   <Point><X>10</X><Y>20</Y><Z>0</Z></Point>
+					   <Point><X>10</X><Y>20</Y><Z>0</Z></Point>
+					   <Point><X>10</X><Y>20</Y><Z>0</Z></Point>
+					   <Point><X>11.633</X><Y>17.4</Y><Z>0</Z></Point>
+					   <Point><X>11.633</X><Y>17.4</Y><Z>0</Z></Point>
+					   <Point><X>11.633</X><Y>17.4</Y><Z>0</Z></Point>
+					   <Point><X>13</X><Y>21</Y><Z>0</Z></Point>
+					   <Point><X>13</X><Y>21</Y><Z>0</Z></Point>
+					   <Point><X>13</X><Y>11</Y><Z>0</Z></Point>
+					   <Point><X>1</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Curve>
+				<Polyline>
+					<Id>1637517095603</Id>
+					<Name><![CDATA[topHighlight]]></Name>
+					<X>0</X><Y>-15</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>true</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>0.1</LineWidth>
+					<LineColor>-12698050</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-12698050</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>5</X><Y>8</Y><Z>0</Z></Point>
+					   <Point><X>5</X><Y>14.475</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>10</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+				<Curve ControlPoints="true">
+					<Id>1637517136982</Id>
+					<Name><![CDATA[bottomShadow]]></Name>
+					<X>5</X><Y>16</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>true</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>0.1</LineWidth>
+					<LineColor>-16316665</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16316665</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-7</X><Y>2</Y><Z>0</Z></Point>
+					   <Point><X>-7</X><Y>2</Y><Z>0</Z></Point>
+					   <Point><X>-7</X><Y>2</Y><Z>0</Z></Point>
+					   <Point><X>-12</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-12</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-12</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-10.966999999999999</X><Y>1.867</Y><Z>0</Z></Point>
+					   <Point><X>-10.966999999999999</X><Y>1.867</Y><Z>0</Z></Point>
+					   <Point><X>-10.966999999999999</X><Y>1.867</Y><Z>0</Z></Point>
+					   <Point><X>-8</X><Y>3</Y><Z>0</Z></Point>
+					   <Point><X>-5</X><Y>3</Y><Z>0</Z></Point>
+					   <Point><X>5</X><Y>3</Y><Z>0</Z></Point>
+					   <Point><X>8</X><Y>-4</Y><Z>0</Z></Point>
+					   <Point><X>8</X><Y>-11</Y><Z>0</Z></Point>
+					   <Point><X>8</X><Y>-11</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Curve>
+				<Polyline>
+					<Id>1637517585624</Id>
+					<Name><![CDATA[bottomHighlight]]></Name>
+					<X>12.35</X><Y>10.275</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>true</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>0.1</LineWidth>
+					<LineColor>-14803426</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-14803426</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-2.7000000000000006</X><Y>2.0500000000000003</Y><Z>0</Z></Point>
+					   <Point><X>-3.5</X><Y>4.45</Y><Z>0</Z></Point>
+					   <Point><X>-1.5249999999999997</X><Y>3.6</Y><Z>0</Z></Point>
+					   <Point><X>-0.6499999999999999</X><Y>1.975</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+			</Presentation>
+
+				</Group>
+			</Presentation>
+
+				</Level>
+			</Presentation>
+
+		</ActiveObjectClass>
+		<!--   =========   Active Object Class   ========  -->
+		<ActiveObjectClass>
+			<Id>1637182862496</Id>
+			<Name><![CDATA[Main]]></Name>
+			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
+			<Import><![CDATA[import org.apache.commons.lang3.ArrayUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;]]></Import>
+			<StartupCode><![CDATA[
+/*int n1 = 1, n2 = 4;
+int idx = 0;
+int[][][][] inp = new int[2][n1][3][n2];
+for (int i = 0; i < 2; i++) {
+for (int j = 0; j < n1; j++) {
+for (int k = 0; k < 3; k++) {
+for (int l = 0; l < n2; l++) {
+	inp[i][j][k][l] = idx++;
+}}}}
+
+ObjectMapper mapper = new ObjectMapper();
+try {
+	traceln(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(inp));
+} catch (Exception e) {}
+
+int[][][][] out = (int[][][][])onnxWrapper.predict(inp);
+try {
+	traceln(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(out));
+} catch (Exception e) {}
+traceln(onnxWrapper.findArrayDims(out));
+*/
+
+/*
+// multiio
+float[][] sineA = new float[3][5];
+float[][] sineB = new float[3][5];
+float[][] ceilMatrix = new float[3][2];
+float[][] multMatrix = new float[3][2];
+float[][][] ignored = new float[2][3][5];
+for (int i = 0; i < 3; i++) {
+	for (int j = 0; j < 2; j++) {
+		sineA[i][j] = (float)uniform(-1, 0);
+		sineB[i][j] = (float)uniform(0, 1);
+		ceilMatrix[i][j] = (float)uniform(0, 1);
+		multMatrix[i][j] = (float)uniform(1, 3);
+	}
+}
+
+ObjectMapper mapper = new ObjectMapper();
+Object output = onnxWrapper.predict(
+	Map.of("toSine_A", sineA, "toSine_B", sineB, "ceil_matrix", ceilMatrix, "mult_matrix", multMatrix,
+			"ignored", ignored)
+);
+try {
+	traceln(mapper.writeValueAsString(output));
+} catch (Exception e) {e.printStackTrace();}
+*/
+
+/* // normalizer
+float[][] f = new float[2][5];
+for (int i = 0; i < f.length; i++) {
+	for (int j = 0; j < f[0].length; j++) {
+		f[i][j] = (float)uniform(1,9)+(i*10);
+	}
+}
+traceln(Arrays.deepToString(f));
+
+float[][] g = (float[][])onnxWrapper.predict(f);
+traceln(Arrays.deepToString(g));
+*/
+
+// inputs:
+// str2bool = [1]
+// variable_io = [-1, 30, 2 1]
+// preprocessing = [3]
+// mnist1.1 = N/A (error)
+// mnist1.3 = [1, 1, 28, 28]
+// reduce3x5= [3,5] (ints)
+
+/* // str2bool model
+String[] numstrs = new String[]{"-3.14"};
+HashMap<String,Object> output = onnxWrapper.predict(Map.of("xstr", numstrs));
+traceln(Arrays.toString((boolean[])output.get("y")));
+*/
+
+/* // variable model
+int var_size = 3;
+float[][][][] x = new float[var_size][30][2][1];
+for (int i = 0; i < x.length; i++) {
+	for (int j = 0; j < x[0].length; j++) {
+		for (int k = 0; k < x[0][0].length; k++) {
+			for (int l = 0; l < x[0][0][0].length; l++) {
+				x[i][j][k][l] = (float)uniform();
+			}
+		}
+	}
+}
+HashMap<String,Object> output = onnxWrapper.predict(Map.of("input_2", x));
+float[][][] op = (float[][][])output.get("output");
+traceln("%s %s %s", op.length, op[0].length, op[0][0].length);
+traceln(Arrays.deepToString(op));
+*/
+
+/* // reduce model
+int[][] x = new int[][]{
+	{1, 2, 3, 4, 5},
+	{5, 5, 5, 5, 5},
+	{-2, -1, 0, 1000, 2}
+};
+HashMap<String,Object> output = onnxWrapper.predict(Map.of("x", x));
+traceln(Arrays.deepToString((int[][])output.get("y")));
+*/]]></StartupCode>
+			<Generic>false</Generic>
+			<GenericParameter>
+				<Id>1637182862494</Id>
+				<Name><![CDATA[1637182862494]]></Name>
+				<GenericParameterValue Class="CodeValue">
+					<Code><![CDATA[T extends Agent]]></Code>
+				</GenericParameterValue>
+				<GenericParameterLabel><![CDATA[Generic parameter:]]></GenericParameterLabel>
+			</GenericParameter>
+			<FlowChartsUsage>ENTITY</FlowChartsUsage>
+			<SamplesToKeep>100</SamplesToKeep>
+			<LimitNumberOfArrayElements>false</LimitNumberOfArrayElements>
+			<ElementsLimitValue>100</ElementsLimitValue>
+			<MakeDefaultViewArea>true</MakeDefaultViewArea>
+			<SceneGridColor/>
+			<SceneBackgroundColor/>
+			<SceneSkybox>null</SceneSkybox>
+			<AgentProperties>
+	 			<SpaceType>CONTINUOUS</SpaceType>			
+				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
+				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
+				<RotateAnimationVertically>false</RotateAnimationVertically>
+				<VelocityCode Class="CodeUnitValue">
+					<Code><![CDATA[10]]></Code>
+					<Unit Class="SpeedUnits"><![CDATA[MPS]]></Unit>
+				</VelocityCode>
+				<PhysicalLength Class="CodeUnitValue">
+					<Code><![CDATA[1]]></Code>
+					<Unit Class="LengthUnits"><![CDATA[METER]]></Unit>
+				</PhysicalLength>
+				<PhysicalWidth Class="CodeUnitValue">
+					<Code><![CDATA[1]]></Code>
+					<Unit Class="LengthUnits"><![CDATA[METER]]></Unit>
+				</PhysicalWidth>
+				<PhysicalHeight Class="CodeUnitValue">
+					<Code><![CDATA[1]]></Code>
+					<Unit Class="LengthUnits"><![CDATA[METER]]></Unit>
+				</PhysicalHeight>
+			</AgentProperties>
+			<EnvironmentProperties>
+					<EnableSteps>false</EnableSteps>
+					<StepDurationCode Class="CodeUnitValue">
+						<Code><![CDATA[1.0]]></Code>
+						<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+					</StepDurationCode>
+					<SpaceType>CONTINUOUS</SpaceType>
+					<WidthCode><![CDATA[500]]></WidthCode>
+					<HeightCode><![CDATA[500]]></HeightCode>
+					<ZHeightCode><![CDATA[0]]></ZHeightCode>
+					<ColumnsCountCode><![CDATA[100]]></ColumnsCountCode>
+					<RowsCountCode><![CDATA[100]]></RowsCountCode>
+					<NeigborhoodType>MOORE</NeigborhoodType>
+					<LayoutType>USER_DEF</LayoutType>
+					<LayoutTypeApplyOnStartup>true</LayoutTypeApplyOnStartup>
+					<NetworkType>USER_DEF</NetworkType>
+					<NetworkTypeApplyOnStartup>true</NetworkTypeApplyOnStartup>
+					<ConnectionsPerAgentCode><![CDATA[2]]></ConnectionsPerAgentCode>
+					<ConnectionsRangeCode><![CDATA[50]]></ConnectionsRangeCode>
+					<NeighborLinkFractionCode><![CDATA[0.95]]></NeighborLinkFractionCode>
+					<MCode><![CDATA[10]]></MCode>
+			</EnvironmentProperties>
+			<DatasetsCreationProperties>
+				<AutoCreate>false</AutoCreate>
+					<OccurrenceAtTime>true</OccurrenceAtTime>
+					<OccurrenceDate>1637222400000</OccurrenceDate>
+					<OccurrenceTime Class="CodeUnitValue">
+						<Code><![CDATA[0]]></Code>
+						<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+					</OccurrenceTime>
+					<RecurrenceCode Class="CodeUnitValue">
+						<Code><![CDATA[1]]></Code>
+						<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+					</RecurrenceCode>
+			</DatasetsCreationProperties>
+			<ScaleRuler>
+				<Id>1637182862492</Id>
+				<Name><![CDATA[scale]]></Name>
+				<X>0</X><Y>-150</Y>
+				<PublicFlag>false</PublicFlag>
+				<PresentationFlag>false</PresentationFlag>
+				<ShowLabel>false</ShowLabel>
+				<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+				<Length>100</Length>
+				<Rotation>0</Rotation>
+				<ScaleType>BASED_ON_LENGTH</ScaleType>
+				<ModelLength>10</ModelLength>
+				<LengthUnits>METER</LengthUnits>
+				<Scale>10</Scale>
+				<InheritedFromParentAgentType>true</InheritedFromParentAgentType>
+			</ScaleRuler>
+			<CurrentLevel>1637182862495</CurrentLevel>
+			<ConnectionsId>1637182862491</ConnectionsId>
+			<AgentLinks>
+				<AgentLink>
+					<Id>1637182862491</Id>
+					<Name><![CDATA[connections]]></Name>
+					<X>50</X><Y>-50</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<HandleReceiveInConnections>false</HandleReceiveInConnections>
+					<AgentLinkType>COLLECTION_OF_LINKS</AgentLinkType>
+					<AgentLinkBidirectional>true</AgentLinkBidirectional>
+					<MessageType><![CDATA[Object]]></MessageType>
+					<LineStyle>SOLID</LineStyle>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineZOrder>UNDER_AGENTS</LineZOrder>
+					<LineArrow>NONE</LineArrow>
+					<LineArrowPosition>END</LineArrowPosition>
+				</AgentLink>
+			</AgentLinks>
+
+			<EmbeddedObjects>
+				<EmbeddedObject>
+					<Id>1637263632937</Id>
+					<Name><![CDATA[onnxWrapper]]></Name>
+					<X>100</X><Y>120</Y>
+					<Label><X>-45</X><Y>-30</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[onnx_wrapper]]></PackageName>
+						<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[onnx_wrapper]]></PackageName>
+							<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+							<ItemName><![CDATA[1637182964285]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[targetModel]]></Name>
+							<Value Class="CodeValue">
+								<Code><![CDATA["C:\\Users\\Tyler Wolfe-Adam\\Documents\\Models\\_AI\\Onnx Wrapper\\research\\multiio.onnx"]]></Code>
+							</Value>
+						</Parameter>
+						<Parameter>
+							<Name><![CDATA[ambiguousInputBehavior]]></Name>
+							<Value Class="CodeValue">
+								<Code><![CDATA[1]]></Code>
+							</Value>
+						</Parameter>
+						<Parameter>
+							<Name><![CDATA[outputDataMethod]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>false</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>SPECIFIED_NUMBER</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+			</EmbeddedObjects>
+
+			<Presentation>
+				<Level>
+					<Id>1637182862495</Id>
+					<Name><![CDATA[level]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<Z>0</Z>
+					<LevelVisibility>DIM_NON_CURRENT</LevelVisibility>
+
+			<Presentation>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1637439779802</Id>
+					<Name><![CDATA[button]]></Name>
+					<X>190</X><Y>100</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="30">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>true</Enabled>
+						<ActionCode><![CDATA[traceln(onnxWrapper.toString());]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[button]]></LabelText>
+					</ExtendedProperties>
+				</Control>
+			</Presentation>
+
+				</Level>
+			</Presentation>
+
+		</ActiveObjectClass>
+	</ActiveObjectClasses>	
+	<DifferentialEquationsMethod>EULER</DifferentialEquationsMethod>
+	<MixedEquationsMethod>RK45_NEWTON</MixedEquationsMethod>
+	<AlgebraicEquationsMethod>MODIFIED_NEWTON</AlgebraicEquationsMethod>
+	<AbsoluteAccuracy>1.0E-5</AbsoluteAccuracy>
+	<FixedTimeStep>0.001</FixedTimeStep>
+	<RelativeAccuracy>1.0E-5</RelativeAccuracy>
+	<TimeAccuracy>1.0E-5</TimeAccuracy>
+	<Frame>
+		<Width>1000</Width>
+		<Height>900</Height>
+	</Frame>
+	<Database>
+		<Logging>false</Logging>
+		<AutoExport>false</AutoExport>
+		<ShutdownCompact>false</ShutdownCompact>
+		<ImportSettings>
+		</ImportSettings>
+		<ExportSettings>
+		</ExportSettings>
+	</Database>
+	
+	<RunConfiguration ActiveObjectClassId="1637182862496">
+		<Id>1637182862512</Id>
+		<Name><![CDATA[RunConfiguration]]></Name>
+		<MaximumMemory>512</MaximumMemory>
+		<ModelTimeProperties>
+			<StopOption><![CDATA[Stop at specified time]]></StopOption>
+			<InitialDate><![CDATA[1637107200000]]></InitialDate>	
+			<InitialTime><![CDATA[0.0]]></InitialTime>	
+			<FinalDate><![CDATA[1639699200000]]></FinalDate>	
+			<FinalTime><![CDATA[100.0]]></FinalTime>	
+		</ModelTimeProperties>
+		<AnimationProperties>
+			<StopNever>true</StopNever>
+			<ExecutionMode>realTimeScaled</ExecutionMode>
+			<RealTimeScale>1.0</RealTimeScale>
+			<EnableZoomAndPanning>true</EnableZoomAndPanning>
+			<EnableDeveloperPanel>false</EnableDeveloperPanel>
+			<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
+		</AnimationProperties>
+		<Inputs>		
+		</Inputs>
+		<Outputs>
+		</Outputs>
+	</RunConfiguration>
+	<Experiments>	
+		<!--   =========   Simulation Experiment   ========  -->
+		<SimulationExperiment ActiveObjectClassId="1637182862496">
+			<Id>1637182862510</Id>
+			<Name><![CDATA[Debug]]></Name>
+			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
+			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
+			<MaximumMemory>512</MaximumMemory>
+			<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
+			<CustomGeneratorCode>new Random()</CustomGeneratorCode>
+			<SeedValue>1</SeedValue>
+			<SelectionModeForSimultaneousEvents>LIFO</SelectionModeForSimultaneousEvents>
+			<VmArgs><![CDATA[]]></VmArgs>
+			<LoadRootFromSnapshot>false</LoadRootFromSnapshot>
+
+			<Presentation>
+				<Text>
+					<Id>1637182862511</Id>
+					<Name><![CDATA[text]]></Name>
+					<X>50</X><Y>30</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-12490271</Color>
+					<Text><![CDATA[Onnx Wrapper]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+			</Presentation>
+
+			<Parameters>			
+			</Parameters>			
+			<PresentationProperties>
+				<EnableZoomAndPanning>true</EnableZoomAndPanning>
+				<ExecutionMode><![CDATA[realTimeScaled]]></ExecutionMode>
+				<Title><![CDATA[Onnx Wrapper : Simulation]]></Title>	
+				<EnableDeveloperPanel>true</EnableDeveloperPanel>
+				<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
+				<RealTimeScale>1.0</RealTimeScale>
+			</PresentationProperties>
+			<ModelTimeProperties>
+				<StopOption><![CDATA[Never]]></StopOption>
+				<InitialDate><![CDATA[1637107200000]]></InitialDate>	
+				<InitialTime><![CDATA[0.0]]></InitialTime>	
+				<FinalDate><![CDATA[1639699200000]]></FinalDate>	
+				<FinalTime><![CDATA[100.0]]></FinalTime>	
+			</ModelTimeProperties>
+			<BypassInitialScreen>true</BypassInitialScreen>
+		</SimulationExperiment>	
+	</Experiments>
+	<Libraries>
+		<!--   =========   Library   ========  -->
+		<Library>
+			<Id>1637603787003</Id>
+			<Name><![CDATA[OnnxLibrary]]></Name>
+			<Description><![CDATA[A wrapper around the ONNX Runtime for Java.
+
+Provides a more user-friendly API for predictions with less Java code.]]></Description>
+			<AOCEntry>
+				<ActiveObjectClassId>1637182964287</ActiveObjectClassId>
+				<Icon16ResourceReference>
+					<PackageName><![CDATA[onnx_wrapper]]></PackageName>
+					<ClassName><![CDATA[onyx_16.png]]></ClassName>
+				</Icon16ResourceReference>
+				<Icon32ResourceReference>
+					<PackageName><![CDATA[onnx_wrapper]]></PackageName>
+					<ClassName><![CDATA[onyx_32.png]]></ClassName>
+				</Icon32ResourceReference>
+			</AOCEntry>
+
+			<IconResourceReference>
+				<PackageName><![CDATA[onnx_wrapper]]></PackageName>
+				<ClassName><![CDATA[onyx_16.png]]></ClassName>
+			</IconResourceReference>
+			<VersionMajor>1</VersionMajor>
+			<VersionMinor>0</VersionMinor>
+			<VersionBuild>0</VersionBuild>
+			<Provider><![CDATA[]]></Provider>    
+		</Library>
+	</Libraries>
+	<ModelResources>
+		<Resource>
+			<Path><![CDATA[onnxruntime-1.9.0.jar]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[commons-lang3-3.12.0.jar]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[onyx_16.png]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[onyx_32.png]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+		</Resource>
+	</ModelResources>
+    <RequiredLibraryReference>
+		<LibraryName><![CDATA[com.anylogic.libraries.modules.markup_descriptors]]></LibraryName>
+		<VersionMajor>1</VersionMajor>
+		<VersionMinor>0</VersionMinor>
+		<VersionBuild>0</VersionBuild>
+    </RequiredLibraryReference>
+    <RequiredLibraryReference>
+		<LibraryName><![CDATA[com.anylogic.libraries.processmodeling]]></LibraryName>
+		<VersionMajor>8</VersionMajor>
+		<VersionMinor>0</VersionMinor>
+		<VersionBuild>5</VersionBuild>
+    </RequiredLibraryReference>
+	<ClassPathEntry>
+		<ResourceReference>
+			<PackageName><![CDATA[onnx_wrapper]]></PackageName>
+			<ClassName><![CDATA[onnxruntime-1.9.0.jar]]></ClassName>
+		</ResourceReference>
+		<Imported>true</Imported>
+		<Folder>false</Folder>
+	</ClassPathEntry>
+	<ClassPathEntry>
+		<ResourceReference>
+			<PackageName><![CDATA[onnx_wrapper]]></PackageName>
+			<ClassName><![CDATA[commons-lang3-3.12.0.jar]]></ClassName>
+		</ResourceReference>
+		<Imported>true</Imported>
+		<Folder>false</Folder>
+	</ClassPathEntry>
+</Model>
+</AnyLogicWorkspace>
