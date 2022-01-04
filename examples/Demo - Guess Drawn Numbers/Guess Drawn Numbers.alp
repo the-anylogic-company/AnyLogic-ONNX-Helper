@@ -255,7 +255,7 @@ updatePredictions();]]></Body>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[float[][] output = (float[][])onnxWrapper.predict(imageArray);
+					<Body><![CDATA[float[][] output = onnxWrapper.predict(float[][].class, imageArray);
 // e.g., [[ -4, 3, 1, 0.01, 3.43, ... ]]
 
 
@@ -313,9 +313,6 @@ traceln("Raw confidences = %s", Arrays.deepToString(output));]]></Body>
 							<Value Class="CodeValue">
 								<Code><![CDATA["mnist-small.onnx"]]></Code>
 							</Value>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[ambiguousInputBehavior]]></Name>
 						</Parameter>
 						<Parameter>
 							<Name><![CDATA[outputDataMethod]]></Name>

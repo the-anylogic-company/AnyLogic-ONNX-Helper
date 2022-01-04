@@ -474,7 +474,7 @@ else
 						<Name><![CDATA[agent]]></Name>
 						<Type><![CDATA[Patient]]></Type>
 					</Parameter>
-					<Body><![CDATA[float[] prediction = (float[]) losQuerier.predict(agent.getArray());
+					<Body><![CDATA[float[] prediction = losQuerier.predict(float[].class, agent.getArray());
 return (double)prediction[0];]]></Body>
 				</Function>
 				<Function AccessType="default" StaticFunction="false">
@@ -489,7 +489,7 @@ return (double)prediction[0];]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[// Use the previous values to predict the next.
 // Note that we need to convert a Collection-typed input to a primitive one.
-float[] raw_output = (float[])rateQuerier.predict(previousRates.toArray(new Float[6]));
+float[] raw_output = rateQuerier.predict(float[].class, previousRates.toArray(new Float[6]));
 float predicted_rate = raw_output[0];
 previousRates.add(predicted_rate);
 return (double)predicted_rate;]]></Body>
@@ -1425,11 +1425,8 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 						<Parameter>
 							<Name><![CDATA[targetModel]]></Name>
 							<Value Class="CodeValue">
-								<Code><![CDATA["C:\\Users\\Tyler Wolfe-Adam\\Documents\\Project ONNX\\Examples\\Simple Hospital (AI Testbed)-ONNX\\python\\los_model-modified.onnx"]]></Code>
+								<Code><![CDATA["los_model.onnx"]]></Code>
 							</Value>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[ambiguousInputBehavior]]></Name>
 						</Parameter>
 						<Parameter>
 							<Name><![CDATA[outputDataMethod]]></Name>
@@ -1497,11 +1494,8 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 						<Parameter>
 							<Name><![CDATA[targetModel]]></Name>
 							<Value Class="CodeValue">
-								<Code><![CDATA["C:\\Users\\Tyler Wolfe-Adam\\Documents\\Project ONNX\\Examples\\Simple Hospital (AI Testbed)-ONNX\\python\\rate_model-modified.onnx"]]></Code>
+								<Code><![CDATA["rate_model.onnx"]]></Code>
 							</Value>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[ambiguousInputBehavior]]></Name>
 						</Parameter>
 						<Parameter>
 							<Name><![CDATA[outputDataMethod]]></Name>
@@ -10345,20 +10339,6 @@ rot %= (2*PI);]]></OnDrawCode>
 			<BypassInitialScreen>false</BypassInitialScreen>
 		</SimulationExperiment>	
 	</Experiments>
-	<ModelResources>
-		<Resource>
-			<Path><![CDATA[los_model.h5]]></Path>
-			<ReferencedFromUserCode>true</ReferencedFromUserCode>
-		</Resource>
-		<Resource>
-			<Path><![CDATA[nn_model_parser.py]]></Path>
-			<ReferencedFromUserCode>true</ReferencedFromUserCode>
-		</Resource>
-		<Resource>
-			<Path><![CDATA[rate_model.h5]]></Path>
-			<ReferencedFromUserCode>true</ReferencedFromUserCode>
-		</Resource>
-	</ModelResources>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.processmodeling]]></LibraryName>
 		<VersionMajor>8</VersionMajor>
@@ -10373,7 +10353,7 @@ rot %= (2*PI);]]></OnDrawCode>
     </RequiredLibraryReference>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[onnx_wrapper]]></LibraryName>
-		<VersionMajor>0</VersionMajor>
+		<VersionMajor>1</VersionMajor>
 		<VersionMinor>0</VersionMinor>
 		<VersionBuild>0</VersionBuild>
     </RequiredLibraryReference>
