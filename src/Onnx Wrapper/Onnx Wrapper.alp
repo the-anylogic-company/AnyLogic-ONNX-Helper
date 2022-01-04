@@ -663,7 +663,7 @@ return null;]]></Body>
 				</Function>
 				<Function AccessType="default" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[HashMap<String, Object>]]></ReturnType>
+					<ReturnType><![CDATA[Map<String, Object>]]></ReturnType>
 					<Id>1637518205493</Id>
 					<Name><![CDATA[inputDataToMap]]></Name>
 					<Description><![CDATA[Handles finding matching names for all the data in the given input. Used by the predict function.]]></Description>
