@@ -1131,7 +1131,7 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 				<ClassName><![CDATA[onyx_16.png]]></ClassName>
 			</IconResourceReference>
 			<VersionMajor>1</VersionMajor>
-			<VersionMinor>0</VersionMinor>
+			<VersionMinor>1</VersionMinor>
 			<VersionBuild>0</VersionBuild>
 			<Provider><![CDATA[]]></Provider>    
 		</Library>
