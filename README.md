@@ -44,13 +44,17 @@ There are two parameters you can set in the object.
 
 #### Primary methods
 
-`Object predict(Map<String,Object>)` - queries the ONNX model based on the provided inputs, which are passed as a Map-type with the input name as the key and the value as the data in the type expected by your ONNX model. 
+There is one method called "predict" which has four variants. You can use the one that is most applicable to your use case.
 
-`Object predict(Object...)` - queries the ONNX model based on the provided inputs, which are passed as a list of values with the expected data type and order as described in your ONNX model.
+`Object predict(Map<String,Object>)` - queries the ONNX model based on the provided mapping from the input name to that input's value (as expected by your ONNX model). Returns as the generic `Object` class.
 
-Note 1: You do not need to cast your inputs to the `Object` type (Java will do this automatically).
+`T predict(Class<T>, Map<String,Object>)` - same as the above method but allows you to specify the expected return type as the first argument (thus, no type casting required).
 
-Note 2: The return type will depend on your choice in the properties. Due to the ambiguity, the method returns as an `Object` need (will need to be casted for you to index it).
+`Object predict(Object...)` - queries the ONNX model based on the provided list of inputs (in the order as expected by your ONNX model). Returns as the generic `Object` class.
+
+`T predict(Class<T>, Map<String,Object>)` - same as the above method but allows you to specify the expected return type as the first argument (thus, no type casting required).
+
+Note: You do not need to cast your inputs to the `Object` type (Java will do this automatically).
 
 #### Helper methods
 
