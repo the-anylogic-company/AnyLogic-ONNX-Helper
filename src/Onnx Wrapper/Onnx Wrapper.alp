@@ -52,73 +52,7 @@ private Class<?> _getRootComponentType(Class<?> cls) {
 		return _getRootComponentType(cls.getComponentType());
 	}
 	return cls;
-}
-
-/*
-public Class<?> getArrayType(Class<?> componentType,
-		int dimensions) throws ClassNotFoundException {
-	if (dimensions == 0) {
-		return componentType;
-	}
-
-	String rawName = componentType.getName();
-	switch (rawName) {
-		case "byte" :
-			rawName = "B";
-			break;
-		case "char" :
-			rawName = "C";
-			break;
-		case "double" :
-			rawName = "D";
-			break;
-		case "float" :
-			rawName = "F";
-			break;
-		case "int" :
-			rawName = "I";
-			break;
-		case "long" :
-			rawName = "J";
-			break;
-		case "short" :
-			rawName = "S";
-			break;
-		case "boolean" :
-			rawName = "Z";
-			break;
-		default :
-			rawName = "L" + rawName + ";";
-			break;
-	}
-
-	for (int i = 0; i < dimensions; i++) {
-		rawName = "[" + rawName;
-	}
-
-	return Class.forName(rawName);
-}
-
-public Object createArray(Class<?> componentType,
-		int dimensions, int length)
-		throws NegativeArraySizeException,
-		ClassNotFoundException {
-	if (dimensions == 0) {
-		return null;
-	}
-
-	Object array = Array.newInstance(
-			getArrayType(componentType, dimensions - 1),
-			length);
-
-	for (int i = 0; i < length; i++) {
-		Array.set(array, i, createArray(componentType,
-				dimensions - 1, length));
-	}
-
-	return array;
-}
-*/]]></AdditionalClassCode>
+}]]></AdditionalClassCode>
 			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Import><![CDATA[import ai.onnxruntime.OrtEnvironment;
 import ai.onnxruntime.OrtSession;
@@ -139,7 +73,8 @@ import java.util.stream.IntStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ai.onnxruntime.OnnxJavaType;
 import java.util.stream.Stream;]]></Import>
-			<StartupCode><![CDATA[if (targetModel != null) {
+			<StartupCode><![CDATA[// only start a session if a model was provided
+if (targetModel != null) {
 	reloadSession();
 }]]></StartupCode>
 			<Generic>false</Generic>
@@ -800,7 +735,7 @@ traceln(output1d); // [0,1,2,3,4,5,6,7,8] </pre>
 @param elementType The class of the inner-most data objects
 @return a single dimension primitive array, of the wrapper class type (e.g., Integer).]]></Description>
 					<CustomModifierCode><![CDATA[public static <T>]]></CustomModifierCode>                 	
-					<X>270</X><Y>570</Y>
+					<X>270</X><Y>540</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -813,13 +748,15 @@ traceln(output1d); // [0,1,2,3,4,5,6,7,8] </pre>
 						<Name><![CDATA[elementType]]></Name>
 						<Type><![CDATA[Class<T>]]></Type>
 					</Parameter>
-					<Body><![CDATA[Stream<Object> stream = object != null && object.getClass().isArray()
-		? IntStream.range(0, Array.getLength(object)).mapToObj(ix -> Array.get(object, ix)).flatMap(x -> _flatten(x))
-		: Stream.of(object);
+					<Body><![CDATA[// call recursive version which will do the unpacking
+Stream<Object> stream = _flatten(object);
 
+// create an initial representation of the array to object its length
 Object[] objArray = stream.toArray();
+// create generic array to hold the final values
 final T[] genArray;
 
+// initialize the generic array based on the element type
 if (elementType.equals(int.class) || elementType.equals(Integer.class)) {
 	genArray = (T[]) new Integer[objArray.length];
 } else if (elementType.equals(long.class) || elementType.equals(Long.class)) {
@@ -832,6 +769,7 @@ if (elementType.equals(int.class) || elementType.equals(Integer.class)) {
 	genArray = (T[]) new Object[objArray.length];
 }
 
+// set all the values in the generic array
 IntStream.range(0, objArray.length).forEach(i -> genArray[i] = (T)objArray[i]);
 return genArray;]]></Body>
 				</Function>
@@ -840,7 +778,7 @@ return genArray;]]></Body>
 					<ReturnType><![CDATA[Stream<Object>]]></ReturnType>
 					<Id>1643303433067</Id>
 					<Name><![CDATA[_flatten]]></Name>
-					<X>290</X><Y>590</Y>
+					<X>290</X><Y>560</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -849,7 +787,8 @@ return genArray;]]></Body>
 						<Name><![CDATA[object]]></Name>
 						<Type><![CDATA[Object]]></Type>
 					</Parameter>
-					<Body><![CDATA[Stream<Object> stream = object != null && object.getClass().isArray()
+					<Body><![CDATA[// ref: https://stackoverflow.com/questions/31851548/flatten-nested-arrays-in-java#comment91107722_44909768
+Stream<Object> stream = object != null && object.getClass().isArray()
 		? IntStream.range(0, Array.getLength(object)).mapToObj(ix -> Array.get(object, ix)).flatMap(x -> _flatten(x))
 		: Stream.of(object); 
 return stream;]]></Body>
@@ -1208,10 +1147,6 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 	</Libraries>
 	<ModelResources>
 		<Resource>
-			<Path><![CDATA[onnxruntime-1.9.0.jar]]></Path>
-			<ReferencedFromUserCode>true</ReferencedFromUserCode>
-		</Resource>
-		<Resource>
 			<Path><![CDATA[commons-lang3-3.12.0.jar]]></Path>
 			<ReferencedFromUserCode>true</ReferencedFromUserCode>
 		</Resource>
@@ -1221,6 +1156,10 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 		</Resource>
 		<Resource>
 			<Path><![CDATA[onyx_32.png]]></Path>
+			<ReferencedFromUserCode>true</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[onnxruntime-1.10.0.jar]]></Path>
 			<ReferencedFromUserCode>true</ReferencedFromUserCode>
 		</Resource>
 	</ModelResources>
@@ -1239,7 +1178,7 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 	<ClassPathEntry>
 		<ResourceReference>
 			<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-			<ClassName><![CDATA[onnxruntime-1.9.0.jar]]></ClassName>
+			<ClassName><![CDATA[commons-lang3-3.12.0.jar]]></ClassName>
 		</ResourceReference>
 		<Imported>true</Imported>
 		<Folder>false</Folder>
@@ -1247,7 +1186,7 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 	<ClassPathEntry>
 		<ResourceReference>
 			<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-			<ClassName><![CDATA[commons-lang3-3.12.0.jar]]></ClassName>
+			<ClassName><![CDATA[onnxruntime-1.10.0.jar]]></ClassName>
 		</ResourceReference>
 		<Imported>true</Imported>
 		<Folder>false</Folder>
