@@ -28,16 +28,12 @@
   
 	<!-- Include all the dependencies you want to download below. -->
 	<dependencies>
-	
 		
-	
-		<!--
 		<dependency>
 			<groupId>com.microsoft.onnxruntime</groupId>
-			<artifactId>onnxruntime_gpu</artifactId>
+			<artifactId>onnxruntime</artifactId>
 			<version>1.10.0</version>
 		</dependency>
-		-->
 		
 	</dependencies>
 	

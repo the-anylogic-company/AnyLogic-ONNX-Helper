@@ -1147,10 +1147,6 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 	</Libraries>
 	<ModelResources>
 		<Resource>
-			<Path><![CDATA[onnxruntime-1.9.0.jar]]></Path>
-			<ReferencedFromUserCode>true</ReferencedFromUserCode>
-		</Resource>
-		<Resource>
 			<Path><![CDATA[commons-lang3-3.12.0.jar]]></Path>
 			<ReferencedFromUserCode>true</ReferencedFromUserCode>
 		</Resource>
@@ -1160,6 +1156,10 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 		</Resource>
 		<Resource>
 			<Path><![CDATA[onyx_32.png]]></Path>
+			<ReferencedFromUserCode>true</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[onnxruntime-1.10.0.jar]]></Path>
 			<ReferencedFromUserCode>true</ReferencedFromUserCode>
 		</Resource>
 	</ModelResources>
@@ -1178,7 +1178,7 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 	<ClassPathEntry>
 		<ResourceReference>
 			<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-			<ClassName><![CDATA[onnxruntime-1.9.0.jar]]></ClassName>
+			<ClassName><![CDATA[commons-lang3-3.12.0.jar]]></ClassName>
 		</ResourceReference>
 		<Imported>true</Imported>
 		<Folder>false</Folder>
@@ -1186,7 +1186,7 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 	<ClassPathEntry>
 		<ResourceReference>
 			<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-			<ClassName><![CDATA[commons-lang3-3.12.0.jar]]></ClassName>
+			<ClassName><![CDATA[onnxruntime-1.10.0.jar]]></ClassName>
 		</ResourceReference>
 		<Imported>true</Imported>
 		<Folder>false</Folder>
