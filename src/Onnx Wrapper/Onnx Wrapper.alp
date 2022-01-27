@@ -278,7 +278,7 @@ It can be changed during runtime by calling <code>set_targetModel("new_model.onn
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<DefaultValue Class="CodeValue">
-							<Code><![CDATA["my_model.onnx"]]></Code>
+							<Code><![CDATA[null // e.g., "my_model.onnx"]]></Code>
 						</DefaultValue>
 						<OnChangeCode><![CDATA[reloadSession();]]></OnChangeCode>
 						<ParameterEditor>
