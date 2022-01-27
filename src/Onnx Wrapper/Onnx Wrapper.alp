@@ -16,7 +16,7 @@
 		<ActiveObjectClass>
 			<Id>1637182964287</Id>
 			<Name><![CDATA[OnnxWrapper]]></Name>
-			<AdditionalClassCode><![CDATA[private final ObjectMapper mapper = new ObjectMapper();
+			<AdditionalClassCode><![CDATA[private final static ObjectMapper mapper = new ObjectMapper();
 
 int[] findArrayDims(Object o) {
 	 return _findArrayDims(o, new ArrayList<Integer>()).stream()
@@ -537,7 +537,7 @@ Removes all non-numical characters and substitutes negative sizes (i.e., variabl
 					</Parameter>
 					<Body><![CDATA[return Arrays.toString(shape).replaceAll("[\\[\\] ]", "");]]></Body>
 				</Function>
-				<Function AccessType="public" StaticFunction="false">
+				<Function AccessType="public" StaticFunction="true">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[int[]]]></ReturnType>
 					<Id>1637451444620</Id>
@@ -558,7 +558,7 @@ for (int i = 0; i < array.length; i++) {
 }
 return maxes;]]></Body>
 				</Function>
-				<Function AccessType="public" StaticFunction="false">
+				<Function AccessType="public" StaticFunction="true">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[int]]></ReturnType>
 					<Id>1637451627622</Id>
@@ -585,7 +585,7 @@ for (int i = 0; i < array.length; i++) {
 }
 return idx;]]></Body>
 				</Function>
-				<Function AccessType="public" StaticFunction="false">
+				<Function AccessType="public" StaticFunction="true">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[int[]]]></ReturnType>
 					<Id>1637451628700</Id>
@@ -606,7 +606,7 @@ for (int i = 0; i < array.length; i++) {
 }
 return maxes;]]></Body>
 				</Function>
-				<Function AccessType="public" StaticFunction="false">
+				<Function AccessType="public" StaticFunction="true">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[int]]></ReturnType>
 					<Id>1637451630249</Id>
@@ -639,7 +639,7 @@ return idx;]]></Body>
 					<Id>1637517797260</Id>
 					<Name><![CDATA[convert]]></Name>
 					<Description><![CDATA[Converts the class of the passed object to the specified type (accomplished via the Jackson library).]]></Description>
-					<CustomModifierCode><![CDATA[public <T>]]></CustomModifierCode>                 	
+					<CustomModifierCode><![CDATA[public static <T>]]></CustomModifierCode>                 	
 					<X>270</X><Y>500</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -656,8 +656,9 @@ return idx;]]></Body>
 					<Body><![CDATA[try {
 	return mapper.convertValue(object, outputType);
 } catch (Exception e) {
-	warning("Conversion of object (type %s) to type %s failed, returning null. Reason: %s",
+	traceln("Conversion of object (type %s) to type %s failed, returning null. Reason: %s",
 		object.getClass(), outputType, e);
+	e.printStackTrace();
 }
 return null;]]></Body>
 				</Function>
@@ -1131,7 +1132,7 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 				<ClassName><![CDATA[onyx_16.png]]></ClassName>
 			</IconResourceReference>
 			<VersionMajor>1</VersionMajor>
-			<VersionMinor>1</VersionMinor>
+			<VersionMinor>2</VersionMinor>
 			<VersionBuild>0</VersionBuild>
 			<Provider><![CDATA[]]></Provider>    
 		</Library>
