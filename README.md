@@ -70,6 +70,8 @@ Note: You do not need to cast your inputs to the `Object` type (Java will do thi
 
 `T convert(Object, Class<T>)` - converts the provided object to the converted class.
 
+`T[] flatten(Object, Class<T>)` - converts a multi-dimensional array to a single dimension; pass the element type as the second argument.
+
 ## Code Examples
 
 Each example below is introduced with a scenario to explain the ONNX model's inputs/outputs that are used in that example. Subsections may use the scenario to show different variations of a concept.
@@ -250,7 +252,7 @@ float[][][] forecastedRates = (float[][][]) output_list.get(1);
 
 ### Other examples
 
-The following is for any helper methods or demoing miscellaneous topics.
+The following is for any helper methods or demoing miscellaneous topics. See the built-in javadocs for more details.
 
 #### argMax
 
@@ -286,4 +288,15 @@ float[][] nn_input = wrapper.convert(data_array, float[][].class);
 
 Object output = wrapper.predict(nn_input);
 // ...
+```
+
+#### flatten
+
+Note that this method returns an array using the wrapper type of the original class (e.g., Integer for int arrays).
+
+```java
+int[][] data2d = new int[][] { {0,1,2}, {3,4,5}, {6,7,8} };
+
+Integer[] data1d = wrapper.flatten(data2d, int.class);
+// = [0,1,2,3,4,5,6,7,8]
 ```
