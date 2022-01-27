@@ -137,7 +137,8 @@ import java.util.Map.Entry;
 import java.lang.reflect.Array;
 import java.util.stream.IntStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ai.onnxruntime.OnnxJavaType;]]></Import>
+import ai.onnxruntime.OnnxJavaType;
+import java.util.stream.Stream;]]></Import>
 			<StartupCode><![CDATA[if (targetModel != null) {
 	reloadSession();
 }]]></StartupCode>
@@ -784,6 +785,74 @@ try {
 	e.printStackTrace();
 }
 return null;]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[T[]]]></ReturnType>
+					<Id>1643302640191</Id>
+					<Name><![CDATA[flatten]]></Name>
+					<Description><![CDATA[Converts a multi-dimensional primitive array to a single dimension (1D) array, in row-major order. Intended for common numerical types (int, long, float, double); other types get casted to Object.
+Example:<pre> int[][] example2d = new int[][] { {0,1,2}, {3,4,5}, {6,7,8} };
+Integer[] output1d = OnnxWrapper.flatten(example2d, int.class);
+traceln(output1d); // [0,1,2,3,4,5,6,7,8] </pre>
+
+@param object An array to flatten
+@param elementType The class of the inner-most data objects
+@return a single dimension primitive array, of the wrapper class type (e.g., Integer).]]></Description>
+					<CustomModifierCode><![CDATA[public static <T>]]></CustomModifierCode>                 	
+					<X>270</X><Y>570</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[object]]></Name>
+						<Type><![CDATA[Object]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[elementType]]></Name>
+						<Type><![CDATA[Class<T>]]></Type>
+					</Parameter>
+					<Body><![CDATA[Stream<Object> stream = object != null && object.getClass().isArray()
+		? IntStream.range(0, Array.getLength(object)).mapToObj(ix -> Array.get(object, ix)).flatMap(x -> _flatten(x))
+		: Stream.of(object);
+
+Object[] objArray = stream.toArray();
+final T[] genArray;
+
+if (elementType.equals(int.class) || elementType.equals(Integer.class)) {
+	genArray = (T[]) new Integer[objArray.length];
+} else if (elementType.equals(long.class) || elementType.equals(Long.class)) {
+	genArray = (T[]) new Long[objArray.length];
+} else if (elementType.equals(float.class) || elementType.equals(Float.class)) {
+	genArray = (T[]) new Float[objArray.length];
+} else if (elementType.equals(double.class) || elementType.equals(Double.class)) {
+	genArray = (T[]) new Double[objArray.length];
+} else {
+	genArray = (T[]) new Object[objArray.length];
+}
+
+IntStream.range(0, objArray.length).forEach(i -> genArray[i] = (T)objArray[i]);
+return genArray;]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="true">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[Stream<Object>]]></ReturnType>
+					<Id>1643303433067</Id>
+					<Name><![CDATA[_flatten]]></Name>
+					<X>290</X><Y>590</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[object]]></Name>
+						<Type><![CDATA[Object]]></Type>
+					</Parameter>
+					<Body><![CDATA[Stream<Object> stream = object != null && object.getClass().isArray()
+		? IntStream.range(0, Array.getLength(object)).mapToObj(ix -> Array.get(object, ix)).flatMap(x -> _flatten(x))
+		: Stream.of(object); 
+return stream;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
