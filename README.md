@@ -54,7 +54,7 @@ There is one method called "predict" which has four variants. You can use the on
 
 `Object predict(Object...)` - queries the ONNX model based on the provided list of inputs (in the order as expected by your ONNX model). Returns as the generic `Object` class.
 
-`T predict(Class<T>, Map<String,Object>)` - same as the above method but allows you to specify the expected return type as the first argument (thus, no type casting required).
+`T predict(Class<T>, Object...)` - same as the above method but allows you to specify the expected return type as the first argument (thus, no type casting required).
 
 Note: You do not need to cast your inputs to the `Object` type (Java will do this automatically).
 
