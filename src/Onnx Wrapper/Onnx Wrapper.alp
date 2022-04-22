@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.9.202112171527" AlpVersion="8.7.3">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.10.202202091651" AlpVersion="8.7.3">
 <Model>
 	<Id>1637182862490</Id>
 	<Name><![CDATA[Onnx Wrapper]]></Name>
@@ -15,7 +15,8 @@
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1637182964287</Id>
-			<Name><![CDATA[OnnxWrapper]]></Name>
+			<Name><![CDATA[OnnxHelper]]></Name>
+			<Description><![CDATA[A helper object for calling the ONNX Runtime. Drag into your model, designate the file, and request outputs via the `predict` method - it's that easy!]]></Description>
 			<AdditionalClassCode><![CDATA[private final static ObjectMapper mapper = new ObjectMapper();
 
 int[] findArrayDims(Object o) {
@@ -91,7 +92,7 @@ if (targetModel != null) {
 			<SamplesToKeep>100</SamplesToKeep>
 			<LimitNumberOfArrayElements>false</LimitNumberOfArrayElements>
 			<ElementsLimitValue>100</ElementsLimitValue>
-			<MakeDefaultViewArea>true</MakeDefaultViewArea>
+			<MakeDefaultViewArea>false</MakeDefaultViewArea>
 			<SceneGridColor/>
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
@@ -201,7 +202,7 @@ if (targetModel != null) {
 				<Variable Class="Parameter">
 					<Id>1637183359611</Id>
 					<Name><![CDATA[targetModel]]></Name>
-					<Description><![CDATA[The ONNX file to use.<br>
+					<Description><![CDATA[The ONNX file to use. It can be expressed as a local or absolute path.<br>
 <br>
 It can be changed during runtime by calling <code>set_targetModel("new_model.onnx");</code> or restarted with <code>refreshSession()</code>.]]></Description>
 					<X>50</X><Y>50</Y>
@@ -221,59 +222,6 @@ It can be changed during runtime by calling <code>set_targetModel("new_model.onn
 							<Id>1637183359609</Id>
 							<Label><![CDATA[ONNX File]]></Label>
 							<EditorContolType>FILE_CHOOSER</EditorContolType>
-							<MinSliderValue><![CDATA[0]]></MinSliderValue>
-							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
-							<DelimeterType>NO_DELIMETER</DelimeterType>
-						</ParameterEditor>
-					</Properties>                 
-				</Variable>
-				<Variable Class="Parameter">
-					<Id>1637370575799</Id>
-					<Name><![CDATA[outputDataMethod]]></Name>
-					<Description><![CDATA[This determines how the output of the model will return data.<br>
-<br>
-<ul>
-<li>0 = As a map (key = output name, value = output entry)</li>
-<li>1 = As a list of the outputs (regardless if there's one entry or multiple)</li>
-<li>2 = The output entry directly when only one value, or as a list of outputs when there are multiple outputs.</li>
-</ul>]]></Description>
-					<X>50</X><Y>80</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[int]]></Type>
-						<UnitType><![CDATA[NONE]]></UnitType>
-						<SdArray>false</SdArray>
-						<DefaultValue Class="CodeValue">
-							<Code><![CDATA[2]]></Code>
-						</DefaultValue>
-						<ParameterEditor>
-							<Id>1637370575797</Id>
-							<Label><![CDATA[How output is returned]]></Label>
-							<EditorContolType>RADIO_BUTTONS</EditorContolType>
-							<PredefParamValue>
-								<Id>1637370575795</Id>
-								<Name><![CDATA[As a map]]></Name>
-								<Value Class="CodeValue">
-									<Code><![CDATA[0]]></Code>
-								</Value>
-							</PredefParamValue>
-							<PredefParamValue>
-								<Id>1637370575796</Id>
-								<Name><![CDATA[As a list (always)]]></Name>
-								<Value Class="CodeValue">
-									<Code><![CDATA[1]]></Code>
-								</Value>
-							</PredefParamValue>
-							<PredefParamValue>
-								<Id>0</Id>
-								<Name><![CDATA[Directly or as a list]]></Name>
-								<Value Class="CodeValue">
-									<Code><![CDATA[2]]></Code>
-								</Value>
-							</PredefParamValue>
 							<MinSliderValue><![CDATA[0]]></MinSliderValue>
 							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
 							<DelimeterType>NO_DELIMETER</DelimeterType>
@@ -376,6 +324,9 @@ return sb.toString();]]></Body>
 					<ReturnType><![CDATA[T]]></ReturnType>
 					<Id>1637267076456</Id>
 					<Name><![CDATA[predict]]></Name>
+					<Description><![CDATA[@param	returnType	The data type to cast the result to
+@param input A mapping of input-name to input-value
+@return The model's output, in the specified data type, based on the provided inputs]]></Description>
 					<CustomModifierCode><![CDATA[public <T>]]></CustomModifierCode>                 	
 					<X>270</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -390,25 +341,8 @@ return sb.toString();]]></Body>
 						<Name><![CDATA[input]]></Name>
 						<Type><![CDATA[Map<String, Object>]]></Type>
 					</Parameter>
-					<Body><![CDATA[Object result = predict(input);
-return returnType.cast(result);]]></Body>
-				</Function>
-				<Function AccessType="public" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[Object]]></ReturnType>
-					<Id>1637267107058</Id>
-					<Name><![CDATA[predict]]></Name>
-					<X>270</X><Y>230</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Parameter>
-						<Name><![CDATA[inputs]]></Name>
-						<Type><![CDATA[Object...]]></Type>
-					</Parameter>
-					<Body><![CDATA[Map<String, Object> imap = inputDataToMap(inputs);
-return predict(imap);]]></Body>
+					<Body><![CDATA[Map<String, Object> output = predict(input);
+return outputMapToType(returnType, output);]]></Body>
 				</Function>
 				<Function AccessType="default" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
@@ -430,30 +364,60 @@ Removes all non-numical characters and substitutes negative sizes (i.e., variabl
 				</Function>
 				<Function AccessType="default" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[Object]]></ReturnType>
+					<ReturnType><![CDATA[T]]></ReturnType>
 					<Id>1637435119251</Id>
-					<Name><![CDATA[resultsToOutputData]]></Name>
-					<X>290</X><Y>200</Y>
+					<Name><![CDATA[outputMapToType]]></Name>
+					<CustomModifierCode><![CDATA[<T>]]></CustomModifierCode>                 	
+					<X>270</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Parameter>
-						<Name><![CDATA[results]]></Name>
+						<Name><![CDATA[returnType]]></Name>
+						<Type><![CDATA[Class<T>]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[outputMap]]></Name>
 						<Type><![CDATA[Map<String, Object>]]></Type>
 					</Parameter>
-					<Body><![CDATA[if (outputDataMethod == 0) { // map
-	return results;
-}
-
-List<Object> outputs = results.entrySet().stream()
+					<Body><![CDATA[// Try to cast output to specified return type.
+if (Map.class.isAssignableFrom(returnType)) {
+	// User wants a type of map
+	return returnType.cast(outputMap);
+} else if (List.class.isAssignableFrom(returnType)) {
+	// User wants a type of list
+	List<Object> outputList = outputMap.entrySet().stream()
        .map(e -> e.getValue())
        .collect(Collectors.toList());
-if (outputDataMethod == 2 && outputs.size() == 1) { // single if only one
-	return outputs.get(0);
+    return returnType.cast(outputList);
+} else if (Set.class.isAssignableFrom(returnType)) {
+	// User wants a type of set
+	Set<Object> outputList = outputMap.entrySet().stream()
+       .map(e -> e.getValue())
+       .collect(Collectors.toSet());
+    return returnType.cast(outputList);
+} else if (returnType.isPrimitive()) {
+	// User expects a single output of a primitive type
+	return returnType.cast( outputMap.values().stream().findFirst().get() );
+} else if (returnType.isArray()) {
+	// User wants some type of traditional array (i.e., [])
+	if (outputMap.size() == 1) {
+		// Output has a single value of an array (assumed to be matching the desired return type)
+		return returnType.cast(outputMap.values().stream().findFirst().get());
+	} else {
+		// Output has multiple values, each an instance of one dimension less than the desired return type
+		Object retVals = Array.newInstance(returnType.getComponentType(), outputMap.size());
+		List<Object> mapVals = new ArrayList<>(outputMap.values());
+		IntStream.range(0, mapVals.size()).forEachOrdered(i -> Array.set(retVals, i, mapVals.get(i)));
+		return (T)retVals;
+	}
+} else {
+	// Some other unhandled type
+	error("Return type not currently supported: %s", returnType);
 }
 
-return outputs;]]></Body>
+return null;]]></Body>
 				</Function>
 				<Function AccessType="default" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
@@ -604,7 +568,7 @@ return null;]]></Body>
 					<Id>1637518205493</Id>
 					<Name><![CDATA[inputDataToMap]]></Name>
 					<Description><![CDATA[Handles finding matching names for all the data in the given input. Used by the predict function.]]></Description>
-					<X>290</X><Y>270</Y>
+					<X>290</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -655,16 +619,18 @@ try {
 
 } catch (Exception e) { error(e, "Problem with getting info in session"); }
 
-return imap;
-]]></Body>
+return imap;]]></Body>
 				</Function>
 				<Function AccessType="default" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[T]]></ReturnType>
 					<Id>1640119964419</Id>
 					<Name><![CDATA[predict]]></Name>
+					<Description><![CDATA[@param	returnType	The data type to cast the result to
+@param inputs	One or more input values (order-sensitive)
+@return The model's output, based on the provided inputs]]></Description>
 					<CustomModifierCode><![CDATA[public <T>]]></CustomModifierCode>                 	
-					<X>270</X><Y>250</Y>
+					<X>270</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -677,15 +643,17 @@ return imap;
 						<Name><![CDATA[inputs]]></Name>
 						<Type><![CDATA[Object...]]></Type>
 					</Parameter>
-					<Body><![CDATA[Object result = predict(inputs);
-return returnType.cast(result);]]></Body>
+					<Body><![CDATA[Map<String, Object> input = inputDataToMap(inputs);
+return predict(returnType, input);]]></Body>
 				</Function>
 				<Function AccessType="public" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[Object]]></ReturnType>
+					<ReturnType><![CDATA[Map<String,Object>]]></ReturnType>
 					<Id>1640120305933</Id>
 					<Name><![CDATA[predict]]></Name>
-					<X>270</X><Y>160</Y>
+					<Description><![CDATA[@param input A mapping of input-name to input-value
+@return The model's output, as a mapping from name to value; possibly null if an error occured]]></Description>
+					<X>270</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -715,7 +683,7 @@ try {
 				entry.getValue().getValue());
 	}
 
-	return resultsToOutputData(outputs);
+	return outputs;
 } catch (Exception e) {
 	e.printStackTrace();
 }
@@ -792,6 +760,122 @@ Stream<Object> stream = object != null && object.getClass().isArray()
 		? IntStream.range(0, Array.getLength(object)).mapToObj(ix -> Array.get(object, ix)).flatMap(x -> _flatten(x))
 		: Stream.of(object); 
 return stream;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="true">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int[]]]></ReturnType>
+					<Id>1649362658547</Id>
+					<Name><![CDATA[argMin]]></Name>
+					<Description><![CDATA[Returns a list of indices representing the location of the minimum argument in each subarray of the provided array.]]></Description>
+					<X>350</X><Y>400</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[float[][]]]></Type>
+					</Parameter>
+					<Body><![CDATA[int[] mins = new int[array.length];
+for (int i = 0; i < array.length; i++) {
+	mins[i] = argMin(array[i]);
+}
+return mins;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="true">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int]]></ReturnType>
+					<Id>1649362658549</Id>
+					<Name><![CDATA[argMin]]></Name>
+					<Description><![CDATA[Returns the index of the minimum value in the passed array.]]></Description>
+					<X>350</X><Y>420</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[float[]]]></Type>
+					</Parameter>
+					<Body><![CDATA[if (array.length == 0)
+	return -1;
+int idx = 0;
+float val = array[0];
+for (int i = 0; i < array.length; i++) {
+	if (array[i] < val) {
+		idx = i;
+		val = array[i];
+	}
+}
+return idx;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="true">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int[]]]></ReturnType>
+					<Id>1649362658551</Id>
+					<Name><![CDATA[argMin]]></Name>
+					<Description><![CDATA[Returns a list of indices representing the location of the minimum argument in each subarray of the provided array.]]></Description>
+					<X>350</X><Y>440</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[double[][]]]></Type>
+					</Parameter>
+					<Body><![CDATA[int[] mins = new int[array.length];
+for (int i = 0; i < array.length; i++) {
+	mins[i] = argMin(array[i]);
+}
+return mins;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="true">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int]]></ReturnType>
+					<Id>1649362658553</Id>
+					<Name><![CDATA[argMin]]></Name>
+					<Description><![CDATA[Returns the index of the minimum value in the passed array.]]></Description>
+					<X>350</X><Y>460</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[array]]></Name>
+						<Type><![CDATA[double[]]]></Type>
+					</Parameter>
+					<Body><![CDATA[if (array.length == 0)
+	return -1;
+int idx = 0;
+double val = array[0];
+for (int i = 0; i < array.length; i++) {
+	if (array[i] < val) {
+		idx = i;
+		val = array[i];
+	}
+}
+return idx;]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[Map<String, Object>]]></ReturnType>
+					<Id>1650650905582</Id>
+					<Name><![CDATA[predict]]></Name>
+					<Description><![CDATA[@param inputs	One or more input values (order-sensitive)
+@return The model's output, as a mapping from name to value]]></Description>
+					<CustomModifierCode><![CDATA[public <T>]]></CustomModifierCode>                 	
+					<X>270</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[inputs]]></Name>
+						<Type><![CDATA[Object...]]></Type>
+					</Parameter>
+					<Body><![CDATA[Map<String, Object> input = inputDataToMap(inputs);
+return predict(input);]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -1063,6 +1147,48 @@ return stream;]]></Body>
 			</Presentation>
 
 				</Group>
+				<Text>
+					<Id>1650062875694</Id>
+					<Name><![CDATA[text]]></Name>
+					<X>250</X><Y>90</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Base method (map input -> map output)]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>10</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1650062895027</Id>
+					<Name><![CDATA[text2]]></Name>
+					<X>250</X><Y>140</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Derivative methods (map or list input -> custom typed output)]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>10</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
 			</Presentation>
 
 				</Level>
@@ -1119,7 +1245,7 @@ return stream;]]></Body>
 		<!--   =========   Library   ========  -->
 		<Library>
 			<Id>1637603787003</Id>
-			<Name><![CDATA[OnnxLibrary]]></Name>
+			<Name><![CDATA[Onnx Helper Library]]></Name>
 			<Description><![CDATA[A wrapper around the ONNX Runtime for Java.
 
 Provides a more user-friendly API for predictions with less Java code.]]></Description>
@@ -1139,8 +1265,8 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 				<PackageName><![CDATA[onnx_wrapper]]></PackageName>
 				<ClassName><![CDATA[onyx_16.png]]></ClassName>
 			</IconResourceReference>
-			<VersionMajor>1</VersionMajor>
-			<VersionMinor>2</VersionMinor>
+			<VersionMajor>2</VersionMajor>
+			<VersionMinor>0</VersionMinor>
 			<VersionBuild>0</VersionBuild>
 			<Provider><![CDATA[]]></Provider>    
 		</Library>
