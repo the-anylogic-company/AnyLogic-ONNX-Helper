@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.8.202111151746" AlpVersion="8.7.2">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.10.202202091651" AlpVersion="8.7.3">
 <Model>
 	<Id>1638474398027</Id>
 	<Name><![CDATA[Simple Operations]]></Name>
@@ -17,6 +17,8 @@
 			<Id>1638474398033</Id>
 			<Name><![CDATA[Main]]></Name>
 			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
+			<StartupCode><![CDATA[// Show initial results
+delayedSolve.restart();]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1638474398031</Id>
@@ -152,7 +154,7 @@
 					<ShowLabel>true</ShowLabel>
 					<Properties TriggerType="timeout" Mode="userControls">
 						<Timeout Class="CodeUnitValue">
-							<Code><![CDATA[0.1]]></Code>
+							<Code><![CDATA[0.05]]></Code>
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</Timeout>
 						<Rate Class="CodeUnitValue">
@@ -172,7 +174,7 @@
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
 					<Action><![CDATA[// Needed when changing dimensions, as the solve function is attempted to be called before
-//	the animation can be updated (ie AL bug)
+//	the animation can be updated.
 solveAnswers();]]></Action>
 				</Event>
 			</Events>
@@ -203,10 +205,22 @@ resultTexts.forEach(i -> i.setText("?.??"));]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[// Create all input objects based on the expected types
 
+if (matrixAFields.size() != dimA*3) {
+	// animation hasn't updated yet. Try again.
+	delayedSolve.restart(0.05);
+	return;
+}
+
+if (matrixBFields.size() != dimB*3) {
+	// animation hasn't updated yet. Try again.
+	delayedSolve.restart(0.05);
+	return;
+}
+
 long[][] transA = new long[dimA][3];
 for (int i = 0; i < dimA; i++) { // dim1 user-defined
 	for (int j = 0; j < 3; j++) { // dim2 pre-defined
-		transA[i][j] = (long)matrixAFields.get(i*3+j).getIntValue();
+		transA[i][j] = Long.parseLong(matrixAFields.get(i*3+j).getText());
 	}
 }
 
@@ -228,12 +242,8 @@ for (int i = 0; i < 2; i++) { // dims are predetermined
 
 int[][][] ignored = new int[4][1][5];
 
-// Construct a map for explicit input mapping, then find the outputs.
-/*Map<String,Object> inputs = Map.of(
-			"toTranspose_A", transA, "toTranspose_B", transB, 
-			"ceil_matrix", ceilMatrix, "mult_matrix", multMatrix,
-			"ignored", ignored);*/
-Object outputs = onnxWrapper.predict(transA, transB, ceilMatrix, multMatrix, ignored); //inputs);
+// Pass in the inputs, in the expected order (as defined by the onnx file)
+Map<String, Object> outputs = onnxHelper.predict(transA, transB, ceilMatrix, multMatrix, ignored);
 
 fillOutAnswers(outputs);
 ]]></Body>
@@ -250,28 +260,14 @@ fillOutAnswers(outputs);
 					<ShowLabel>true</ShowLabel>
 					<Parameter>
 						<Name><![CDATA[outputs]]></Name>
-						<Type><![CDATA[Object]]></Type>
+						<Type><![CDATA[Map<String,Object>]]></Type>
 					</Parameter>
-					<Body><![CDATA[// Update the text objects with the found results
-
-long[][] resultsA;
-byte[][] resultsB;
-float[][] resultMatrix;
-
-// Use different logic based on the set output type.
-if (onnxWrapper.outputDataMethod == 0) { // map
-	Map<String,Object> mapOutputs = (Map)outputs;
-	
-	resultsA = (long[][])mapOutputs.get("trans_resultA");
-	resultsB = (byte[][])mapOutputs.get("trans_resultB");
-	resultMatrix = (float[][])mapOutputs.get("result_matrix");
-
-} else { // list/directly or list (will be a list since multiple)
-	ArrayList<Object> listOutputs = (ArrayList)outputs;
-	resultMatrix = (float[][])listOutputs.get(0);
-	resultsA = (long[][])listOutputs.get(1);
-	resultsB = (byte[][])listOutputs.get(2);
-}
+					<Body><![CDATA[// Update the text objects with the found results.
+// First extract each expected output in the map 
+//	(named defined in the ONNX file and visible from the helper's inspection during runtime)
+long[][] resultsA = (long[][])outputs.get("trans_resultA");
+byte[][] resultsB = (byte[][])outputs.get("trans_resultB");
+float[][] resultMatrix = (float[][])outputs.get("result_matrix");
 
 // Implementation logic
 for (int i = 0; i < 3; i++) { // dim1 pre-defined (swapped of input)
@@ -317,21 +313,21 @@ for (int i = 0; i < 2; i++) { // dims are predetermined
 
 			<EmbeddedObjects>
 				<EmbeddedObject>
-					<Id>1638474410798</Id>
-					<Name><![CDATA[onnxWrapper]]></Name>
-					<X>60</X><Y>60</Y>
-					<Label><X>-45</X><Y>-30</Y></Label>
+					<Id>1650654717564</Id>
+					<Name><![CDATA[onnxHelper]]></Name>
+					<X>60</X><Y>50</Y>
+					<Label><X>-40</X><Y>-25</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-						<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+						<ClassName><![CDATA[OnnxHelper]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-							<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+							<ClassName><![CDATA[OnnxHelper]]></ClassName>
 							<ItemName><![CDATA[1637182964285]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -342,25 +338,12 @@ for (int i = 0; i < 2; i++) { // dims are predetermined
 								<Code><![CDATA["simple_ops.onnx"]]></Code>
 							</Value>
 						</Parameter>
-						<Parameter>
-							<Name><![CDATA[ambiguousInputBehavior]]></Name>
-							<Value Class="CodeValue">
-								<Code><![CDATA[1]]></Code>
-							</Value>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[outputDataMethod]]></Name>
-							<Value Class="CodeValue">
-								<Code><![CDATA[1]]></Code>
-							</Value>
-						</Parameter>
 					</Parameters>
 					<ReplicationFlag>false</ReplicationFlag>
 					<Replication Class="CodeValue">
 						<Code><![CDATA[100]]></Code>
 					</Replication>
 					<CollectionType>ARRAY_LIST_BASED</CollectionType>
-					<InEnvironment>true</InEnvironment>	
 					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
 					<XCode Class="CodeValue">
 						<Code><![CDATA[0]]></Code>
@@ -488,7 +471,12 @@ for (int i = 0; i < 2; i++) { // dims are predetermined
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D</DrawMode>
-					<YCode><![CDATA[matrixAFields.get(roundToInt(3*dimA/2)).getY()]]></YCode>
+					<YCode><![CDATA[matrixAFields.get(
+	limitMax(
+		roundToInt(3*dimA/2), // expected
+		matrixAFields.size()-1 // actual
+	)		
+).getY()]]></YCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
@@ -609,7 +597,12 @@ delayedSolve.restart();]]></ActionCode>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D</DrawMode>
-					<YCode><![CDATA[matrixBFields.get(roundToInt(3*dimB/2)).getY()]]></YCode>
+					<YCode><![CDATA[matrixBFields.get(
+	limitMax(
+		roundToInt(3*dimB/2), // expected
+		matrixBFields.size()-1 // actual
+	)
+).getY()]]></YCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
@@ -705,7 +698,12 @@ solveAnswers();]]></ActionCode>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D</DrawMode>
-					<YCode><![CDATA[matrixBFields.get(roundToInt(3*dimB/2)).getY()]]></YCode>
+					<YCode><![CDATA[matrixBFields.get(
+	limitMax(
+		roundToInt(3*dimB/2), // expected
+		matrixBFields.size()-1 // actual
+	)
+).getY()]]></YCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
@@ -727,7 +725,12 @@ solveAnswers();]]></ActionCode>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D</DrawMode>
-					<YCode><![CDATA[matrixAFields.get(roundToInt(3*dimA/2)).getY()]]></YCode>
+					<YCode><![CDATA[matrixAFields.get(
+	limitMax(
+		roundToInt(3*dimA/2), // expected
+		matrixAFields.size()-1 // actual
+	)		
+).getY()]]></YCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
@@ -817,7 +820,12 @@ solveAnswers();]]></ActionCode>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D</DrawMode>
-					<YCode><![CDATA[matrixAFields.get(roundToInt(3*dimA/2)).getY()]]></YCode>
+					<YCode><![CDATA[matrixAFields.get(
+	limitMax(
+		roundToInt(3*dimA/2), // expected
+		matrixAFields.size()-1 // actual
+	)		
+).getY()]]></YCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
@@ -839,7 +847,12 @@ solveAnswers();]]></ActionCode>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D</DrawMode>
-					<YCode><![CDATA[matrixBFields.get(roundToInt(3*dimB/2)).getY()]]></YCode>
+					<YCode><![CDATA[matrixBFields.get(
+	limitMax(
+		roundToInt(3*dimB/2), // expected
+		matrixBFields.size()-1 // actual
+	)
+).getY()]]></YCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
@@ -1020,12 +1033,53 @@ delayedSolve.restart();]]></ActionCode>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
 					<Text><![CDATA[Simple demo of variable-typed and variable-sized inputs/outputs.
-Code also shows the various ways to retrieve the outputs, based on the wrapper object's properties.
 
 Fill out the input fields (green), results are shown in blue.]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>16</Size>
+						<Style>2</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1650651209837</Id>
+					<Name><![CDATA[text9]]></Name>
+					<X>40</X><Y>460</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-8355712</Color>
+					<Text><![CDATA[byte value range = [-128, 127]]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>10</Size>
+						<Style>2</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1650651228752</Id>
+					<Name><![CDATA[text17]]></Name>
+					<X>40</X><Y>180</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-8355712</Color>
+					<Text><![CDATA[long value range (approx) = [-9.2e18, 9.2e18]]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>10</Size>
 						<Style>2</Style>
 					</Font>
 					<Alignment>LEFT</Alignment>

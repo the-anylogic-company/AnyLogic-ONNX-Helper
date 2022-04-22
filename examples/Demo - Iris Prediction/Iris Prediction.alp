@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.8.202111151746" AlpVersion="8.7.2">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.10.202202091651" AlpVersion="8.7.3">
 <Model>
 	<Id>1638474234291</Id>
 	<Name><![CDATA[Iris Prediction]]></Name>
@@ -279,8 +279,8 @@ for (int i = 0; i < nFlowers; i++) {
 	input[i][3] = (scales.get(i)[3].floatValue()-0.5f)*(2.5f-0.1f)+0.1f;
 }
 
-float[][] output = (float[][])onnxWrapper.predict(input);
-int[] results = onnxWrapper.argMax(output);
+float[][] output = onnxHelper.predict(float[][].class, input);
+int[] results = onnxHelper.argMax(output);
 
 traceln("Raw outputs: %s\n\t%s", Arrays.deepToString(output), Arrays.toString(results));
 
@@ -313,8 +313,8 @@ for (int idx : results)
 
 			<EmbeddedObjects>
 				<EmbeddedObject>
-					<Id>1638474250499</Id>
-					<Name><![CDATA[onnxWrapper]]></Name>
+					<Id>1650654797101</Id>
+					<Name><![CDATA[onnxHelper]]></Name>
 					<X>850</X><Y>40</Y>
 					<Label><X>-40</X><Y>-25</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -322,12 +322,12 @@ for (int idx : results)
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-						<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+						<ClassName><![CDATA[OnnxHelper]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-							<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+							<ClassName><![CDATA[OnnxHelper]]></ClassName>
 							<ItemName><![CDATA[1637182964285]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -337,12 +337,6 @@ for (int idx : results)
 							<Value Class="CodeValue">
 								<Code><![CDATA["iris.onnx"]]></Code>
 							</Value>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[ambiguousInputBehavior]]></Name>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[outputDataMethod]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>false</ReplicationFlag>
@@ -1255,7 +1249,7 @@ sepal width
     </RequiredLibraryReference>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[onnx_wrapper]]></LibraryName>
-		<VersionMajor>1</VersionMajor>
+		<VersionMajor>0</VersionMajor>
 		<VersionMinor>0</VersionMinor>
 		<VersionBuild>0</VersionBuild>
     </RequiredLibraryReference>

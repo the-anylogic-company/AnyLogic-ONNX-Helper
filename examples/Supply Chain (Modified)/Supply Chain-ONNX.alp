@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.8.202111151746" AlpVersion="8.7.2">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.10.202202091651" AlpVersion="8.7.3">
 <Model>
 	<Id>1172827656617</Id>
 	<Name><![CDATA[Supply Chain-ONNX]]></Name>
@@ -945,7 +945,7 @@ else
 			<SamplesToKeep>100</SamplesToKeep>
 			<LimitNumberOfArrayElements>false</LimitNumberOfArrayElements>
 			<ElementsLimitValue>100</ElementsLimitValue>
-			<MakeDefaultViewArea>false</MakeDefaultViewArea>
+			<MakeDefaultViewArea>true</MakeDefaultViewArea>
 			<SceneGridColor/>
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
@@ -1541,7 +1541,7 @@ factory.checkOrders();]]></Action>
 // Query the pipeline for the next order details
 //	based on the epoch time (seconds since 1/1/70)
 long epochTime = date().toInstant().getEpochSecond();
-float[] nextDetails = (float[])onnxWrapper.predict(new long[]{epochTime});
+float[] nextDetails = onnxWrapper.predict(float[].class, new long[]{epochTime});
 
 /*
 traceln("[%s] Creating demand for %.0f product in %.2f minutes",
@@ -1622,7 +1622,7 @@ hourVsSize.add(getHourOfDay()+(getMinute()/60.0), size*1.0);
 
 // Query the ONNX model for the next event
 long epochTime = date().toInstant().getEpochSecond();
-float[] nextDetails = (float[])onnxWrapper.predict(new long[]{epochTime});
+float[] nextDetails = onnxWrapper.predict(float[].class, new long[]{epochTime});
 /*
 traceln("[%s] Creating demand for %.0f product in %.2f minutes",
 	date(),
@@ -2136,21 +2136,21 @@ return cost / 365;]]></Body>
 					</QuantityColumn>
 				</EmbeddedObject>
 				<EmbeddedObject>
-					<Id>1638235627475</Id>
-					<Name><![CDATA[onnxWrapper]]></Name>
-					<X>-150</X><Y>-90</Y>
-					<Label><X>25</X><Y>10</Y></Label>
+					<Id>1650654580884</Id>
+					<Name><![CDATA[onnxHelper]]></Name>
+					<X>-150</X><Y>-80</Y>
+					<Label><X>-40</X><Y>-25</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-						<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+						<ClassName><![CDATA[OnnxHelper]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-							<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+							<ClassName><![CDATA[OnnxHelper]]></ClassName>
 							<ItemName><![CDATA[1637182964285]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -2160,12 +2160,6 @@ return cost / 365;]]></Body>
 							<Value Class="CodeValue">
 								<Code><![CDATA["forecast_pipeline.onnx"]]></Code>
 							</Value>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[ambiguousInputBehavior]]></Name>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[outputDataMethod]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>false</ReplicationFlag>
@@ -2223,6 +2217,38 @@ return cost / 365;]]></Body>
 					<LevelVisibility>ALWAYS_SHOW</LevelVisibility>
 
 			<Presentation>
+				<Polyline>
+					<Id>1650650175404</Id>
+					<Name><![CDATA[polyline16]]></Name>
+					<X>-45</X><Y>10</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<OnClickCode><![CDATA[_origin_VA.navigateTo();]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-1644806</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>20</X><Y>15</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>30</Y><Z>0</Z></Point>
+					   <Point><X>-105</X><Y>30</Y><Z>0</Z></Point>
+					   <Point><X>-105</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
 				<Rectangle>
 					<Id>1173180042121</Id>
 					<Name><![CDATA[rectangle573]]></Name>
@@ -2292,7 +2318,7 @@ return cost / 365;]]></Body>
 				<Oval>
 					<Id>1173171862604</Id>
 					<Name><![CDATA[oval2]]></Name>
-					<X>650</X><Y>90</Y>
+					<X>730</X><Y>90</Y>
 					<Label><X>0</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2314,7 +2340,7 @@ return cost / 365;]]></Body>
 				<Oval>
 					<Id>1173171788027</Id>
 					<Name><![CDATA[oval]]></Name>
-					<X>400</X><Y>90</Y>
+					<X>480</X><Y>90</Y>
 					<Label><X>0</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2336,7 +2362,7 @@ return cost / 365;]]></Body>
 				<Oval>
 					<Id>1173169519515</Id>
 					<Name><![CDATA[oval1]]></Name>
-					<X>150</X><Y>90</Y>
+					<X>230</X><Y>90</Y>
 					<Label><X>0</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2421,7 +2447,7 @@ return cost / 365;]]></Body>
 				<Group>
 					<Id>1173169553744</Id>
 					<Name><![CDATA[group]]></Name>
-					<X>193</X><Y>60</Y>
+					<X>273</X><Y>60</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2464,7 +2490,7 @@ return cost / 365;]]></Body>
 				<Polyline>
 					<Id>1173169716177</Id>
 					<Name><![CDATA[polyline]]></Name>
-					<X>101</X><Y>57</Y>
+					<X>181</X><Y>57</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2494,7 +2520,7 @@ return cost / 365;]]></Body>
 				<Group>
 					<Id>1173170089785</Id>
 					<Name><![CDATA[group1]]></Name>
-					<X>122</X><Y>137</Y>
+					<X>202</X><Y>137</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2588,7 +2614,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1173170716166</Id>
 					<Name><![CDATA[text6]]></Name>
-					<X>150</X><Y>140</Y>
+					<X>230</X><Y>140</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2609,7 +2635,7 @@ return cost / 365;]]></Body>
 				<Polyline>
 					<Id>1173170021697</Id>
 					<Name><![CDATA[polyline1]]></Name>
-					<X>180</X><Y>80</Y>
+					<X>260</X><Y>80</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2639,7 +2665,7 @@ return cost / 365;]]></Body>
 				<Polyline>
 					<Id>1173171744414</Id>
 					<Name><![CDATA[polyline2]]></Name>
-					<X>351</X><Y>57</Y>
+					<X>431</X><Y>57</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2669,7 +2695,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1173171744416</Id>
 					<Name><![CDATA[text7]]></Name>
-					<X>445</X><Y>45</Y>
+					<X>525</X><Y>45</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2690,7 +2716,7 @@ return cost / 365;]]></Body>
 				<Polyline>
 					<Id>1173171744418</Id>
 					<Name><![CDATA[polyline3]]></Name>
-					<X>430</X><Y>80</Y>
+					<X>510</X><Y>80</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2720,7 +2746,7 @@ return cost / 365;]]></Body>
 				<Group>
 					<Id>1173171744426</Id>
 					<Name><![CDATA[group2]]></Name>
-					<X>443</X><Y>60</Y>
+					<X>523</X><Y>60</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2763,7 +2789,7 @@ return cost / 365;]]></Body>
 				<Group>
 					<Id>1173171744430</Id>
 					<Name><![CDATA[group3]]></Name>
-					<X>372</X><Y>137</Y>
+					<X>452</X><Y>137</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2857,7 +2883,7 @@ return cost / 365;]]></Body>
 				<Group>
 					<Id>1173171757964</Id>
 					<Name><![CDATA[group4]]></Name>
-					<X>693</X><Y>60</Y>
+					<X>773</X><Y>60</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2900,7 +2926,7 @@ return cost / 365;]]></Body>
 				<Polyline>
 					<Id>1173171757968</Id>
 					<Name><![CDATA[polyline4]]></Name>
-					<X>680</X><Y>80</Y>
+					<X>760</X><Y>80</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2930,7 +2956,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1173171757970</Id>
 					<Name><![CDATA[text8]]></Name>
-					<X>695</X><Y>45</Y>
+					<X>775</X><Y>45</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2951,7 +2977,7 @@ return cost / 365;]]></Body>
 				<Polyline>
 					<Id>1173171757974</Id>
 					<Name><![CDATA[polyline5]]></Name>
-					<X>601</X><Y>57</Y>
+					<X>681</X><Y>57</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2981,7 +3007,7 @@ return cost / 365;]]></Body>
 				<Group>
 					<Id>1173171757976</Id>
 					<Name><![CDATA[group5]]></Name>
-					<X>622</X><Y>137</Y>
+					<X>702</X><Y>137</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3075,7 +3101,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1173173819678</Id>
 					<Name><![CDATA[text9]]></Name>
-					<X>400</X><Y>140</Y>
+					<X>480</X><Y>140</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3096,7 +3122,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1173173838425</Id>
 					<Name><![CDATA[text10]]></Name>
-					<X>650</X><Y>140</Y>
+					<X>730</X><Y>140</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3117,7 +3143,7 @@ return cost / 365;]]></Body>
 				<Group>
 					<Id>1173177954814</Id>
 					<Name><![CDATA[group7]]></Name>
-					<X>263</X><Y>121</Y>
+					<X>343</X><Y>121</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3297,7 +3323,7 @@ return cost / 365;]]></Body>
 				<Group>
 					<Id>1173178985526</Id>
 					<Name><![CDATA[group8]]></Name>
-					<X>513</X><Y>121</Y>
+					<X>593</X><Y>121</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3477,7 +3503,7 @@ return cost / 365;]]></Body>
 				<Line>
 					<Id>1173179072330</Id>
 					<Name><![CDATA[line468]]></Name>
-					<X>225</X><Y>135</Y>
+					<X>305</X><Y>135</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3501,7 +3527,7 @@ return cost / 365;]]></Body>
 				<Line>
 					<Id>1173179078970</Id>
 					<Name><![CDATA[line469]]></Name>
-					<X>475</X><Y>135</Y>
+					<X>555</X><Y>135</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3678,7 +3704,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1173183277789</Id>
 					<Name><![CDATA[text13]]></Name>
-					<X>195</X><Y>45</Y>
+					<X>275</X><Y>45</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3699,7 +3725,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1173183303215</Id>
 					<Name><![CDATA[text14]]></Name>
-					<X>150</X><Y>165</Y>
+					<X>230</X><Y>165</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3720,7 +3746,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1173183303225</Id>
 					<Name><![CDATA[text15]]></Name>
-					<X>400</X><Y>165</Y>
+					<X>480</X><Y>165</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3741,7 +3767,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1173183303245</Id>
 					<Name><![CDATA[text16]]></Name>
-					<X>650</X><Y>165</Y>
+					<X>730</X><Y>165</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4151,7 +4177,7 @@ return cost / 365;]]></Body>
     			<Histogram>
 					<Id>1637782267067</Id>
 					<Name><![CDATA[chart4]]></Name>
-					<X>-660</X><Y>40</Y>
+					<X>-900</X><Y>40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4169,14 +4195,14 @@ return cost / 365;]]></Body>
 						<Unit Class="TimeUnits"><![CDATA[DAY]]></Unit>
 					</RecurrenceCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
-					<Width>310</Width>
+					<Width>340</Width>
 					<Height>160</Height>
 					<BackgroundColor/>
 					<BorderColor/>
 					<ChartArea>
 						<XOffset>50</XOffset>
 						<YOffset>10</YOffset>
-						<Width>240</Width>
+						<Width>270</Width>
 						<Height>90</Height>
 						<BackgroundColor>-1</BackgroundColor>
 						<BorderColor>-16777216</BorderColor>
@@ -4195,7 +4221,7 @@ return cost / 365;]]></Body>
 					<ShowLegend>true</ShowLegend>
 					<ShowPDF>true</ShowPDF>
 					<ShowCDF>false</ShowCDF>
-					<ShowMean>false</ShowMean>
+					<ShowMean>true</ShowMean>
 					<Bars>
 						<Direction>UP</Direction>
 						<RelativeWidth>0.8</RelativeWidth>
@@ -4208,14 +4234,14 @@ return cost / 365;]]></Body>
 						<ColorLowPercent>-6632142</ColorLowPercent>
 						<ColorHighPercent>-14774017</ColorHighPercent>
 						<ColorMean>-10496</ColorMean>
-						<LineWidth>1</LineWidth>						
+						<LineWidth>3</LineWidth>						
 						<Title><![CDATA[Distribution in orders per day]]></Title>							
 					</HistogramDataExpression>
     			</Histogram>
     			<Histogram>
 					<Id>1637782270647</Id>
 					<Name><![CDATA[chart5]]></Name>
-					<X>-340</X><Y>40</Y>
+					<X>-500</X><Y>40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4233,14 +4259,14 @@ return cost / 365;]]></Body>
 						<Unit Class="TimeUnits"><![CDATA[DAY]]></Unit>
 					</RecurrenceCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
-					<Width>310</Width>
+					<Width>340</Width>
 					<Height>160</Height>
 					<BackgroundColor/>
 					<BorderColor/>
 					<ChartArea>
 						<XOffset>50</XOffset>
 						<YOffset>10</YOffset>
-						<Width>240</Width>
+						<Width>270</Width>
 						<Height>90</Height>
 						<BackgroundColor>-1</BackgroundColor>
 						<BorderColor>-16777216</BorderColor>
@@ -4259,7 +4285,7 @@ return cost / 365;]]></Body>
 					<ShowLegend>true</ShowLegend>
 					<ShowPDF>true</ShowPDF>
 					<ShowCDF>false</ShowCDF>
-					<ShowMean>false</ShowMean>
+					<ShowMean>true</ShowMean>
 					<Bars>
 						<Direction>UP</Direction>
 						<RelativeWidth>0.8</RelativeWidth>
@@ -4272,14 +4298,14 @@ return cost / 365;]]></Body>
 						<ColorLowPercent>-60269</ColorLowPercent>
 						<ColorHighPercent>-29696</ColorHighPercent>
 						<ColorMean>-8097537</ColorMean>
-						<LineWidth>1</LineWidth>						
+						<LineWidth>3</LineWidth>						
 						<Title><![CDATA[Distribution in order size per day]]></Title>							
 					</HistogramDataExpression>
     			</Histogram>
     			<Histogram2D>
 					<Id>1638554675177</Id>
 					<Name><![CDATA[chart8]]></Name>
-					<X>-640</X><Y>200</Y>
+					<X>-890</X><Y>200</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4297,14 +4323,14 @@ return cost / 365;]]></Body>
 						<Unit Class="TimeUnits"><![CDATA[DAY]]></Unit>
 					</RecurrenceCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
-					<Width>600</Width>
+					<Width>800</Width>
 					<Height>190</Height>
 					<BackgroundColor/>
 					<BorderColor/>
 					<ChartArea>
 						<XOffset>20</XOffset>
 						<YOffset>10</YOffset>
-						<Width>570</Width>
+						<Width>770</Width>
 						<Height>120</Height>
 						<BackgroundColor>-1</BackgroundColor>
 						<BorderColor>-16777216</BorderColor>
@@ -4333,7 +4359,7 @@ return cost / 365;]]></Body>
     			<Histogram2D>
 					<Id>1638555026576</Id>
 					<Name><![CDATA[chart10]]></Name>
-					<X>-640</X><Y>370</Y>
+					<X>-890</X><Y>370</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4351,14 +4377,14 @@ return cost / 365;]]></Body>
 						<Unit Class="TimeUnits"><![CDATA[DAY]]></Unit>
 					</RecurrenceCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
-					<Width>600</Width>
+					<Width>800</Width>
 					<Height>230</Height>
 					<BackgroundColor/>
 					<BorderColor/>
 					<ChartArea>
 						<XOffset>20</XOffset>
 						<YOffset>20</YOffset>
-						<Width>570</Width>
+						<Width>770</Width>
 						<Height>150</Height>
 						<BackgroundColor>-1</BackgroundColor>
 						<BorderColor>-16777216</BorderColor>
@@ -4431,7 +4457,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1638567365170</Id>
 					<Name><![CDATA[text1]]></Name>
-					<X>-340</X><Y>20</Y>
+					<X>-520</X><Y>20</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4449,10 +4475,98 @@ return cost / 365;]]></Body>
 					</Font>
 					<Alignment>CENTER</Alignment>
 				</Text>
+				<Polyline>
+					<Id>1650650132147</Id>
+					<Name><![CDATA[polyline15]]></Name>
+					<X>30</X><Y>10</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<OnClickCode><![CDATA[viewArea.navigateTo();]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-1644806</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-20</X><Y>15</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>30</Y><Z>0</Z></Point>
+					   <Point><X>105</X><Y>30</Y><Z>0</Z></Point>
+					   <Point><X>105</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+				<Text>
+					<Id>1650650147863</Id>
+					<Name><![CDATA[text2]]></Name>
+					<X>30</X><Y>20</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[To alternative stats]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>12</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1650650175402</Id>
+					<Name><![CDATA[text17]]></Name>
+					<X>-140</X><Y>20</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[To original stats]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>12</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
 			</Presentation>
 
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1650650060937</Id>
+					<Name><![CDATA[viewArea]]></Name>
+					<X>-960</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>950</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -12389,9 +12503,6 @@ copyToClipboard( s );
 			<Parameter>	
 				<Id>1638235712020</Id>
 				<Type>FIXED</Type>
-				<Value Class="CodeValue">
-					<Code><![CDATA[false]]></Code>
-				</Value>
 			</Parameter>
 			<ObjectiveFunctionCode><![CDATA[root.meanDailyCost()]]></ObjectiveFunctionCode>
 			<Objective>MINIMIZE</Objective>
@@ -12431,9 +12542,9 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 			</Requirement>
 			<ReplicationsProperties>
 				<UseReplication>true</UseReplication>
-				<FixedReplicationsNumber>true</FixedReplicationsNumber>
+				<FixedReplicationsNumber>false</FixedReplicationsNumber>
 				<ReplicationPerIteration>10</ReplicationPerIteration>
-				<MinimumReplication>1</MinimumReplication>
+				<MinimumReplication>3</MinimumReplication>
 				<MaximumReplication>10</MaximumReplication>
 				<ConfidenceLevel>LEVEL_80</ConfidenceLevel>
 				<ErrorPercent>0.5</ErrorPercent>
@@ -12623,7 +12734,7 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 					<ShowLegend>true</ShowLegend>
 					<ShowPDF>true</ShowPDF>
 					<ShowCDF>false</ShowCDF>
-					<ShowMean>false</ShowMean>
+					<ShowMean>true</ShowMean>
 					<Bars>
 						<Direction>UP</Direction>
 						<RelativeWidth>0.8</RelativeWidth>
@@ -12676,7 +12787,7 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 					<ShowLegend>true</ShowLegend>
 					<ShowPDF>true</ShowPDF>
 					<ShowCDF>false</ShowCDF>
-					<ShowMean>false</ShowMean>
+					<ShowMean>true</ShowMean>
 					<Bars>
 						<Direction>UP</Direction>
 						<RelativeWidth>0.8</RelativeWidth>
@@ -12823,7 +12934,7 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 					<ShowLegend>true</ShowLegend>
 					<ShowPDF>true</ShowPDF>
 					<ShowCDF>false</ShowCDF>
-					<ShowMean>false</ShowMean>
+					<ShowMean>true</ShowMean>
 					<Bars>
 						<Direction>UP</Direction>
 						<RelativeWidth>0.8</RelativeWidth>
@@ -12876,7 +12987,7 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 					<ShowLegend>true</ShowLegend>
 					<ShowPDF>true</ShowPDF>
 					<ShowCDF>false</ShowCDF>
-					<ShowMean>false</ShowMean>
+					<ShowMean>true</ShowMean>
 					<Bars>
 						<Direction>UP</Direction>
 						<RelativeWidth>0.8</RelativeWidth>

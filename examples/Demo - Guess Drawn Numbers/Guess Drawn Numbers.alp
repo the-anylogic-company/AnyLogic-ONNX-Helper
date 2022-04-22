@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.8.202111151746" AlpVersion="8.7.2">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.10.202202091651" AlpVersion="8.7.3">
 <Model>
 	<Id>1638474333297</Id>
 	<Name><![CDATA[Guess Drawn Numbers]]></Name>
@@ -255,7 +255,7 @@ updatePredictions();]]></Body>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[float[][] output = onnxWrapper.predict(float[][].class, imageArray);
+					<Body><![CDATA[float[][] output = onnxHelper.predict(float[][].class, imageArray);
 // e.g., [[ -4, 3, 1, 0.01, 3.43, ... ]]
 
 
@@ -290,7 +290,7 @@ traceln("Raw confidences = %s", Arrays.deepToString(output));]]></Body>
 			<EmbeddedObjects>
 				<EmbeddedObject>
 					<Id>1638474347335</Id>
-					<Name><![CDATA[onnxWrapper]]></Name>
+					<Name><![CDATA[onnxHelper]]></Name>
 					<X>70</X><Y>50</Y>
 					<Label><X>-35</X><Y>-25</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -298,12 +298,12 @@ traceln("Raw confidences = %s", Arrays.deepToString(output));]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-						<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+						<ClassName><![CDATA[OnnxHelper]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-							<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+							<ClassName><![CDATA[OnnxHelper]]></ClassName>
 							<ItemName><![CDATA[1637182964285]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -313,9 +313,6 @@ traceln("Raw confidences = %s", Arrays.deepToString(output));]]></Body>
 							<Value Class="CodeValue">
 								<Code><![CDATA["mnist-small.onnx"]]></Code>
 							</Value>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[outputDataMethod]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>false</ReplicationFlag>
@@ -912,7 +909,7 @@ index1 = -1;]]></ActionCode>
     </RequiredLibraryReference>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[onnx_wrapper]]></LibraryName>
-		<VersionMajor>1</VersionMajor>
+		<VersionMajor>0</VersionMajor>
 		<VersionMinor>0</VersionMinor>
 		<VersionBuild>0</VersionBuild>
     </RequiredLibraryReference>

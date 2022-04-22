@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.8.202111151746" AlpVersion="8.7.2">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.10.202202091651" AlpVersion="8.7.3">
 <Model>
 	<Id>1586797690566</Id>
 	<Name><![CDATA[Simple Hospital (AI Testbed)-ONNX]]></Name>
@@ -218,7 +218,8 @@ IntStream.range(0, 6).forEach($ -> previousRates.add((float)uniform(0.35, 10.7))
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[EvictingQueue<Float>]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[EvictingQueue.create(6)]]></Code>
+							<Code><![CDATA[// Special collection type that limits the entries
+EvictingQueue.create(6)]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -1403,21 +1404,21 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 					</QuantityColumn>
 				</EmbeddedObject>
 				<EmbeddedObject>
-					<Id>1639679262291</Id>
-					<Name><![CDATA[losQuerier]]></Name>
-					<X>80</X><Y>50</Y>
-					<Label><X>-20</X><Y>-25</Y></Label>
+					<Id>1650654631998</Id>
+					<Name><![CDATA[rateQuerier]]></Name>
+					<X>200</X><Y>40</Y>
+					<Label><X>-40</X><Y>-25</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-						<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+						<ClassName><![CDATA[OnnxHelper]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-							<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+							<ClassName><![CDATA[OnnxHelper]]></ClassName>
 							<ItemName><![CDATA[1637182964285]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -1425,11 +1426,8 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 						<Parameter>
 							<Name><![CDATA[targetModel]]></Name>
 							<Value Class="CodeValue">
-								<Code><![CDATA["los_model.onnx"]]></Code>
+								<Code><![CDATA["rate_model.onnx"]]></Code>
 							</Value>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[outputDataMethod]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>false</ReplicationFlag>
@@ -1472,21 +1470,21 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 					</QuantityColumn>
 				</EmbeddedObject>
 				<EmbeddedObject>
-					<Id>1639679302233</Id>
-					<Name><![CDATA[rateQuerier]]></Name>
-					<X>200</X><Y>50</Y>
-					<Label><X>-30</X><Y>-25</Y></Label>
+					<Id>1650654653157</Id>
+					<Name><![CDATA[losQuerier]]></Name>
+					<X>60</X><Y>40</Y>
+					<Label><X>-40</X><Y>-25</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-						<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+						<ClassName><![CDATA[OnnxHelper]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-							<ClassName><![CDATA[OnnxWrapper]]></ClassName>
+							<ClassName><![CDATA[OnnxHelper]]></ClassName>
 							<ItemName><![CDATA[1637182964285]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -1494,11 +1492,8 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 						<Parameter>
 							<Name><![CDATA[targetModel]]></Name>
 							<Value Class="CodeValue">
-								<Code><![CDATA["rate_model.onnx"]]></Code>
+								<Code><![CDATA["los_model.onnx"]]></Code>
 							</Value>
-						</Parameter>
-						<Parameter>
-							<Name><![CDATA[outputDataMethod]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>false</ReplicationFlag>
@@ -10353,7 +10348,7 @@ rot %= (2*PI);]]></OnDrawCode>
     </RequiredLibraryReference>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[onnx_wrapper]]></LibraryName>
-		<VersionMajor>1</VersionMajor>
+		<VersionMajor>0</VersionMajor>
 		<VersionMinor>0</VersionMinor>
 		<VersionBuild>0</VersionBuild>
     </RequiredLibraryReference>
