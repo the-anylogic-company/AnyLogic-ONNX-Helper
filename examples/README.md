@@ -1,6 +1,6 @@
 # Examples
 
-This folder contains some simple examples that utilize the ONNX Wrapper Library for AnyLogic. They all require you to have the latest version of AnyLogic installed and the library included in your development environment.
+This folder contains some simple examples that utilize the ONNX Helper Library for AnyLogic. They all require you to have the latest version of AnyLogic installed and the library included in your development environment.
 
 The models prefixed with "Demo" are simple demonstrations of the library which are either exceedingly simple toy models or ones trained based on common datasets. Any other models are more practical examples which expect you to be familiar with the basics of navigating an AnyLogic model.
 
