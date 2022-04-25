@@ -73,7 +73,8 @@ import java.lang.reflect.Array;
 import java.util.stream.IntStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ai.onnxruntime.OnnxJavaType;
-import java.util.stream.Stream;]]></Import>
+import java.util.stream.Stream;
+import ai.onnxruntime.TensorInfo.OnnxTensorType;]]></Import>
 			<StartupCode><![CDATA[// only start a session if a model was provided
 if (targetModel != null) {
 	reloadSession();
@@ -302,13 +303,13 @@ ValueInfo valueInfo = nodeInfo.getInfo();
 if (valueInfo.getClass()
 		.isAssignableFrom(TensorInfo.class)) {
 	TensorInfo info = (TensorInfo) valueInfo;
-	sb.append(String.format("(%s):[%s]", 
-			info.type, encodeShape(info.getShape())));
+	sb.append(String.format(": %s[%s]", 
+			onnxTypeToJavaName(info.type), encodeShape(info.getShape())));
 } else if (valueInfo.getClass()
 		.isAssignableFrom(MapInfo.class)) {
 	MapInfo info = (MapInfo) valueInfo;
-	sb.append(String.format("(%s, %s):%s", 
-			info.keyType, info.valueType, info.size));
+	sb.append(String.format(": %s -> %s | x%s", 
+			onnxTypeToJavaName(info.keyType), onnxTypeToJavaName(info.valueType), info.size));
 } else if (valueInfo.getClass()
 		.isAssignableFrom(SequenceInfo.class)) {
 	SequenceInfo info = (SequenceInfo) valueInfo;
@@ -351,7 +352,7 @@ return outputMapToType(returnType, output);]]></Body>
 					<Name><![CDATA[encodeShape]]></Name>
 					<Description><![CDATA[Encode shape array to string.<br>
 Removes all non-numical characters and substitutes negative sizes (i.e., variable) with a placeholder character.]]></Description>
-					<X>50</X><Y>280</Y>
+					<X>50</X><Y>310</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -426,7 +427,7 @@ return null;]]></Body>
 					<Name><![CDATA[encodeShape]]></Name>
 					<Description><![CDATA[Encode shape array to string.<br>
 Removes all non-numical characters and substitutes negative sizes (i.e., variable) with a placeholder character.]]></Description>
-					<X>50</X><Y>300</Y>
+					<X>50</X><Y>330</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -877,6 +878,67 @@ return idx;]]></Body>
 					<Body><![CDATA[Map<String, Object> input = inputDataToMap(inputs);
 return predict(input);]]></Body>
 				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[String]]></ReturnType>
+					<Id>1650662101105</Id>
+					<Name><![CDATA[onnxTypeToJavaName]]></Name>
+					<X>100</X><Y>250</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[onnxType]]></Name>
+						<Type><![CDATA[OnnxJavaType]]></Type>
+					</Parameter>
+					<Body><![CDATA[switch (onnxType) {
+
+	case BOOL:
+		return "boolean";
+
+	case INT8:
+		return "byte";
+		
+	case INT16:
+		return "short";
+		
+	case INT32:
+		return "int";
+		
+	case INT64:
+		return "long";
+		
+	case FLOAT:
+		return "float";
+		
+	case DOUBLE:
+		return "double";
+		
+	case STRING:
+		return "String";
+		
+	case UNKNOWN:
+	default:
+		return "Unknown";
+}]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[String]]></ReturnType>
+					<Id>1650663481119</Id>
+					<Name><![CDATA[onnxTypeToJavaName]]></Name>
+					<X>100</X><Y>270</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[tensorType]]></Name>
+						<Type><![CDATA[TensorInfo.OnnxTensorType]]></Type>
+					</Parameter>
+					<Body><![CDATA[return onnxTypeToJavaName(OnnxJavaType.mapFromOnnxTensorType(tensorType));]]></Body>
+				</Function>
 			</Functions>
 			<AgentLinks>
 				<AgentLink>
@@ -1266,7 +1328,7 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 				<ClassName><![CDATA[onyx_16.png]]></ClassName>
 			</IconResourceReference>
 			<VersionMajor>2</VersionMajor>
-			<VersionMinor>0</VersionMinor>
+			<VersionMinor>1</VersionMinor>
 			<VersionBuild>0</VersionBuild>
 			<Provider><![CDATA[]]></Provider>    
 		</Library>
@@ -1287,6 +1349,10 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 		<Resource>
 			<Path><![CDATA[onnxruntime-1.10.0.jar]]></Path>
 			<ReferencedFromUserCode>true</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[onnxruntime-1.11.0.jar]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
 		</Resource>
 	</ModelResources>
     <RequiredLibraryReference>
@@ -1312,7 +1378,7 @@ Provides a more user-friendly API for predictions with less Java code.]]></Descr
 	<ClassPathEntry>
 		<ResourceReference>
 			<PackageName><![CDATA[onnx_wrapper]]></PackageName>
-			<ClassName><![CDATA[onnxruntime-1.10.0.jar]]></ClassName>
+			<ClassName><![CDATA[onnxruntime-1.11.0.jar]]></ClassName>
 		</ResourceReference>
 		<Imported>true</Imported>
 		<Folder>false</Folder>
