@@ -1,5 +1,5 @@
 <!-- USAGE:
-1. Update the `depedencies` tag with all the items you want to download.
+1. Update the `dependencies` tag with all the items you want to download.
 2. Update the output names in the `properties` section, as desired.
 2. Comment out either `plugin` (inside the `build/plugins` tabs that you don't want (the first creates a single jar, the second splits into individual files)
 3. Open a command prompt, navigate to the directory this file is inside and enter `mvn clean install`
@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>com.microsoft.onnxruntime</groupId>
 			<artifactId>onnxruntime</artifactId>
-			<version>1.10.0</version>
+			<version>1.11.0</version>
 		</dependency>
 		
 	</dependencies>
