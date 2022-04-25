@@ -13173,8 +13173,8 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
     </RequiredLibraryReference>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[onnx_wrapper]]></LibraryName>
-		<VersionMajor>0</VersionMajor>
-		<VersionMinor>0</VersionMinor>
+		<VersionMajor>2</VersionMajor>
+		<VersionMinor>1</VersionMinor>
 		<VersionBuild>0</VersionBuild>
     </RequiredLibraryReference>
     <RequiredLibraryReference>
