@@ -1604,7 +1604,7 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 					<DrawLine>true</DrawLine>
 					<Interpolation>LINEAR</Interpolation>
 					<DatasetExpression>  
-						<Title><![CDATA[Daily arrival rate]]></Title>
+						<Title><![CDATA[Hourly arrival rate]]></Title>
 					<Id>1632265970025</Id>
 					<Expression><![CDATA[arrivalRateDS]]></Expression>
 					<Color>-2354116</Color>
@@ -5949,11 +5949,11 @@ return new float[] {
 		<Name><![CDATA[RunConfiguration]]></Name>
 		<MaximumMemory>512</MaximumMemory>
 		<ModelTimeProperties>
-			<StopOption><![CDATA[Stop at specified time]]></StopOption>
+			<StopOption><![CDATA[Stop at specified date]]></StopOption>
 			<InitialDate><![CDATA[1586736000000]]></InitialDate>	
 			<InitialTime><![CDATA[0.0]]></InitialTime>	
-			<FinalDate><![CDATA[1589328000000]]></FinalDate>	
-			<FinalTime><![CDATA[100.0]]></FinalTime>	
+			<FinalDate><![CDATA[1618272000000]]></FinalDate>	
+			<FinalTime><![CDATA[8760.0]]></FinalTime>	
 		</ModelTimeProperties>
 		<AnimationProperties>
 			<StopNever>true</StopNever>
@@ -5963,9 +5963,115 @@ return new float[] {
 			<EnableDeveloperPanel>false</EnableDeveloperPanel>
 			<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
 		</AnimationProperties>
-		<Inputs>		
+		<Inputs>
+    		<RunConfigurationInput>
+				<Id>1666290811786</Id>
+				<Name><![CDATA[Rate model]]></Name>
+				<InputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[rate_model.onnx]]></ClassName>
+				</InputReference>
+    		</RunConfigurationInput>
+    		<RunConfigurationInput>
+				<Id>1666290811101</Id>
+				<Name><![CDATA[Los model]]></Name>
+				<InputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[los_model.onnx]]></ClassName>
+				</InputReference>
+    		</RunConfigurationInput>
+    		<RunConfigurationInput>
+				<Id>1658344376244</Id>
+				<Name><![CDATA[Hospital capacity]]></Name>
+				<InputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[hospitalCapacity]]></ItemName>
+				</InputReference>
+    		</RunConfigurationInput>		
 		</Inputs>
 		<Outputs>
+    		<RunConfigurationOutput>
+				<Id>1658344375248</Id>
+				<Name><![CDATA[Arrival rate DS]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[arrivalRateDS]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375250</Id>
+				<Name><![CDATA[Taken beds DS]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[takenBedsDS]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375252</Id>
+				<Name><![CDATA[Waiting DS]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[waitingDS]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375254</Id>
+				<Name><![CDATA[Cumulative tis HD]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[cumulativeTisHD]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375256</Id>
+				<Name><![CDATA[Predicted stay duration HD]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[predictedStayDurationHD]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375258</Id>
+				<Name><![CDATA[Plot]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[plot]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375260</Id>
+				<Name><![CDATA[Hourly arrival rate]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[plot1]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375262</Id>
+				<Name><![CDATA[Length of stay (days)]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[chart]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375264</Id>
+				<Name><![CDATA[TisHD (with wait time)]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[chart1]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
 		</Outputs>
 	</RunConfiguration>
 	<Experiments>	
@@ -10334,6 +10440,16 @@ rot %= (2*PI);]]></OnDrawCode>
 			<BypassInitialScreen>false</BypassInitialScreen>
 		</SimulationExperiment>	
 	</Experiments>
+	<ModelResources>
+		<Resource>
+			<Path><![CDATA[los_model.onnx]]></Path>
+			<ReferencedFromUserCode>true</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[rate_model.onnx]]></Path>
+			<ReferencedFromUserCode>true</ReferencedFromUserCode>
+		</Resource>
+	</ModelResources>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.processmodeling]]></LibraryName>
 		<VersionMajor>8</VersionMajor>
