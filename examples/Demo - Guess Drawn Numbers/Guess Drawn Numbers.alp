@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.10.202202091651" AlpVersion="8.7.3">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.2.202303221145" AlpVersion="8.7.7">
 <Model>
 	<Id>1638474333297</Id>
 	<Name><![CDATA[Guess Drawn Numbers]]></Name>
@@ -16,7 +16,6 @@
 		<ActiveObjectClass>
 			<Id>1638474333303</Id>
 			<Name><![CDATA[Main]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Import><![CDATA[import java.util.stream.IntStream;]]></Import>
 			<Generic>false</Generic>
 			<GenericParameter>
@@ -36,7 +35,6 @@
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -841,7 +839,6 @@ index1 = -1;]]></ActionCode>
 		<SimulationExperiment ActiveObjectClassId="1638474333303">
 			<Id>1638474333305</Id>
 			<Name><![CDATA[Simulation]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
 			<MaximumMemory>512</MaximumMemory>
 			<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
@@ -911,7 +908,7 @@ index1 = -1;]]></ActionCode>
 		<LibraryName><![CDATA[onnx_wrapper]]></LibraryName>
 		<VersionMajor>2</VersionMajor>
 		<VersionMinor>1</VersionMinor>
-		<VersionBuild>0</VersionBuild>
+		<VersionBuild>1</VersionBuild>
     </RequiredLibraryReference>
 </Model>
 </AnyLogicWorkspace>

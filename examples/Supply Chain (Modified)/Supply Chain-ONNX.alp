@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.10.202202091651" AlpVersion="8.7.3">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.2.202303221145" AlpVersion="8.7.7">
 <Model>
 	<Id>1172827656617</Id>
 	<Name><![CDATA[Supply Chain-ONNX]]></Name>
@@ -17,7 +17,6 @@
 		<ActiveObjectClass>
 			<Id>1172827959393</Id>
 			<Name><![CDATA[Factory]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1413230937278</Id>
@@ -36,7 +35,6 @@
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -923,7 +921,6 @@ shortageCost.update();]]></Body>
 		<ActiveObjectClass>
 			<Id>1172827656618</Id>
 			<Name><![CDATA[Main]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<StartupCode><![CDATA[if( SHiRetailer < sLoRetailer || SHiWholesaler < sLoWholesaler || SHiFactory < sLoFactory )
 	error( "Invalid parameter values!" );
 
@@ -953,7 +950,6 @@ if (isDefaultGenerator) {
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -8319,7 +8315,6 @@ shortageCost.update();]]></Body>
 		<SimulationExperiment ActiveObjectClassId="1172827656618">
 			<Id>1172827656619</Id>
 			<Name><![CDATA[Simulation]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
 			<MaximumMemory>512</MaximumMemory>
 			<RandomNumberGenerationType>randomSeed</RandomNumberGenerationType>
@@ -14676,7 +14671,7 @@ final Color apperanceDayVsCount = maroon;]]></AdditionalClassCode>
 		<LibraryName><![CDATA[onnx_wrapper]]></LibraryName>
 		<VersionMajor>2</VersionMajor>
 		<VersionMinor>1</VersionMinor>
-		<VersionBuild>0</VersionBuild>
+		<VersionBuild>1</VersionBuild>
     </RequiredLibraryReference>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.processmodeling]]></LibraryName>
