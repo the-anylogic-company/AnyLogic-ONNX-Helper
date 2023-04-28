@@ -20,7 +20,7 @@ Then in AnyLogic, in the Palette panel, press the plus ("+") button on the botto
 
 The object in this library - "ONNX Helper" - represents a single connection to an ONNX file (.onnx). If you have multiple ONNX files that you want to query from, you can use multiple instances of this object, or a population if you want to get fancy!
 
-After dragging an instance of the helper object into your model, it's only property is to reference your desired ONNX file (as a local or absolute path). The helper object has one basic `predict` function with a few variants dependending on your preferences and a handful of miscellaneous functions for common operations.
+After dragging an instance of the helper object into your model, its only property is to reference your desired ONNX file (as a local or absolute path). The helper object has one basic `predict` function with a few variants depending on your preferences and a handful of miscellaneous functions for common operations.
 
 If you run the simulation model, you can click on the helper object to see information about the ONNX model, including:
 
