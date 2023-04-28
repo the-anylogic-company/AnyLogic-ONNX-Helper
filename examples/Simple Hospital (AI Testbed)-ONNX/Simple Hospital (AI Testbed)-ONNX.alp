@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.7.10.202202091651" AlpVersion="8.7.3">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.2.202303221145" AlpVersion="8.7.7">
 <Model>
 	<Id>1586797690566</Id>
 	<Name><![CDATA[Simple Hospital (AI Testbed)-ONNX]]></Name>
@@ -19,7 +19,6 @@ A slider is provided for you to experiment with dynamically adjusting hospital c
 		<ActiveObjectClass>
 			<Id>1586797690572</Id>
 			<Name><![CDATA[Main]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Import><![CDATA[import com.google.common.collect.EvictingQueue;
 import java.util.stream.IntStream;]]></Import>
 			<StartupCode><![CDATA[// fill "previous rates" collection with random data
@@ -42,7 +41,6 @@ IntStream.range(0, 6).forEach($ -> previousRates.add((float)uniform(0.35, 10.7))
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -1604,7 +1602,7 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 					<DrawLine>true</DrawLine>
 					<Interpolation>LINEAR</Interpolation>
 					<DatasetExpression>  
-						<Title><![CDATA[Daily arrival rate]]></Title>
+						<Title><![CDATA[Hourly arrival rate]]></Title>
 					<Id>1632265970025</Id>
 					<Expression><![CDATA[arrivalRateDS]]></Expression>
 					<Color>-2354116</Color>
@@ -4047,7 +4045,6 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 		<ActiveObjectClass>
 			<Id>1586799909151</Id>
 			<Name><![CDATA[Patient]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Import><![CDATA[import com.google.common.base.Strings;]]></Import>
 			<Generic>false</Generic>
 			<GenericParameter>
@@ -4067,7 +4064,6 @@ cumulativeTisHD.add(time(DAY)-flowchartEntryDay);]]></Code>
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -5949,23 +5945,129 @@ return new float[] {
 		<Name><![CDATA[RunConfiguration]]></Name>
 		<MaximumMemory>512</MaximumMemory>
 		<ModelTimeProperties>
-			<StopOption><![CDATA[Stop at specified time]]></StopOption>
+			<StopOption><![CDATA[Stop at specified date]]></StopOption>
 			<InitialDate><![CDATA[1586736000000]]></InitialDate>	
 			<InitialTime><![CDATA[0.0]]></InitialTime>	
-			<FinalDate><![CDATA[1589328000000]]></FinalDate>	
-			<FinalTime><![CDATA[100.0]]></FinalTime>	
+			<FinalDate><![CDATA[1618272000000]]></FinalDate>	
+			<FinalTime><![CDATA[8760.0]]></FinalTime>	
 		</ModelTimeProperties>
 		<AnimationProperties>
 			<StopNever>true</StopNever>
 			<ExecutionMode>realTimeScaled</ExecutionMode>
 			<RealTimeScale>1.0</RealTimeScale>
-			<EnableZoomAndPanning>true</EnableZoomAndPanning>
-			<EnableDeveloperPanel>false</EnableDeveloperPanel>
+			<EnableZoomAndPanning>false</EnableZoomAndPanning>
+			<EnableDeveloperPanel>true</EnableDeveloperPanel>
 			<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
 		</AnimationProperties>
-		<Inputs>		
+		<Inputs>
+    		<RunConfigurationInput>
+				<Id>1666290811786</Id>
+				<Name><![CDATA[Rate model]]></Name>
+				<InputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[rate_model.onnx]]></ClassName>
+				</InputReference>
+    		</RunConfigurationInput>
+    		<RunConfigurationInput>
+				<Id>1666290811101</Id>
+				<Name><![CDATA[Los model]]></Name>
+				<InputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[los_model.onnx]]></ClassName>
+				</InputReference>
+    		</RunConfigurationInput>
+    		<RunConfigurationInput>
+				<Id>1658344376244</Id>
+				<Name><![CDATA[Hospital capacity]]></Name>
+				<InputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[hospitalCapacity]]></ItemName>
+				</InputReference>
+    		</RunConfigurationInput>		
 		</Inputs>
 		<Outputs>
+    		<RunConfigurationOutput>
+				<Id>1658344375248</Id>
+				<Name><![CDATA[Arrival rate DS]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[arrivalRateDS]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375250</Id>
+				<Name><![CDATA[Taken beds DS]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[takenBedsDS]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375252</Id>
+				<Name><![CDATA[Waiting DS]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[waitingDS]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375254</Id>
+				<Name><![CDATA[Cumulative tis HD]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[cumulativeTisHD]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375256</Id>
+				<Name><![CDATA[Predicted stay duration HD]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[predictedStayDurationHD]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375258</Id>
+				<Name><![CDATA[Plot]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[plot]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375260</Id>
+				<Name><![CDATA[Hourly arrival rate]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[plot1]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375262</Id>
+				<Name><![CDATA[Length of stay (days)]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[chart]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
+    		<RunConfigurationOutput>
+				<Id>1658344375264</Id>
+				<Name><![CDATA[TisHD (with wait time)]]></Name>
+				<OutputReference>
+					<PackageName><![CDATA[simple_hospital_ai_testbed_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[chart1]]></ItemName>
+				</OutputReference>
+    		</RunConfigurationOutput>
 		</Outputs>
 	</RunConfiguration>
 	<Experiments>	
@@ -5973,7 +6075,6 @@ return new float[] {
 		<SimulationExperiment ActiveObjectClassId="1586797690572">
 			<Id>1586797690574</Id>
 			<Name><![CDATA[Simulation]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
 			<MaximumMemory>512</MaximumMemory>
 			<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
@@ -10317,7 +10418,7 @@ rot %= (2*PI);]]></OnDrawCode>
 				</Parameter>
 			</Parameters>			
 			<PresentationProperties>
-				<EnableZoomAndPanning>true</EnableZoomAndPanning>
+				<EnableZoomAndPanning>false</EnableZoomAndPanning>
 				<ExecutionMode><![CDATA[realTimeScaled]]></ExecutionMode>
 				<Title><![CDATA[Hospital stay predictor : Simulation]]></Title>	
 				<EnableDeveloperPanel>true</EnableDeveloperPanel>
@@ -10334,6 +10435,16 @@ rot %= (2*PI);]]></OnDrawCode>
 			<BypassInitialScreen>false</BypassInitialScreen>
 		</SimulationExperiment>	
 	</Experiments>
+	<ModelResources>
+		<Resource>
+			<Path><![CDATA[los_model.onnx]]></Path>
+			<ReferencedFromUserCode>true</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[rate_model.onnx]]></Path>
+			<ReferencedFromUserCode>true</ReferencedFromUserCode>
+		</Resource>
+	</ModelResources>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.processmodeling]]></LibraryName>
 		<VersionMajor>8</VersionMajor>
@@ -10350,7 +10461,8 @@ rot %= (2*PI);]]></OnDrawCode>
 		<LibraryName><![CDATA[onnx_wrapper]]></LibraryName>
 		<VersionMajor>2</VersionMajor>
 		<VersionMinor>1</VersionMinor>
-		<VersionBuild>0</VersionBuild>
+		<VersionBuild>1</VersionBuild>
     </RequiredLibraryReference>
+	<CloudModelUuid><![CDATA[79904223-e7cf-4590-847b-02972cf566ff]]></CloudModelUuid>
 </Model>
 </AnyLogicWorkspace>
