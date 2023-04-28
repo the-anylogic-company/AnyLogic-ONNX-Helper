@@ -4,7 +4,7 @@
 
 This library provides a custom object that allows you to easily call predictions from an ONNX file. 
 
-Even though AnyLogic is inteded to be used by business-oriented users, it does not hide or limit the possibilities of its internal language (i.e., Java) from the end user. The features this library provides are simply an abstraction on top of the already existing ONNX Runtime Java Library, to make the functionalities more accessible for all! 
+Even though AnyLogic is intended to be used by business-oriented users, it does not hide or limit the possibilities of its internal language (i.e., Java) from the end user. The features this library provides are simply an abstraction on top of the already existing ONNX Runtime Java Library, to make the functionalities more accessible for all! 
 
 ## Getting Started
 
