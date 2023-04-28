@@ -927,11 +927,14 @@ shortageCost.update();]]></Body>
 			<StartupCode><![CDATA[if( SHiRetailer < sLoRetailer || SHiWholesaler < sLoWholesaler || SHiFactory < sLoFactory )
 	error( "Invalid parameter values!" );
 
-if (isDefaultGenerator)
+if (isDefaultGenerator) {
 	demandGeneratorONNX.reset();
-else
+	setupIndicatorIcons(brainIconGroup, rateIconGroup, 1);
+} else {
 	demandGeneratorDefault.reset();
-	]]></StartupCode>
+	setupIndicatorIcons(rateIconGroup, brainIconGroup, 0);
+}
+]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1413230937289</Id>
@@ -1009,7 +1012,7 @@ else
 			<ScaleRuler>
 				<Id>1411988348419</Id>
 				<Name><![CDATA[scale]]></Name>
-				<X>50</X><Y>-230</Y>
+				<X>50</X><Y>-370</Y>
 				<PublicFlag>false</PublicFlag>
 				<PresentationFlag>false</PresentationFlag>
 				<ShowLabel>false</ShowLabel>
@@ -1028,7 +1031,7 @@ else
 				<Output>
 					<Id>1509713457344</Id>
 					<Name><![CDATA[dailyCosts]]></Name>
-					<X>840</X><Y>-40</Y>
+					<X>840</X><Y>-180</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1048,7 +1051,7 @@ else
 				<Output>
 					<Id>1510045781054</Id>
 					<Name><![CDATA[meanWaitingTime]]></Name>
-					<X>950</X><Y>-40</Y>
+					<X>950</X><Y>-180</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1070,7 +1073,7 @@ else
 				<Variable Class="PlainVariable">
 					<Id>1172872270001</Id>
 					<Name><![CDATA[demandSizeDitsribution]]></Name>
-					<X>50</X><Y>-70</Y>
+					<X>50</X><Y>-210</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1085,7 +1088,7 @@ else
 				<Variable Class="PlainVariable">
 					<Id>1637782145767</Id>
 					<Name><![CDATA[nOrdersToday]]></Name>
-					<X>-150</X><Y>-170</Y>
+					<X>-350</X><Y>-250</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1097,7 +1100,7 @@ else
 				<Variable Class="PlainVariable">
 					<Id>1637782154374</Id>
 					<Name><![CDATA[sizeTotalToday]]></Name>
-					<X>-150</X><Y>-140</Y>
+					<X>-350</X><Y>-220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1109,7 +1112,7 @@ else
 				<Variable Class="PlainVariable">
 					<Id>1637783039961</Id>
 					<Name><![CDATA[lastOrderTime]]></Name>
-					<X>-150</X><Y>-200</Y>
+					<X>-350</X><Y>-280</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1124,7 +1127,7 @@ else
 				<Variable Class="Parameter">
 					<Id>1638235712020</Id>
 					<Name><![CDATA[isDefaultGenerator]]></Name>
-					<X>250</X><Y>-110</Y>
+					<X>250</X><Y>-250</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1164,7 +1167,7 @@ else
 				<Variable Class="Parameter">
 					<Id>1172867745801</Id>
 					<Name><![CDATA[sLoRetailer]]></Name>
-					<X>500</X><Y>-60</Y>
+					<X>500</X><Y>-200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1190,7 +1193,7 @@ else
 				<Variable Class="Parameter">
 					<Id>1172867750870</Id>
 					<Name><![CDATA[SHiRetailer]]></Name>
-					<X>500</X><Y>-40</Y>
+					<X>500</X><Y>-180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1215,7 +1218,7 @@ else
 				<Variable Class="Parameter">
 					<Id>1173096605578</Id>
 					<Name><![CDATA[sLoWholesaler]]></Name>
-					<X>600</X><Y>-60</Y>
+					<X>600</X><Y>-200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1241,7 +1244,7 @@ else
 				<Variable Class="Parameter">
 					<Id>1173096605575</Id>
 					<Name><![CDATA[SHiWholesaler]]></Name>
-					<X>600</X><Y>-40</Y>
+					<X>600</X><Y>-180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1266,7 +1269,7 @@ else
 				<Variable Class="Parameter">
 					<Id>1173096608051</Id>
 					<Name><![CDATA[sLoFactory]]></Name>
-					<X>700</X><Y>-60</Y>
+					<X>700</X><Y>-200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1292,7 +1295,7 @@ else
 				<Variable Class="Parameter">
 					<Id>1173096608048</Id>
 					<Name><![CDATA[SHiFactory]]></Name>
-					<X>700</X><Y>-40</Y>
+					<X>700</X><Y>-180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1319,7 +1322,7 @@ else
 				<Connector>
 					<Id>1172832585214</Id>
 					<Name><![CDATA[connector]]></Name>
-					<X>640</X><Y>-120</Y>
+					<X>640</X><Y>-260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1352,7 +1355,7 @@ else
 				<Connector>
 					<Id>1172834933311</Id>
 					<Name><![CDATA[connector1]]></Name>
-					<X>540</X><Y>-120</Y>
+					<X>540</X><Y>-260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1387,7 +1390,7 @@ else
 				<Event>
 					<Id>1172834998124</Id>
 					<Name><![CDATA[demandGeneratorDefault]]></Name>
-					<X>250</X><Y>-70</Y>
+					<X>250</X><Y>-210</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1430,16 +1433,12 @@ retailer.portCustomers.receive(
 sizeTotalToday += size;
 nOrdersToday++;
 lastOrderTime = time();
-hourVsSize.add(getHourOfDay()+(getMinute()/60.0), size);
-
-
-
-]]></Action>
+hourVsSize.add(getHourOfDay()+(getMinute()/60.0), size);]]></Action>
 				</Event>
 				<Event>
 					<Id>1172917946973</Id>
 					<Name><![CDATA[beginningOfDay]]></Name>
-					<X>50</X><Y>-180</Y>
+					<X>50</X><Y>-320</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1475,7 +1474,7 @@ factory.checkOrders();]]></Action>
 				<Event>
 					<Id>1238745509514</Id>
 					<Name><![CDATA[plotUpdateEvent]]></Name>
-					<X>50</X><Y>-150</Y>
+					<X>50</X><Y>-290</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1506,7 +1505,7 @@ factory.checkOrders();]]></Action>
 				<Event>
 					<Id>1638235793935</Id>
 					<Name><![CDATA[demandGeneratorONNX]]></Name>
-					<X>250</X><Y>-50</Y>
+					<X>250</X><Y>-190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1541,7 +1540,7 @@ factory.checkOrders();]]></Action>
 // Query the pipeline for the next order details
 //	based on the epoch time (seconds since 1/1/70)
 long epochTime = date().toInstant().getEpochSecond();
-float[] nextDetails = onnxWrapper.predict(float[].class, new long[]{epochTime});
+float[] nextDetails = onnxHelper.predict(float[].class, new long[]{epochTime});
 
 /*
 traceln("[%s] Creating demand for %.0f product in %.2f minutes",
@@ -1553,13 +1552,12 @@ traceln("[%s] Creating demand for %.0f product in %.2f minutes",
 create_DemandEvent(
 	(double)nextDetails[0], SECOND,
 	(int)nextDetails[1]
-);
-]]></Action>
+);]]></Action>
 				</Event>
 				<Event>
 					<Id>1638566976106</Id>
 					<Name><![CDATA[dailyStatsUpdate]]></Name>
-					<X>250</X><Y>-150</Y>
+					<X>250</X><Y>-290</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1600,7 +1598,7 @@ sizeTotalToday = 0;]]></Action>
 				<DynamicEventClass>
 					<Id>1638235931079</Id>
 					<Name><![CDATA[DemandEvent]]></Name>
-					<X>270</X><Y>-30</Y>
+					<X>270</X><Y>-170</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1622,7 +1620,7 @@ hourVsSize.add(getHourOfDay()+(getMinute()/60.0), size*1.0);
 
 // Query the ONNX model for the next event
 long epochTime = date().toInstant().getEpochSecond();
-float[] nextDetails = onnxWrapper.predict(float[].class, new long[]{epochTime});
+float[] nextDetails = onnxHelper.predict(float[].class, new long[]{epochTime});
 /*
 traceln("[%s] Creating demand for %.0f product in %.2f minutes",
 	date(),
@@ -1641,7 +1639,7 @@ create_DemandEvent(
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1172916274198</Id>
 					<Name><![CDATA[meanDailyCost]]></Name>
-					<X>840</X><Y>-60</Y>
+					<X>840</X><Y>-200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1658,12 +1656,108 @@ cost += factory.holdingCost.integral();
 cost += factory.shortageCost.integral();
 return cost / 365;]]></Body>
 				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1677278300019</Id>
+					<Name><![CDATA[setupIndicatorIcons]]></Name>
+					<X>250</X><Y>-340</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[grayGroup]]></Name>
+						<Type><![CDATA[ShapeGroup]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[greenGroup]]></Name>
+						<Type><![CDATA[ShapeGroup]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[imageIndex]]></Name>
+						<Type><![CDATA[int]]></Type>
+					</Parameter>
+					<Body><![CDATA[final Color inactive = gainsboro;
+final Color active = green;
+
+
+LinkedList<Object> grayQueue = new LinkedList<>(grayGroup.getShapes());
+while (!grayQueue.isEmpty()) {
+	Object obj = grayQueue.pollFirst();
+	if (obj instanceof ShapeLineFill) {
+		((ShapeLineFill)obj).setLineColor(
+			copyColorTransparency(
+				((ShapeLineFill)obj).getLineColor(),
+				inactive
+			)
+		);
+	} else if (obj instanceof ShapeLine) {
+		((ShapeLine)obj).setColor(
+			copyColorTransparency(
+				((ShapeLine)obj).getColor(),
+				inactive
+			)
+		);
+	} else if (obj instanceof ShapeGroup) {
+		grayQueue.addAll(((ShapeGroup)obj).getShapes());
+	} else {
+		traceln("UNHANDLED: %s (%s)", obj, obj.getClass());
+	}
+}
+
+LinkedList<Object> greenQueue = new LinkedList<>(greenGroup.getShapes());
+while (!greenQueue.isEmpty()) {
+	Object obj = greenQueue.pollFirst();
+	if (obj instanceof ShapeLineFill) {
+		((ShapeLineFill)obj).setLineColor(
+			copyColorTransparency(
+				((ShapeLineFill)obj).getLineColor(),
+				active
+			)
+		);
+	} else if (obj instanceof ShapeLine) {
+		((ShapeLine)obj).setColor(
+			copyColorTransparency(
+				((ShapeLine)obj).getColor(),
+				active
+			)
+		);
+	} else if (obj instanceof ShapeGroup) {
+		greenQueue.addAll(((ShapeGroup)obj).getShapes());
+	} else {
+		traceln("UNHANDLED: %s (%s)", obj, obj.getClass());
+	}
+}
+
+imageONNX.setIndex(imageIndex);]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[Color]]></ReturnType>
+					<Id>1677279703878</Id>
+					<Name><![CDATA[copyColorTransparency]]></Name>
+					<X>275</X><Y>-320</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[oldColor]]></Name>
+						<Type><![CDATA[Color]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[newColor]]></Name>
+						<Type><![CDATA[Color]]></Type>
+					</Parameter>
+					<Body><![CDATA[return transparent(newColor, oldColor.getAlpha()/255.0);]]></Body>
+				</Function>
 			</Functions>
 			<TableFunctions>
 				<TableFunction AccessType="public" StaticFunction="true">
 					<Id>1172872166671</Id>
 					<Name><![CDATA[demandSizeProbability]]></Name>
-					<X>50</X><Y>-110</Y>
+					<X>50</X><Y>-250</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1698,7 +1792,7 @@ return cost / 365;]]></Body>
     			<HistogramData>
 					<Id>1172867099533</Id>
 					<Name><![CDATA[histWaitingTime]]></Name>
-					<X>50</X><Y>-30</Y>
+					<X>50</X><Y>-170</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1729,7 +1823,7 @@ return cost / 365;]]></Body>
     			<HistogramData>
 					<Id>1637782200289</Id>
 					<Name><![CDATA[ordersPerDayHD]]></Name>
-					<X>-350</X><Y>-200</Y>
+					<X>-550</X><Y>-280</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1747,9 +1841,9 @@ return cost / 365;]]></Body>
 					</RecurrenceCode>
 					<Value><![CDATA[]]></Value>
 					<NumberOfIntervals>12</NumberOfIntervals>
-					<MinMaxAutodetect>true</MinMaxAutodetect>
+					<MinMaxAutodetect>false</MinMaxAutodetect>
 					<RangeMinExpression><![CDATA[0]]></RangeMinExpression>
-					<RangeMaxExpression><![CDATA[1]]></RangeMaxExpression>
+					<RangeMaxExpression><![CDATA[24]]></RangeMaxExpression>
 					<InitialIntervalSize><![CDATA[0.1]]></InitialIntervalSize>
 					<CalculateCDF>true</CalculateCDF>
 					<CalculatePercentiles>false</CalculatePercentiles>
@@ -1760,7 +1854,7 @@ return cost / 365;]]></Body>
     			<HistogramData>
 					<Id>1637782207037</Id>
 					<Name><![CDATA[totalDailyOrderSize]]></Name>
-					<X>-350</X><Y>-170</Y>
+					<X>-550</X><Y>-250</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1778,9 +1872,9 @@ return cost / 365;]]></Body>
 					</RecurrenceCode>
 					<Value><![CDATA[]]></Value>
 					<NumberOfIntervals>12</NumberOfIntervals>
-					<MinMaxAutodetect>true</MinMaxAutodetect>
+					<MinMaxAutodetect>false</MinMaxAutodetect>
 					<RangeMinExpression><![CDATA[0]]></RangeMinExpression>
-					<RangeMaxExpression><![CDATA[1]]></RangeMaxExpression>
+					<RangeMaxExpression><![CDATA[60]]></RangeMaxExpression>
 					<InitialIntervalSize><![CDATA[0.1]]></InitialIntervalSize>
 					<CalculateCDF>true</CalculateCDF>
 					<CalculatePercentiles>false</CalculatePercentiles>
@@ -1791,7 +1885,7 @@ return cost / 365;]]></Body>
     			<Histogram2DData>
 					<Id>1638554633482</Id>
 					<Name><![CDATA[hourVsSize]]></Name>
-					<X>-350</X><Y>-110</Y>
+					<X>-550</X><Y>-190</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1814,15 +1908,14 @@ return cost / 365;]]></Body>
 					<VerticalRangeToExpression><![CDATA[5]]></VerticalRangeToExpression>
 					<HorizontalRangeFromExpression><![CDATA[0]]></HorizontalRangeFromExpression>
 					<HorizontalRangeToExpression><![CDATA[24]]></HorizontalRangeToExpression>
-					<Envelope>0.2</Envelope>
-					<Envelope>0.4</Envelope>
-					<Envelope>0.6</Envelope>
-					<Envelope>0.8</Envelope>
+					<Envelope>0.25</Envelope>
+					<Envelope>0.5</Envelope>
+					<Envelope>0.75</Envelope>
 				</Histogram2DData>
     			<Histogram2DData>
 					<Id>1638554989463</Id>
 					<Name><![CDATA[dayVsOrderCount]]></Name>
-					<X>-350</X><Y>-140</Y>
+					<X>-550</X><Y>-220</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1845,17 +1938,16 @@ return cost / 365;]]></Body>
 					<VerticalRangeToExpression><![CDATA[25]]></VerticalRangeToExpression>
 					<HorizontalRangeFromExpression><![CDATA[0]]></HorizontalRangeFromExpression>
 					<HorizontalRangeToExpression><![CDATA[366]]></HorizontalRangeToExpression>
-					<Envelope>0.2</Envelope>
-					<Envelope>0.4</Envelope>
-					<Envelope>0.6</Envelope>
-					<Envelope>0.8</Envelope>
+					<Envelope>0.25</Envelope>
+					<Envelope>0.5</Envelope>
+					<Envelope>0.75</Envelope>
 				</Histogram2DData>
 			</AnalysisData>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1411988348418</Id>
 					<Name><![CDATA[connections]]></Name>
-					<X>50</X><Y>-270</Y>
+					<X>50</X><Y>-410</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1877,7 +1969,7 @@ return cost / 365;]]></Body>
 				<EmbeddedObject>
 					<Id>1172832497078</Id>
 					<Name><![CDATA[factory]]></Name>
-					<X>690</X><Y>-130</Y>
+					<X>690</X><Y>-270</Y>
 					<Label><X>10</X><Y>-30</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1962,7 +2054,7 @@ return cost / 365;]]></Body>
 				<EmbeddedObject>
 					<Id>1172832509495</Id>
 					<Name><![CDATA[wholesaler]]></Name>
-					<X>590</X><Y>-130</Y>
+					<X>590</X><Y>-270</Y>
 					<Label><X>-10</X><Y>-30</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -2050,7 +2142,7 @@ return cost / 365;]]></Body>
 				<EmbeddedObject>
 					<Id>1172834921914</Id>
 					<Name><![CDATA[retailer]]></Name>
-					<X>490</X><Y>-130</Y>
+					<X>490</X><Y>-270</Y>
 					<Label><X>0</X><Y>-30</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -2138,7 +2230,7 @@ return cost / 365;]]></Body>
 				<EmbeddedObject>
 					<Id>1650654580884</Id>
 					<Name><![CDATA[onnxHelper]]></Name>
-					<X>-150</X><Y>-80</Y>
+					<X>-350</X><Y>-160</Y>
 					<Label><X>-40</X><Y>-25</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2220,7 +2312,7 @@ return cost / 365;]]></Body>
 				<Polyline>
 					<Id>1650650175404</Id>
 					<Name><![CDATA[polyline16]]></Name>
-					<X>-45</X><Y>10</Y>
+					<X>-245</X><Y>10</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4004,21 +4096,18 @@ return cost / 365;]]></Body>
 					<Id>1637781384553</Id>
 					<Expression><![CDATA[retailer.orderingCost.sum() / 365]]></Expression>
 					<Color>-7722014</Color>
-					<Expression2Flag>false</Expression2Flag>
 						<Title><![CDATA[Retailer ordering]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1637781384554</Id>
 					<Expression><![CDATA[retailer.holdingCost.mean()]]></Expression>
 					<Color>-10185235</Color>
-					<Expression2Flag>false</Expression2Flag>
 						<Title><![CDATA[Retailer holding]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1637781384555</Id>
 					<Expression><![CDATA[retailer.shortageCost.mean()]]></Expression>
 					<Color>-7876870</Color>
-					<Expression2Flag>false</Expression2Flag>
 						<Title><![CDATA[Retailer shortage]]></Title>
 					</DataItem>
 					<ScaleToExpression><![CDATA[1000]]></ScaleToExpression>
@@ -4077,21 +4166,18 @@ return cost / 365;]]></Body>
 					<Id>1637781384556</Id>
 					<Expression><![CDATA[wholesaler.orderingCost.sum() / 365]]></Expression>
 					<Color>-7722014</Color>
-					<Expression2Flag>false</Expression2Flag>
 						<Title><![CDATA[Wholesaler ordering]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1637781384557</Id>
 					<Expression><![CDATA[wholesaler.holdingCost.mean()]]></Expression>
 					<Color>-10185235</Color>
-					<Expression2Flag>false</Expression2Flag>
 						<Title><![CDATA[Wholesaler holding]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1637781384558</Id>
 					<Expression><![CDATA[wholesaler.shortageCost.mean()]]></Expression>
 					<Color>-7876870</Color>
-					<Expression2Flag>false</Expression2Flag>
 						<Title><![CDATA[Wholesaler shortage]]></Title>
 					</DataItem>
 					<ScaleToExpression><![CDATA[1000]]></ScaleToExpression>
@@ -4150,21 +4236,18 @@ return cost / 365;]]></Body>
 					<Id>1637781384559</Id>
 					<Expression><![CDATA[factory.manufacturingCost.sum() / 365]]></Expression>
 					<Color>-7722014</Color>
-					<Expression2Flag>false</Expression2Flag>
 						<Title><![CDATA[Manufacturing]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1637781384560</Id>
 					<Expression><![CDATA[factory.holdingCost.mean()]]></Expression>
 					<Color>-10185235</Color>
-					<Expression2Flag>false</Expression2Flag>
 						<Title><![CDATA[Factory holding]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1637781384561</Id>
 					<Expression><![CDATA[factory.shortageCost.mean()]]></Expression>
 					<Color>-7876870</Color>
-					<Expression2Flag>false</Expression2Flag>
 						<Title><![CDATA[Factory shortage]]></Title>
 					</DataItem>
 					<ScaleToExpression><![CDATA[1000]]></ScaleToExpression>
@@ -4177,7 +4260,7 @@ return cost / 365;]]></Body>
     			<Histogram>
 					<Id>1637782267067</Id>
 					<Name><![CDATA[chart4]]></Name>
-					<X>-900</X><Y>40</Y>
+					<X>-1100</X><Y>40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4229,19 +4312,19 @@ return cost / 365;]]></Body>
 					<HistogramDataExpression>
 					<Id>1637782267068</Id>
 					<Expression><![CDATA[ordersPerDayHD]]></Expression>
-						<ColorPDF>-6270419</ColorPDF>
+						<ColorPDF>-2448096</ColorPDF>
 						<ColorCDF>-2354116</ColorCDF>
 						<ColorLowPercent>-6632142</ColorLowPercent>
 						<ColorHighPercent>-14774017</ColorHighPercent>
-						<ColorMean>-10496</ColorMean>
-						<LineWidth>3</LineWidth>						
+						<ColorMean>-2987746</ColorMean>
+						<LineWidth>2</LineWidth>						
 						<Title><![CDATA[Distribution in orders per day]]></Title>							
 					</HistogramDataExpression>
     			</Histogram>
     			<Histogram>
 					<Id>1637782270647</Id>
 					<Name><![CDATA[chart5]]></Name>
-					<X>-500</X><Y>40</Y>
+					<X>-700</X><Y>40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4297,15 +4380,15 @@ return cost / 365;]]></Body>
 						<ColorCDF>-12004916</ColorCDF>
 						<ColorLowPercent>-60269</ColorLowPercent>
 						<ColorHighPercent>-29696</ColorHighPercent>
-						<ColorMean>-8097537</ColorMean>
-						<LineWidth>3</LineWidth>						
+						<ColorMean>-15132304</ColorMean>
+						<LineWidth>2</LineWidth>						
 						<Title><![CDATA[Distribution in order size per day]]></Title>							
 					</HistogramDataExpression>
     			</Histogram>
     			<Histogram2D>
 					<Id>1638554675177</Id>
 					<Name><![CDATA[chart8]]></Name>
-					<X>-890</X><Y>200</Y>
+					<X>-1090</X><Y>200</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4351,15 +4434,14 @@ return cost / 365;]]></Body>
 					<HistogramDataExpression>
 					<Id>1638554675174</Id>
 					<Expression><![CDATA[hourVsSize]]></Expression>
-					<Color>-16777088</Color>
-					<Expression2Flag>true</Expression2Flag>  
+					<Color>-16777088</Color>  
 							<Title><![CDATA[Order size, by hour of the day]]></Title>
 					</HistogramDataExpression>
     			</Histogram2D>
     			<Histogram2D>
 					<Id>1638555026576</Id>
 					<Name><![CDATA[chart10]]></Name>
-					<X>-890</X><Y>370</Y>
+					<X>-1090</X><Y>370</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4401,19 +4483,18 @@ return cost / 365;]]></Body>
 						<TextColor>-12566464</TextColor>
 					</Labels>
 					<ShowLegend>true</ShowLegend>
-					<ShowType>SHOW_BINS</ShowType>
+					<ShowType>SHOW_ENVELOPES</ShowType>
 					<HistogramDataExpression>
 					<Id>1638555026573</Id>
 					<Expression><![CDATA[dayVsOrderCount]]></Expression>
-					<Color>-8388608</Color>
-					<Expression2Flag>true</Expression2Flag>  
+					<Color>-8388608</Color>  
 							<Title><![CDATA[Orders per day, by day of the year]]></Title>
 					</HistogramDataExpression>
     			</Histogram2D>
 				<Rectangle>
 					<Id>1638566325325</Id>
 					<Name><![CDATA[rectangle2]]></Name>
-					<X>220</X><Y>-180</Y>
+					<X>220</X><Y>-370</Y>
 					<Label><X>10</X><Y>10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4427,7 +4508,7 @@ return cost / 365;]]></Body>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>DASHED</LineStyle>
 					<Width>190</Width>
-					<Height>170</Height>
+					<Height>220</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor/>
 					<FillMaterial>null</FillMaterial>
@@ -4435,7 +4516,7 @@ return cost / 365;]]></Body>
 				<Rectangle>
 					<Id>1638567145874</Id>
 					<Name><![CDATA[rectangle3]]></Name>
-					<X>-380</X><Y>-240</Y>
+					<X>-580</X><Y>-320</Y>
 					<Label><X>10</X><Y>10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4457,7 +4538,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1638567365170</Id>
 					<Name><![CDATA[text1]]></Name>
-					<X>-520</X><Y>20</Y>
+					<X>-720</X><Y>20</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4531,7 +4612,7 @@ return cost / 365;]]></Body>
 				<Text>
 					<Id>1650650175402</Id>
 					<Name><![CDATA[text17]]></Name>
-					<X>-140</X><Y>20</Y>
+					<X>-340</X><Y>20</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4549,6 +4630,1462 @@ return cost / 365;]]></Body>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
+				<Oval>
+					<Id>1677277235319</Id>
+					<Name><![CDATA[oval7]]></Name>
+					<X>80</X><Y>130</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Circle>false</Circle>
+					<RadiusX>65</RadiusX>
+					<RadiusY>32.5</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor>-1</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Polyline>
+					<Id>1677277362245</Id>
+					<Name><![CDATA[polyline18]]></Name>
+					<X>130</X><Y>109</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>30</X><Y>1</Y><Z>0</Z></Point>
+					   <Point><X>15</X><Y>21</Y><Z>0</Z></Point>
+					   <Point><X>14</X><Y>17</Y><Z>0</Z></Point>
+					   <Point><X>13</X><Y>14</Y><Z>0</Z></Point>
+					   <Point><X>11</X><Y>10</Y><Z>0</Z></Point>
+					   <Point><X>8</X><Y>7</Y><Z>0</Z></Point>
+					   <Point><X>6</X><Y>5</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Polyline>
+					<Id>1677277211564</Id>
+					<Name><![CDATA[polyline17]]></Name>
+					<X>127.25000000000006</X><Y>109.47499999999997</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-1</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>31.5</X><Y>1.075</Y><Z>0</Z></Point>
+					   <Point><X>18.625000000000014</X><Y>18.39999999999999</Y><Z>0</Z></Point>
+					   <Point><X>16.750000000000014</X><Y>20.52499999999999</Y><Z>0</Z></Point>
+					   <Point><X>11.749999999999991</X><Y>9.525000000000004</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+				<Group>
+					<Id>1677277443710</Id>
+					<Name><![CDATA[clock]]></Name>
+					<X>60</X><Y>107</Y>
+					<Label><X>1.472</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Oval>
+					<Id>1677277443712</Id>
+					<Name><![CDATA[face]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>-50</X><Y>-60</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>1</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>-12156236</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>5.8855</RadiusX>
+					<RadiusY>40</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor>-460545</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Group>
+					<Id>1677277443720</Id>
+					<Name><![CDATA[hourMarks]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<ReplicationCode Class="CodeValue">
+						<Code><![CDATA[12]]></Code>
+					</ReplicationCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>1</Z>
+					<Rotation>0.0</Rotation>
+					<RotationCode><![CDATA[( index / 12. ) * 2 * PI]]></RotationCode>
+
+			<Presentation>
+				<Oval>
+					<Id>1677277443722</Id>
+					<Name><![CDATA[oval8]]></Name>
+					<X>0</X><Y>-5.297</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>1</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>0.2945</RadiusX>
+					<RadiusY>2</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor>-5192482</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+			</Presentation>
+
+				</Group>
+				<Group>
+					<Id>1677277443724</Id>
+					<Name><![CDATA[minuteGroup]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>2</Z>
+					<Rotation>330.0</Rotation>
+
+			<Presentation>
+				<Polyline>
+					<Id>1677277443726</Id>
+					<Name><![CDATA[minutes]]></Name>
+					<X>-0.294</X><Y>1.03</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>1</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16777216</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0.294</X><Y>-6.18</Y><Z>0</Z></Point>
+					   <Point><X>0.589</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+			</Presentation>
+
+				</Group>
+				<Group>
+					<Id>1677277443728</Id>
+					<Name><![CDATA[hourGroup]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>1</Z>
+					<Rotation>60.0</Rotation>
+
+			<Presentation>
+				<Polyline>
+					<Id>1677277443730</Id>
+					<Name><![CDATA[hours]]></Name>
+					<X>-0.294</X><Y>1.03</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>1</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16777216</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0.147</X><Y>-3.678</Y><Z>0</Z></Point>
+					   <Point><X>0.294</X><Y>-4.12</Y><Z>0</Z></Point>
+					   <Point><X>0.441</X><Y>-3.678</Y><Z>0</Z></Point>
+					   <Point><X>0.589</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+			</Presentation>
+
+				</Group>
+				<Oval>
+					<Id>1677277443732</Id>
+					<Name><![CDATA[center]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>1</Z>
+					<ZHeight>4</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>0.147</RadiusX>
+					<RadiusY>1</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor>-1</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+			</Presentation>
+
+				</Group>
+				<Polyline>
+					<Id>1677277510895</Id>
+					<Name><![CDATA[polyline19]]></Name>
+					<X>72</X><Y>107</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>-12156236</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-460545</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>5</Y><Z>0</Z></Point>
+					   <Point><X>7</X><Y>5</Y><Z>0</Z></Point>
+					   <Point><X>7</X><Y>9</Y><Z>0</Z></Point>
+					   <Point><X>14</X><Y>2</Y><Z>0</Z></Point>
+					   <Point><X>7</X><Y>-5</Y><Z>0</Z></Point>
+					   <Point><X>7</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+				<Polyline>
+					<Id>1677277562098</Id>
+					<Name><![CDATA[polyline20]]></Name>
+					<X>92</X><Y>102</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>-12156236</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-460545</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>4</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>1</X><Y>6</Y><Z>0</Z></Point>
+					   <Point><X>7</X><Y>6</Y><Z>0</Z></Point>
+					   <Point><X>-2</X><Y>15</Y><Z>0</Z></Point>
+					   <Point><X>1</X><Y>9</Y><Z>0</Z></Point>
+					   <Point><X>-4</X><Y>9</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+				<Group>
+					<Id>1677278384920</Id>
+					<Name><![CDATA[rateIconGroup]]></Name>
+					<X>60</X><Y>140</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Polyline>
+					<Id>1677277700219</Id>
+					<Name><![CDATA[polyline21]]></Name>
+					<X>-14</X><Y>-17</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>3</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>27</Y><Z>0</Z></Point>
+					   <Point><X>26</X><Y>27</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Curve ControlPoints="false">
+					<Id>1677277708172</Id>
+					<Name><![CDATA[curve]]></Name>
+					<X>-10</X><Y>-15</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>5</X><Y>13</Y><Z>0</Z></Point>
+					   <Point><X>20</X><Y>20</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+			</Presentation>
+
+				</Group>
+				<Image>
+					<Id>1677279218138</Id>
+					<Name><![CDATA[imageONNX]]></Name>
+					<X>91</X><Y>127</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Width>20</Width>
+					<Height>20</Height>
+					<Rotation>0.0</Rotation>
+					<ImageFiles>
+						<ImageResourceReference>
+							<PackageName><![CDATA[supply_chain_onnx]]></PackageName>
+							<ClassName><![CDATA[icon-ONNX-logo.png]]></ClassName>
+						</ImageResourceReference>
+						<ImageResourceReference>
+							<PackageName><![CDATA[supply_chain_onnx]]></PackageName>
+							<ClassName><![CDATA[icon-ONNX-logo-faded.png]]></ClassName>
+						</ImageResourceReference>
+					</ImageFiles>
+					<OriginalSize>false</OriginalSize>
+				</Image>
+				<Group>
+					<Id>1677277780074</Id>
+					<Name><![CDATA[brainIconGroup]]></Name>
+					<X>103</X><Y>139</Y>
+					<Label><X>9.048</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Curve ControlPoints="true">
+					<Id>1677277780076</Id>
+					<Name><![CDATA[curve2]]></Name>
+					<X>-7.193</X><Y>-8.091</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-2.782</X><Y>-0.023</Y><Z>0</Z></Point>
+					   <Point><X>-2.782</X><Y>-3.386</Y><Z>0</Z></Point>
+					   <Point><X>-2.556</X><Y>-8.773</Y><Z>0</Z></Point>
+					   <Point><X>3.574</X><Y>-9.659</Y><Z>0</Z></Point>
+					   <Point><X>5.338</X><Y>-6.773</Y><Z>0</Z></Point>
+					   <Point><X>8.414</X><Y>-10.545</Y><Z>0</Z></Point>
+					   <Point><X>13.255</X><Y>-7.614</Y><Z>0</Z></Point>
+					   <Point><X>13.504</X><Y>-3.386</Y><Z>0</Z></Point>
+					   <Point><X>13.436</X><Y>-1.341</Y><Z>0</Z></Point>
+					   <Point><X>11.423</X><Y>-0.045</Y><Z>0</Z></Point>
+					   <Point><X>11.423</X><Y>-0.045</Y><Z>0</Z></Point>
+					   <Point><X>6.899</X><Y>1.166</Y><Z>0</Z></Point>
+					   <Point><X>4.524</X><Y>1.212</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Curve ControlPoints="true">
+					<Id>1677277780078</Id>
+					<Name><![CDATA[curve3]]></Name>
+					<X>6.333</X><Y>-11.818</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>2.194</X><Y>0.636</Y><Z>0</Z></Point>
+					   <Point><X>4.479</X><Y>2.136</Y><Z>0</Z></Point>
+					   <Point><X>4.298</X><Y>5.75</Y><Z>0</Z></Point>
+					   <Point><X>5.881</X><Y>7.364</Y><Z>0</Z></Point>
+					   <Point><X>8.346</X><Y>10.477</Y><Z>0</Z></Point>
+					   <Point><X>3.393</X><Y>14.341</Y><Z>0</Z></Point>
+					   <Point><X>2.85</X><Y>11.909</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>11.818</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>11.818</Y><Z>0</Z></Point>
+					   <Point><X>-1.206</X><Y>7.273</Y><Z>0</Z></Point>
+					   <Point><X>-2.194</X><Y>-0.636</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Curve ControlPoints="true">
+					<Id>1677277780080</Id>
+					<Name><![CDATA[curve4]]></Name>
+					<X>-1.832</X><Y>10.932</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0.158</X><Y>2.977</Y><Z>0</Z></Point>
+					   <Point><X>7.396</X><Y>3.977</Y><Z>0</Z></Point>
+					   <Point><X>8.052</X><Y>-2.886</Y><Z>0</Z></Point>
+					   <Point><X>12.712</X><Y>-4.159</Y><Z>0</Z></Point>
+					   <Point><X>11.626</X><Y>-8.318</Y><Z>0</Z></Point>
+					   <Point><X>11.626</X><Y>-8.318</Y><Z>0</Z></Point>
+					   <Point><X>8.611</X><Y>-7.712</Y><Z>0</Z></Point>
+					   <Point><X>-0.226</X><Y>-1.614</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Curve ControlPoints="true">
+					<Id>1677277780082</Id>
+					<Name><![CDATA[curve5]]></Name>
+					<X>-9.862</X><Y>-3.273</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-1.199</X><Y>-0.091</Y><Z>0</Z></Point>
+					   <Point><X>-3.868</X><Y>-1.182</Y><Z>0</Z></Point>
+					   <Point><X>-3.777</X><Y>-4.068</Y><Z>0</Z></Point>
+					   <Point><X>-3.687</X><Y>-6.955</Y><Z>0</Z></Point>
+					   <Point><X>-1.448</X><Y>-8.227</Y><Z>0</Z></Point>
+					   <Point><X>-0.204</X><Y>-8.295</Y><Z>0</Z></Point>
+					   <Point><X>1.04</X><Y>-8.364</Y><Z>0</Z></Point>
+					   <Point><X>1.199</X><Y>0.091</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Curve ControlPoints="true">
+					<Id>1677277780084</Id>
+					<Name><![CDATA[curve6]]></Name>
+					<X>-13.979</X><Y>2.705</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-0.882</X><Y>-0.636</Y><Z>0</Z></Point>
+					   <Point><X>-2.285</X><Y>-1.614</Y><Z>0</Z></Point>
+					   <Point><X>-2.398</X><Y>-3.705</Y><Z>0</Z></Point>
+					   <Point><X>-2.511</X><Y>-5.795</Y><Z>0</Z></Point>
+					   <Point><X>-0.746</X><Y>-8.455</Y><Z>0</Z></Point>
+					   <Point><X>0.498</X><Y>-8.523</Y><Z>0</Z></Point>
+					   <Point><X>1.742</X><Y>-8.591</Y><Z>0</Z></Point>
+					   <Point><X>0.882</X><Y>0.636</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Curve ControlPoints="true">
+					<Id>1677277780086</Id>
+					<Name><![CDATA[curve7]]></Name>
+					<X>-9.794</X><Y>8.182</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-1.312</X><Y>-0.227</Y><Z>0</Z></Point>
+					   <Point><X>-3.167</X><Y>-0.932</Y><Z>0</Z></Point>
+					   <Point><X>-4.139</X><Y>-2.795</Y><Z>0</Z></Point>
+					   <Point><X>-5.112</X><Y>-4.659</Y><Z>0</Z></Point>
+					   <Point><X>-3.981</X><Y>-7.455</Y><Z>0</Z></Point>
+					   <Point><X>-2.171</X><Y>-8.227</Y><Z>0</Z></Point>
+					   <Point><X>-0.362</X><Y>-9</Y><Z>0</Z></Point>
+					   <Point><X>1.312</X><Y>0.227</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Curve ControlPoints="true">
+					<Id>1677277780088</Id>
+					<Name><![CDATA[curve8]]></Name>
+					<X>-1.945</X><Y>11</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-1.855</X><Y>3.909</Y><Z>0</Z></Point>
+					   <Point><X>-6.22</X><Y>1.818</Y><Z>0</Z></Point>
+					   <Point><X>-7.351</X><Y>-0.341</Y><Z>0</Z></Point>
+					   <Point><X>-8.482</X><Y>-2.5</Y><Z>0</Z></Point>
+					   <Point><X>-8.03</X><Y>-5.591</Y><Z>0</Z></Point>
+					   <Point><X>-5.429</X><Y>-6.545</Y><Z>0</Z></Point>
+					   <Point><X>-2.827</X><Y>-7.5</Y><Z>0</Z></Point>
+					   <Point><X>1.855</X><Y>-3.909</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Line>
+					<Id>1677277780090</Id>
+					<Name><![CDATA[line]]></Name>
+					<X>-1.9</X><Y>-15.273</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<Dx>0</Dx>
+					<Dy>26</Dy>
+					<Dz>0</Dz>
+				</Line>
+				<Curve ControlPoints="true">
+					<Id>1677277780092</Id>
+					<Name><![CDATA[curve10]]></Name>
+					<X>-11.445</X><Y>-2.159</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-0.543</X><Y>0.25</Y><Z>0</Z></Point>
+					   <Point><X>-1.131</X><Y>1.818</Y><Z>0</Z></Point>
+					   <Point><X>-0.52</X><Y>2.591</Y><Z>0</Z></Point>
+					   <Point><X>0.09</X><Y>3.364</Y><Z>0</Z></Point>
+					   <Point><X>0.814</X><Y>3.341</Y><Z>0</Z></Point>
+					   <Point><X>1.402</X><Y>3.25</Y><Z>0</Z></Point>
+					   <Point><X>1.99</X><Y>3.159</Y><Z>0</Z></Point>
+					   <Point><X>0.543</X><Y>-0.25</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Oval>
+					<Id>1677277780094</Id>
+					<Name><![CDATA[oval9]]></Name>
+					<X>3.71</X><Y>-7.727</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>0.909</RadiusX>
+					<RadiusY>40</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Oval>
+					<Id>1677277780096</Id>
+					<Name><![CDATA[oval10]]></Name>
+					<X>5.587</X><Y>-0.023</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>0.909</RadiusX>
+					<RadiusY>40</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Oval>
+					<Id>1677277780098</Id>
+					<Name><![CDATA[oval11]]></Name>
+					<X>-6.582</X><Y>4.136</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>0.909</RadiusX>
+					<RadiusY>40</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Oval>
+					<Id>1677277780100</Id>
+					<Name><![CDATA[oval12]]></Name>
+					<X>-9.161</X><Y>-3.136</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>0.909</RadiusX>
+					<RadiusY>40</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Polyline>
+					<Id>1677277780102</Id>
+					<Name><![CDATA[polyline22]]></Name>
+					<X>-6.65</X><Y>5.227</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>2.727</Y><Z>0</Z></Point>
+					   <Point><X>1.81</X><Y>2.727</Y><Z>0</Z></Point>
+					   <Point><X>1.81</X><Y>4.545</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Polyline>
+					<Id>1677277780104</Id>
+					<Name><![CDATA[polyline23]]></Name>
+					<X>-9.183</X><Y>-2.159</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>1.818</Y><Z>0</Z></Point>
+					   <Point><X>4.75</X><Y>1.818</Y><Z>0</Z></Point>
+					   <Point><X>4.75</X><Y>3.091</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Oval>
+					<Id>1677277780106</Id>
+					<Name><![CDATA[oval13]]></Name>
+					<X>-4.411</X><Y>1.705</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>0.909</RadiusX>
+					<RadiusY>40</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Oval>
+					<Id>1677277780108</Id>
+					<Name><![CDATA[oval14]]></Name>
+					<X>-6.265</X><Y>-8.091</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>0.909</RadiusX>
+					<RadiusY>40</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Polyline>
+					<Id>1677277780110</Id>
+					<Name><![CDATA[polyline24]]></Name>
+					<X>2.737</X><Y>-7.591</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-1.81</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-1.81</X><Y>-4.545</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Polyline>
+					<Id>1677277780112</Id>
+					<Name><![CDATA[polyline25]]></Name>
+					<X>3.755</X><Y>-6.795</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>2.727</Y><Z>0</Z></Point>
+					   <Point><X>1.81</X><Y>2.727</Y><Z>0</Z></Point>
+					   <Point><X>1.81</X><Y>5.932</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Polyline>
+					<Id>1677277780114</Id>
+					<Name><![CDATA[polyline26]]></Name>
+					<X>-6.333</X><Y>-9.091</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-3.636</Y><Z>0</Z></Point>
+					   <Point><X>1.81</X><Y>-3.636</Y><Z>0</Z></Point>
+					   <Point><X>1.81</X><Y>-5.455</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Polyline>
+					<Id>1677277780116</Id>
+					<Name><![CDATA[polyline27]]></Name>
+					<X>-6.333</X><Y>-7.273</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>2.727</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Oval>
+					<Id>1677277780118</Id>
+					<Name><![CDATA[oval15]]></Name>
+					<X>0.55</X><Y>3.098</Y>
+					<Label><X>0</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>0.909</RadiusX>
+					<RadiusY>40</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Polyline>
+					<Id>1677277780120</Id>
+					<Name><![CDATA[polyline28]]></Name>
+					<X>4.524</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-4.071</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-4.071</X><Y>2.061</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Curve ControlPoints="true">
+					<Id>1677277780122</Id>
+					<Name><![CDATA[curve9]]></Name>
+					<X>6.242</X><Y>7.818</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-0.179</X><Y>-1.817</Y><Z>0</Z></Point>
+					   <Point><X>-1.115</X><Y>-2.485</Y><Z>0</Z></Point>
+					   <Point><X>-2.05</X><Y>-3.152</Y><Z>0</Z></Point>
+					   <Point><X>-3.256</X><Y>-1.97</Y><Z>0</Z></Point>
+					   <Point><X>-3.256</X><Y>-1.97</Y><Z>0</Z></Point>
+					   <Point><X>-3.005</X><Y>-1.132</Y><Z>0</Z></Point>
+					   <Point><X>-0.603</X><Y>-0.303</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Curve ControlPoints="false">
+					<Id>1677277780124</Id>
+					<Name><![CDATA[curve11]]></Name>
+					<X>10.616</X><Y>-6.666</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-0.452</X><Y>1.575</Y><Z>0</Z></Point>
+					   <Point><X>-1.9</X><Y>3</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Curve ControlPoints="false">
+					<Id>1677277780126</Id>
+					<Name><![CDATA[curve12]]></Name>
+					<X>7.057</X><Y>-4.303</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>2.081</X><Y>0.424</Y><Z>0</Z></Point>
+					   <Point><X>1.538</X><Y>2.273</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+				<Curve ControlPoints="false">
+					<Id>1677277780128</Id>
+					<Name><![CDATA[curve13]]></Name>
+					<X>1.237</X><Y>6</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1.5</LineWidth>
+					<LineColor>838893568</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>1.99</X><Y>-0.212</Y><Z>0</Z></Point>
+					   <Point><X>1.869</X><Y>1.879</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Curve>
+			</Presentation>
+
+				</Group>
+				<Group>
+					<Id>1677279976711</Id>
+					<Name><![CDATA[box]]></Name>
+					<X>65</X><Y>113</Y>
+					<Label><X>2.733</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Polyline>
+					<Id>1677279976713</Id>
+					<Name><![CDATA[shapeBox]]></Name>
+					<X>0</X><Y>5.465</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-460545</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>5.465</X><Y>-2.733</Y><Z>0</Z></Point>
+					   <Point><X>5.465</X><Y>-8.198</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-10.932</Y><Z>0</Z></Point>
+					   <Point><X>-5.465</X><Y>-8.198</Y><Z>0</Z></Point>
+					   <Point><X>-5.465</X><Y>-2.733</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+				<Polyline>
+					<Id>1677279976715</Id>
+					<Name><![CDATA[_ps2]]></Name>
+					<X>0</X><Y>5.465</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>402653184</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-5.465</Y><Z>0</Z></Point>
+					   <Point><X>5.465</X><Y>-8.198</Y><Z>0</Z></Point>
+					   <Point><X>5.465</X><Y>-2.733</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+				<Polyline>
+					<Id>1677279976717</Id>
+					<Name><![CDATA[_ps3]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-1761607681</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>5.465</X><Y>-2.733</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-5.465</Y><Z>0</Z></Point>
+					   <Point><X>-5.465</X><Y>-2.733</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+				<Polyline>
+					<Id>1677279976719</Id>
+					<Name><![CDATA[_ps4]]></Name>
+					<X>0</X><Y>5.465</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>-12156236</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>5.465</X><Y>-2.733</Y><Z>0</Z></Point>
+					   <Point><X>5.465</X><Y>-8.198</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-10.932</Y><Z>0</Z></Point>
+					   <Point><X>-5.465</X><Y>-8.198</Y><Z>0</Z></Point>
+					   <Point><X>-5.465</X><Y>-2.733</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
+				<Line>
+					<Id>1677279976721</Id>
+					<Name><![CDATA[_ps5]]></Name>
+					<X>-2.733</X><Y>-4.1</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>0.5</LineWidth>
+					<LineColor>-12156236</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<Dx>5.033</Dx>
+					<Dy>2.9</Dy>
+					<Dz>0</Dz>
+				</Line>
+				<Line>
+					<Id>1677279976723</Id>
+					<Name><![CDATA[_ps6]]></Name>
+					<X>5.465</X><Y>-2.733</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>0.5</LineWidth>
+					<LineColor>-12156236</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<Dx>-5.465</Dx>
+					<Dy>2.733</Dy>
+					<Dz>0</Dz>
+				</Line>
+			</Presentation>
+
+				</Group>
 			</Presentation>
 
 				</Level>
@@ -4557,7 +6094,7 @@ return cost / 365;]]></Body>
 				<Area>
 					<Id>1650650060937</Id>
 					<Name><![CDATA[viewArea]]></Name>
-					<X>-960</X><Y>0</Y>
+					<X>-1160</X><Y>0</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4573,7 +6110,6 @@ return cost / 365;]]></Body>
 		<ActiveObjectClass>
 			<Id>1172832870775</Id>
 			<Name><![CDATA[Retailer]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1413230937317</Id>
@@ -4592,7 +6128,6 @@ return cost / 365;]]></Body>
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -5300,7 +6835,6 @@ if ( O > 0 ) {
 		<ActiveObjectClass>
 			<Id>1172831125425</Id>
 			<Name><![CDATA[Wholesaler]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1413230937319</Id>
@@ -5319,7 +6853,6 @@ if ( O > 0 ) {
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -6068,7 +7601,6 @@ shortageCost.update();]]></Body>
 		<ActiveObjectClass>
 			<Id>1490607518383</Id>
 			<Name><![CDATA[Demand]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Generic>false</Generic>
 			<FlowChartsUsage>ENTITY</FlowChartsUsage>
 			<SamplesToKeep>100</SamplesToKeep>
@@ -6079,7 +7611,6 @@ shortageCost.update();]]></Body>
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -6256,7 +7787,6 @@ shortageCost.update();]]></Body>
 		<ActiveObjectClass>
 			<Id>1490607524439</Id>
 			<Name><![CDATA[Order]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Generic>false</Generic>
 			<FlowChartsUsage>ENTITY</FlowChartsUsage>
 			<SamplesToKeep>100</SamplesToKeep>
@@ -6267,7 +7797,6 @@ shortageCost.update();]]></Body>
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -6444,7 +7973,6 @@ shortageCost.update();]]></Body>
 		<ActiveObjectClass>
 			<Id>1490607527551</Id>
 			<Name><![CDATA[Shipment]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<Generic>false</Generic>
 			<FlowChartsUsage>ENTITY</FlowChartsUsage>
 			<SamplesToKeep>100</SamplesToKeep>
@@ -6455,7 +7983,6 @@ shortageCost.update();]]></Body>
 			<SceneBackgroundColor/>
 			<SceneSkybox>null</SceneSkybox>
 			<AgentProperties>
-	 			<SpaceType>CONTINUOUS</SpaceType>			
 				<EnvironmentDefinesInitialLocation>true</EnvironmentDefinesInitialLocation>
 				<RotateAnimationTowardsMovement>true</RotateAnimationTowardsMovement>
 				<RotateAnimationVertically>false</RotateAnimationVertically>
@@ -6644,11 +8171,28 @@ shortageCost.update();]]></Body>
 			<StopNever>false</StopNever>
 			<ExecutionMode>realTimeScaled</ExecutionMode>
 			<RealTimeScale>1.0</RealTimeScale>
-			<EnableZoomAndPanning>false</EnableZoomAndPanning>
-			<EnableDeveloperPanel>false</EnableDeveloperPanel>
+			<EnableZoomAndPanning>true</EnableZoomAndPanning>
+			<EnableDeveloperPanel>true</EnableDeveloperPanel>
 			<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
 		</AnimationProperties>
 		<Inputs>
+    		<RunConfigurationInput>
+				<Id>1677280214617</Id>
+				<Name><![CDATA[Policy file]]></Name>
+				<InputReference>
+					<PackageName><![CDATA[supply_chain_onnx]]></PackageName>
+					<ClassName><![CDATA[forecast_pipeline.onnx]]></ClassName>
+				</InputReference>
+    		</RunConfigurationInput>
+    		<RunConfigurationInput>
+				<Id>1677280185699</Id>
+				<Name><![CDATA[Data generator source]]></Name>
+				<InputReference>
+					<PackageName><![CDATA[supply_chain_onnx]]></PackageName>
+					<ClassName><![CDATA[Main]]></ClassName>
+					<ItemName><![CDATA[isDefaultGenerator]]></ItemName>
+				</InputReference>
+    		</RunConfigurationInput>
     		<RunConfigurationInput>
 				<Id>1497370278265</Id>
 				<Name><![CDATA[Retailer min stock level]]></Name>
@@ -6778,7 +8322,7 @@ shortageCost.update();]]></Body>
 			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
 			<MaximumMemory>512</MaximumMemory>
-			<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
+			<RandomNumberGenerationType>randomSeed</RandomNumberGenerationType>
 			<CustomGeneratorCode>new Random()</CustomGeneratorCode>
 			<AfterSimulationRunCode><![CDATA[nRuns.add(getRunCount());
 retailerParamertersHistory.add( "(" + sLoRetailer + "," + SHiRetailer + ")" );
@@ -9707,63 +11251,6 @@ order frequency and size:]]></Text>
 
 			<Parameters>			
 				<Parameter>
-					<ParameterName><![CDATA[sRetailer2]]></ParameterName>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[s1]]></ParameterName>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[S]]></ParameterName>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[s]]></ParameterName>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[sRetailer1]]></ParameterName>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[SRetailer1]]></ParameterName>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[SRetailer2]]></ParameterName>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[sRetailer]]></ParameterName>
-					<ParameterValue Class="CodeValue">
-						<Code><![CDATA[sRetailer]]></Code>
-					</ParameterValue>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[SRetailer]]></ParameterName>
-					<ParameterValue Class="CodeValue">
-						<Code><![CDATA[SRetailer]]></Code>
-					</ParameterValue>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[sWholesaler]]></ParameterName>
-					<ParameterValue Class="CodeValue">
-						<Code><![CDATA[sWholesaler]]></Code>
-					</ParameterValue>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[SWholesaler]]></ParameterName>
-					<ParameterValue Class="CodeValue">
-						<Code><![CDATA[SWholesaler]]></Code>
-					</ParameterValue>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[sFactory]]></ParameterName>
-					<ParameterValue Class="CodeValue">
-						<Code><![CDATA[sFactory]]></Code>
-					</ParameterValue>
-				</Parameter>
-				<Parameter>
-					<ParameterName><![CDATA[SFactory]]></ParameterName>
-					<ParameterValue Class="CodeValue">
-						<Code><![CDATA[SFactory]]></Code>
-					</ParameterValue>
-				</Parameter>
-				<Parameter>
 					<ParameterName><![CDATA[sLoRetailer]]></ParameterName>
 					<ParameterValue Class="CodeValue">
 						<Code><![CDATA[sLoRetailer]]></Code>
@@ -9807,7 +11294,7 @@ order frequency and size:]]></Text>
 				</Parameter>
 			</Parameters>			
 			<PresentationProperties>
-				<EnableZoomAndPanning>true</EnableZoomAndPanning>
+				<EnableZoomAndPanning>false</EnableZoomAndPanning>
 				<ExecutionMode><![CDATA[realTimeScaled]]></ExecutionMode>
 				<Title><![CDATA[Supply Chain : Simulation]]></Title>	
 				<EnableDeveloperPanel>true</EnableDeveloperPanel>
@@ -9828,7 +11315,6 @@ order frequency and size:]]></Text>
 			<Id>1173131386288</Id>
 			<Name><![CDATA[Optimization]]></Name>
 			<ExcludeFromBuild>true</ExcludeFromBuild>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
 			<MaximumMemory>256</MaximumMemory>
 			<RandomNumberGenerationType>randomSeed</RandomNumberGenerationType>
@@ -12570,23 +14056,26 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 		<ParamVariationExperiment ActiveObjectClassId="1172827656618">
 			<Id>1638567713048</Id>
 			<Name><![CDATA[CompareDefaultVsONNX]]></Name>
-			<ClientAreaTopLeft><X>0</X><Y>0</Y></ClientAreaTopLeft>
+			<AdditionalClassCode><![CDATA[// Apperance args: Color colorLowPercent, Color colorHighPercent, Color colorPDF, Color colorCDF, float lineWidthCDF, Color colorMean
+final Histogram.Appearance apperanceOrdersPerDay = new Histogram.Appearance(null, null, goldenRod, null, 2f, chocolate);
+final Histogram.Appearance apperanceDailyOrderSize = new Histogram.Appearance(null, null, teal, null, 2f, midnightBlue);
+final Color apperanceHourVsSize = navy;
+final Color apperanceDayVsCount = maroon;]]></AdditionalClassCode>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
 			<MaximumMemory>512</MaximumMemory>
 			<RandomNumberGenerationType>randomSeed</RandomNumberGenerationType>
 			<CustomGeneratorCode>new Random()</CustomGeneratorCode>
 			<AfterSimulationRunCode><![CDATA[if (root.isDefaultGenerator) {
-	chart1a.addHistogram(root.ordersPerDayHD, "Distribution in orders per day", null, null, sienna, null, 1f, null);
-	chart2a.addHistogram(root.totalDailyOrderSize, "Distribution in order size per day", null, null, teal, null, 1f, null);
-	chart3a.addHistogram2D(root.hourVsSize, "Order size, by hour of the day", navy);
-	chart4a.addHistogram2D(root.dayVsOrderCount, "Orders per day, by day of the year", maroon);
+	chart1a.addHistogram(root.ordersPerDayHD, "Distribution in orders per day", apperanceOrdersPerDay);
+	chart2a.addHistogram(root.totalDailyOrderSize, "Distribution in order size per day", apperanceDailyOrderSize);
+	chart3a.addHistogram2D(root.hourVsSize, "Order size, by hour of the day", apperanceHourVsSize);
+	chart4a.addHistogram2D(root.dayVsOrderCount, "Orders per day, by day of the year", apperanceDayVsCount);
 } else {
-	chart1b.addHistogram(root.ordersPerDayHD, "Distribution in orders per day", null, null, sienna, null, 1f, null);
-	chart2b.addHistogram(root.totalDailyOrderSize, "Distribution in order size per day", null, null, teal, null, 1f, null);
-	chart3b.addHistogram2D(root.hourVsSize, "Order size, by hour of the day", navy);
-	chart4b.addHistogram2D(root.dayVsOrderCount, "Orders per day, by day of the year", maroon);
-}
-]]></AfterSimulationRunCode>
+	chart1b.addHistogram(root.ordersPerDayHD, "Distribution in orders per day", apperanceOrdersPerDay);
+	chart2b.addHistogram(root.totalDailyOrderSize, "Distribution in order size per day", apperanceDailyOrderSize);
+	chart3b.addHistogram2D(root.hourVsSize, "Order size, by hour of the day", apperanceHourVsSize);
+	chart4b.addHistogram2D(root.dayVsOrderCount, "Orders per day, by day of the year", apperanceDayVsCount);
+}]]></AfterSimulationRunCode>
 			<SeedValue>1</SeedValue>
 			<SelectionModeForSimultaneousEvents>LIFO</SelectionModeForSimultaneousEvents>
 			<VmArgs><![CDATA[]]></VmArgs>
@@ -12638,7 +14127,7 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 						<TextColor>-12566464</TextColor>
 					</Labels>
 					<ShowLegend>true</ShowLegend>
-					<ShowType>SHOW_BINS</ShowType>
+					<ShowType>SHOW_ENVELOPES</ShowType>
     			</Histogram2D>
     			<Histogram2D>
 					<Id>1638567757713</Id>
@@ -12838,7 +14327,7 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 						<TextColor>-12566464</TextColor>
 					</Labels>
 					<ShowLegend>true</ShowLegend>
-					<ShowType>SHOW_BINS</ShowType>
+					<ShowType>SHOW_ENVELOPES</ShowType>
     			</Histogram2D>
     			<Histogram2D>
 					<Id>1638567812650</Id>
@@ -13138,11 +14627,11 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 				<StopOption><![CDATA[Stop at specified date]]></StopOption>
 				<InitialDate><![CDATA[1514764800000]]></InitialDate>	
 				<InitialTime><![CDATA[0.0]]></InitialTime>	
-				<FinalDate><![CDATA[1577836800000]]></FinalDate>	
-				<FinalTime><![CDATA[730.0]]></FinalTime>	
+				<FinalDate><![CDATA[1830297600000]]></FinalDate>	
+				<FinalTime><![CDATA[3652.0]]></FinalTime>	
 			</ModelTimeProperties>
 			<PresentationProperties>
-				<EnableZoomAndPanning>true</EnableZoomAndPanning>
+				<EnableZoomAndPanning>false</EnableZoomAndPanning>
 				<Title><![CDATA[Supply Chain-ONNX : CompareDefaultVsONNX]]></Title>
 				<EnableDeveloperPanel>true</EnableDeveloperPanel>
 				<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
@@ -13164,6 +14653,18 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 			<Path><![CDATA[AnyLogic model logo dark.png]]></Path>
 			<ReferencedFromUserCode>false</ReferencedFromUserCode>
 		</Resource>
+		<Resource>
+			<Path><![CDATA[forecast_pipeline.onnx]]></Path>
+			<ReferencedFromUserCode>true</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[icon-ONNX-logo.png]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+		</Resource>
+		<Resource>
+			<Path><![CDATA[icon-ONNX-logo-faded.png]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+		</Resource>
 	</ModelResources>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.modules.markup_descriptors]]></LibraryName>
@@ -13183,6 +14684,6 @@ if (bestInfeasibleObjective != Double.POSITIVE_INFINITY) {
 		<VersionMinor>0</VersionMinor>
 		<VersionBuild>5</VersionBuild>
     </RequiredLibraryReference>
-	<CloudModelUuid><![CDATA[a17b5bbe-7c9d-4460-9be7-15c9820ebec0]]></CloudModelUuid>
+	<CloudModelUuid><![CDATA[d1ae12d1-cc34-49e3-a8ba-d901baa21632]]></CloudModelUuid>
 </Model>
 </AnyLogicWorkspace>
