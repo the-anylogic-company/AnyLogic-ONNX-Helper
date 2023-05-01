@@ -7,7 +7,7 @@
 <AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.2.202303221145" AlpVersion="8.7.7">
 <Model>
 	<Id>1172827656617</Id>
-	<Name><![CDATA[Supply Chain-ONNX]]></Name>
+	<Name><![CDATA[Supply Chain (with ONNX)]]></Name>
 	<Description><![CDATA[A simple model of a supply chain consisting of a retailer, a wholesaler, and a factory. Customers arrive to the retailer, demand a product, and take the currently available items.  The excess of demand over supply is backlogged. At the beginning of each day, the retailer and the wholesaler review their inventory levels and decide how many items to order. Similarly, the factory decides how many items to manufacture. All of them use a stationary policy. Cost is associated with ordering, manufacturing, holding products, and having a backlog of orders (shortage). The output of the simulation includes the structured mean daily cost for all supply chain elements, and the distribution of waiting times for customers to get their orders. The goal of the model is to find the inventory policy parameters for the supply chain that result in minimum cost and minimum waiting times. The model includes a simulation experiment where you can set up the parameters manually, and the automatic optimization experiment.]]></Description>
 	<EngineVersion>6</EngineVersion>
 	<JavaPackageName><![CDATA[supply_chain_onnx]]></JavaPackageName>
