@@ -10,7 +10,7 @@ Even though AnyLogic is intended to be used by business-oriented users, it does 
 
 ### Installation
 
-The library (a jar file) can be downloaded from the releases page, accessible on the right side of the GitHub page or from [this link](https://github.com/t-wolfeadam/AnyLogic-ONNX-Helper/releases).
+The library (a jar file) can be downloaded from the releases page, accessible on the right side of the GitHub page or from [this link](https://github.com/the-anylogic-company/AnyLogic-ONNX-Helper/releases).
 
 After downloading, copy/move the provided jar file in a location where it won't be accidentally moved or deleted.
 
